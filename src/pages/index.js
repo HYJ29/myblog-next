@@ -1,7 +1,11 @@
-import Head from 'next/head'
-import styles from '../styles/Home.module.css'
+import Head from 'next/head';
+import styles from '../styles/Home.module.css';
 
 export default function Home() {
+  console.log(
+    `process.env.NEXT_PUBLIC_BROWSER_VARIABLE`,
+    process.env.NEXT_PUBLIC_BROWSER_VARIABLE
+  );
   return (
     <div className={styles.container}>
       <Head>
@@ -61,5 +65,5 @@ export default function Home() {
         </a>
       </footer>
     </div>
-  )
+  );
 }
