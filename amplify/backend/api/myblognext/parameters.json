@@ -1,0 +1,11 @@
+{
+  "AppSyncApiName": "myblognext",
+  "DynamoDBBillingMode": "PAY_PER_REQUEST",
+  "DynamoDBEnableServerSideEncryption": false,
+  "AuthCognitoUserPoolId": {
+    "Fn::GetAtt": [
+      "authmyblognexta5c09760",
+      "Outputs.UserPoolId"
+    ]
+  }
+}
