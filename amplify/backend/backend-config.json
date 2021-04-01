@@ -1,0 +1,10 @@
+{
+  "auth": {
+    "myblognexta5c09760": {
+      "service": "Cognito",
+      "providerPlugin": "awscloudformation",
+      "dependsOn": [],
+      "customAuth": false
+    }
+  }
+}
