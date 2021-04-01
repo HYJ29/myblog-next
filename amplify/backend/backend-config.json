@@ -19,9 +19,23 @@
               "userPoolId": "authmyblognexta5c09760"
             }
           },
-          "additionalAuthenticationProviders": []
+          "additionalAuthenticationProviders": [
+            {
+              "authenticationType": "API_KEY",
+              "apiKeyConfig": {
+                "apiKeyExpirationDays": 7,
+                "description": "api key for my blog next.js app"
+              }
+            }
+          ]
         }
       }
+    }
+  },
+  "storage": {
+    "myblognextstorage": {
+      "service": "S3",
+      "providerPlugin": "awscloudformation"
     }
   }
 }

@@ -1,17 +1,72 @@
-type Task
+type User
   @model
   @auth(
     rules: [
-      { allow: groups, groups: ["Managers"], queries: null, mutations: [create, update, delete] }
-      { allow: groups, groups: ["Employees"], queries: [get, list], mutations: null }
+      { allow: owner }
+      { allow: public, operations: [read] }
+      { allow: private, operations: [read] }
     ]
   ) {
   id: ID!
-  title: String!
-  description: String
-  status: String
+  providerType: String!
+  providerKey: String!
+  name: String!
+  photoUrl: AWSURL
+  email: AWSEmail
+  Posts: [Post] @connection(fields: ["id"], keyName: "byUser")
 }
-type PrivateNote @model @auth(rules: [{ allow: owner }]) {
+
+type Post
+  @model
+  @auth(
+    rules: [
+      { allow: owner }
+      { allow: public, operations: [read] }
+      { allow: private, operations: [read] }
+    ]
+  )
+  @key(name: "byUser", fields: ["userId"]) {
   id: ID!
-  content: String!
+  editorState: String!
+  titlePhoto: String!
+  title: String!
+  subTitle: String!
+
+  userId: ID!
+  tags: [PostTag] @connection(keyName: "byPostByUser", fields: ["id"])
+}
+
+type PostTag
+  @model
+  @auth(
+    rules: [
+      { allow: owner }
+      { allow: public, operations: [read] }
+      { allow: private, operations: [read] }
+    ]
+  )
+  @key(name: "byPostByUser", fields: ["postId", "userId"])
+  @key(name: "byTagByUser", fields: ["tagId", "userId"]) {
+  id: ID!
+
+  userId: ID!
+  postId: ID!
+  tagId: ID!
+  post: Post! @connection(fields: ["postId"])
+  tag: Tag! @connection(fields: ["tagId"])
+}
+
+type Tag
+  @model
+  @auth(
+    rules: [
+      { allow: owner }
+      { allow: public, operations: [read] }
+      { allow: private, operations: [read] }
+    ]
+  ) {
+  id: ID!
+  tagName: String!
+
+  posts: [PostTag] @connection(keyName: "byTagByUser", fields: ["id"])
 }
