@@ -1,0 +1,8 @@
+@import 'colors';
+@import 'layout';
+
+.container {
+  @include col();
+  width: 100%;
+  align-items: center;
+}

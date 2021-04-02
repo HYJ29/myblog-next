@@ -1,0 +1,17 @@
+@import 'colors';
+
+.navigationItem {
+  margin: 0 2rem;
+  color: $color-primary-500;
+  cursor: pointer;
+  position: relative;
+}
+
+.navigationItemDecorator {
+  position: absolute;
+  background-color: $color-primary-300;
+  height: 0.5rem;
+  width: 100%;
+  bottom: 0;
+  z-index: -1;
+}

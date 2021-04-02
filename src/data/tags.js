@@ -1,0 +1,80 @@
+export default [
+  {
+    id: 1,
+    tagName: '#javascript',
+    createdAt: '2020-05-27 01:17:15',
+    updatedAt: '2020-05-27 01:17:15',
+  },
+  {
+    id: 2,
+    tagName: '#사이드프로젝트',
+    createdAt: '2020-06-01 10:24:14',
+    updatedAt: '2020-06-01 10:24:14',
+  },
+  {
+    id: 3,
+    tagName: '#리엑트네이티브',
+    createdAt: '2020-06-13 06:14:21',
+    updatedAt: '2020-06-13 06:14:21',
+  },
+  {
+    id: 4,
+    tagName: '#Amplify',
+    createdAt: '2020-09-16 03:57:23',
+    updatedAt: '2020-09-16 03:57:23',
+  },
+  {
+    id: 5,
+    tagName: '#CodePipeline',
+    createdAt: '2020-09-16 03:57:23',
+    updatedAt: '2020-09-16 03:57:23',
+  },
+  {
+    id: 6,
+    tagName: '#보안그룹',
+    createdAt: '2020-09-16 03:57:23',
+    updatedAt: '2020-09-16 03:57:23',
+  },
+  {
+    id: 7,
+    tagName: '#TODO',
+    createdAt: '2020-09-16 03:57:23',
+    updatedAt: '2020-09-16 03:57:23',
+  },
+  {
+    id: 8,
+    tagName: '#123',
+    createdAt: '2020-09-29 07:25:09',
+    updatedAt: '2020-09-29 07:25:09',
+  },
+  {
+    id: 9,
+    tagName: '#blog소개',
+    createdAt: '2020-10-04 01:07:59',
+    updatedAt: '2020-10-04 01:07:59',
+  },
+  {
+    id: 10,
+    tagName: '#기능소개',
+    createdAt: '2020-10-04 01:07:59',
+    updatedAt: '2020-10-04 01:07:59',
+  },
+  {
+    id: 11,
+    tagName: '#블로그소개',
+    createdAt: '2020-10-04 01:12:37',
+    updatedAt: '2020-10-04 01:12:37',
+  },
+  {
+    id: 12,
+    tagName: '#blog',
+    createdAt: '2020-10-04 01:15:48',
+    updatedAt: '2020-10-04 01:15:48',
+  },
+  {
+    id: 13,
+    tagName: '#SPA',
+    createdAt: '2021-03-28 23:32:02',
+    updatedAt: '2021-03-28 23:32:02',
+  },
+];
