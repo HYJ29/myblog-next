@@ -1,0 +1,11 @@
+@import 'layout';
+
+.container {
+  @include col();
+  align-items: center;
+}
+
+.editor {
+  width: 680px;
+  margin: 0 24px;
+}

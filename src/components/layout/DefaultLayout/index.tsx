@@ -10,7 +10,10 @@ type Props = {
 export default function DefaultLayout({ children }: Props): JSX.Element {
   return (
     <div className={styles.container}>
-      <MainHeader />
+      <div className={styles.headerContainer}>
+        <MainHeader />
+      </div>
+      <div className={styles.headerPlaceholder}/>
       {children}
     </div>
   );
