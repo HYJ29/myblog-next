@@ -1,5 +1,5 @@
 import React from 'react';
-import { GetStaticProps, GetStaticPaths, GetServerSideProps } from 'next';
+import { GetStaticProps } from 'next';
 
 import { Card } from '@/components/ui';
 import { getAllPosts } from '@/data';
@@ -17,6 +17,7 @@ export default function HomePage({ posts }: Props): JSX.Element {
         <ul className={styles.postListContainer}>
           {posts.map((post) => (
             <Card
+              key={post.id}
               postId={post.id}
               titlePhoto={post.titlePhoto}
               title={post.title}

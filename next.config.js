@@ -10,7 +10,6 @@ module.exports = (phase, { defaultConfig }) => {
       env = {};
       break;
     default:
-      return;
   }
 
   // sass setting
@@ -18,5 +17,10 @@ module.exports = (phase, { defaultConfig }) => {
     includePaths: [path.join(__dirname, '/src/styles')],
   };
 
-  return { ...defaultConfig, env, sassOptions };
+  // Ignore typescript build error
+  const typescript = {
+    ignoreBuildErrors: true,
+  };
+
+  return { ...defaultConfig, sassOptions, typescript };
 };

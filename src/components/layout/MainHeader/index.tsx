@@ -25,6 +25,7 @@ export default function MainHeader() {
         <NavigationItem text="HOME" route="/" pathname={pathname} />
         <NavigationItem text="ABOUT" route="/about" pathname={pathname} />
         <NavigationItem text="WHO ARE YOU" route="/auth" pathname={pathname} />
+        <NavigationItem text="WRITE" route="/post/write" pathname={pathname} />
       </ul>
     </header>
   );

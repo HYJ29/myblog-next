@@ -19,7 +19,7 @@ export default function NavigationItem({
 }: Props): JSX.Element {
   const [isSelected, setIsSelected] = useState<boolean>(pathname === route);
 
-  const [{ ref }, { width }] = useMeasure();
+  const [{ ref }, { width }] = useMeasure<HTMLLIElement>();
   const props = useSpring({ width: isSelected ? width : 0 });
 
   useEffect(() => {
