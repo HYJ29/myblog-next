@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 import {
   PlusCircle,
@@ -15,51 +15,58 @@ type Props = {
   top: number;
   left: number;
   scale: number;
+  isEditorFocused: boolean;
 };
-export default function SideBar({ top, left, scale }: Props) {
+export default function SideBar({ top, left, scale, isEditorFocused }: Props) {
   const [isOpen, setIsOpen] = useState<boolean>(false);
 
-  const toggleButtonHandler = (e) => {
+  const toggleButtonHandler = (e: React.MouseEvent) => {
+    e.stopPropagation();
     setIsOpen((prev) => !prev);
   };
 
+  useEffect(() => {
+    if (isEditorFocused) {
+      setIsOpen(false);
+    }
+  }, [isEditorFocused]);
+
   const icons = [<Minus />, <Code />, <Camera />, <Search />, <Video />];
+
   return (
     <div
       className={styles.container}
       style={{
         top,
         left: left - 50,
-        transform: isOpen ? 'scale(1)' : `scale(${scale})`,
+        transform: `scale(${scale})`,
         transition: 'transform 0.15s cubic-bezier(.3,1.2,.2,1)',
       }}
     >
       <div className={styles.buttonContainer}>
-        <div className={styles.addButton} onMouseDown={toggleButtonHandler}>
+        <div className={styles.addButton} onClick={toggleButtonHandler}>
           <PlusCircle />
         </div>
-        <div className={styles.subButtonConatiner}>
+        <div className={styles.subButtons}>
           {icons.map((Icon, index) => (
             <div
               key={index}
-              className={styles.button}
+              className={styles.subButton}
               style={
                 isOpen
                   ? {
                       left: 40 + index * 40,
                       opacity: 1,
-                      transition:
-                        'left 0.15s cubic-bezier(.3,1.2,.2,1), opacity .3s cubic-bezier(.3,1.2,.2,1)',
+                      zIndex: 1,
                     }
                   : {
                       left: 0,
                       opacity: 0,
-                      transition:
-                        'left 0.15s cubic-bezier(.3,1.2,.2,1), opacity .3s cubic-bezier(.3,1.2,.2,1)',
+                      zIndex: 0,
                     }
               }
             >
-              {Icon}
+              <div className={styles.iconContainer}>{Icon}</div>
             </div>
           ))}
         </div>

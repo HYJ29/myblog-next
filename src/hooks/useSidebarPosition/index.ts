@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { EditorState } from 'draft-js';
+import { EditorState, convertToRaw } from 'draft-js';
 
 export const useSidebarPosition = ({
   editorState,
@@ -11,10 +11,26 @@ export const useSidebarPosition = ({
   const [scale, setScale] = useState<number>(0);
 
   useEffect(() => {
-    console.log('useSidebar Hook');
+    // Check from window object
     const windowSelection = window.getSelection();
+    const windowFocusOffset = windowSelection?.focusOffset;
+    const isThrereOffsetFromFocus = windowFocusOffset && windowFocusOffset > 0;
+
+    // Check from draft.js selectionState
+    const selectionState = editorState.getSelection();
+    const contentState = editorState.getCurrentContent();
+    const focusKey = selectionState.getFocusKey();
+    const focusedBlock = contentState.getBlockForKey(focusKey);
+    const focusedBlockText = focusedBlock.getText();
+    const isThereTextOnBlock = focusedBlockText.length > 0;
+
+    // If threre is any text on block, hide sidebar
+    if (isThereTextOnBlock || isThrereOffsetFromFocus) {
+      setScale(0);
+    }
     const anchorNode = windowSelection?.anchorNode;
-    console.log(`anchorNode`, anchorNode);
+
+    // If  threre are no text and just 'span' ELEMENT_NODE exists -> set the span element top, left position and show sidebar
     if (anchorNode && anchorNode.ELEMENT_NODE && anchorNode.attributes) {
       const dataOffsetKey = anchorNode.attributes['data-offset-key']?.value;
       // Find the most parent node with same data-offset-key
@@ -22,16 +38,12 @@ export const useSidebarPosition = ({
         `[data-offset-key="${dataOffsetKey}"]`
       );
       if (blockNode) {
-        console.log('hasblock node');
         const blockNodeRect = blockNode.getBoundingClientRect();
         const { x, top } = blockNodeRect;
         setTop(top);
         setLeft(x);
         setScale(1);
       }
-    } else {
-      console.log('no block node');
-      setScale(0);
     }
   }, [editorState]);
 
