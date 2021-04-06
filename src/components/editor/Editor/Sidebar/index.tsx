@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { EditorState } from 'draft-js';
 
 import {
   PlusCircle,
@@ -8,6 +9,7 @@ import {
   Video,
   Minus,
 } from '@/components/icons';
+import { addAtomicBlock } from '@/utils';
 
 import styles from './style.module.scss';
 
@@ -16,8 +18,19 @@ type Props = {
   left: number;
   scale: number;
   isEditorFocused: boolean;
+  setEditorState: (arg0: EditorState) => void;
+  editorState: EditorState;
+  setIsEditorReadOnly: (arg: boolean) => void;
 };
-export default function SideBar({ top, left, scale, isEditorFocused }: Props) {
+export default function SideBar({
+  top,
+  left,
+  scale,
+  isEditorFocused,
+  setEditorState,
+  editorState,
+  setIsEditorReadOnly,
+}: Props) {
   const [isOpen, setIsOpen] = useState<boolean>(false);
 
   const toggleButtonHandler = (e: React.MouseEvent) => {
@@ -31,7 +44,35 @@ export default function SideBar({ top, left, scale, isEditorFocused }: Props) {
     }
   }, [isEditorFocused]);
 
-  const icons = [<Minus />, <Code />, <Camera />, <Search />, <Video />];
+  const subButtons = [
+    {
+      icon: <Minus />,
+      onClick: () => {},
+    },
+    {
+      icon: <Code />,
+      onClick: () => {},
+    },
+    {
+      icon: <Camera />,
+      onClick: () => {},
+    },
+    {
+      icon: <Search />,
+      onClick: () => {
+        const newEditorState = addAtomicBlock({
+          editorState,
+          entityType: 'UNSPLASH',
+        });
+        setEditorState(newEditorState);
+        setIsOpen(false);
+      },
+    },
+    {
+      icon: <Video />,
+      onClick: () => {},
+    },
+  ];
 
   return (
     <div
@@ -48,10 +89,11 @@ export default function SideBar({ top, left, scale, isEditorFocused }: Props) {
           <PlusCircle />
         </div>
         <div className={styles.subButtons}>
-          {icons.map((Icon, index) => (
+          {subButtons.map((button, index) => (
             <div
               key={index}
               className={styles.subButton}
+              onClick={button.onClick}
               style={
                 isOpen
                   ? {
@@ -66,7 +108,7 @@ export default function SideBar({ top, left, scale, isEditorFocused }: Props) {
                     }
               }
             >
-              <div className={styles.iconContainer}>{Icon}</div>
+              <div className={styles.iconContainer}>{button.icon}</div>
             </div>
           ))}
         </div>

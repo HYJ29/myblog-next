@@ -5,7 +5,7 @@
   width: 30px;
   height: 30px;
   border-radius: 15px;
-  background-color: $color-primary-500;
+  background-color: $color-primary-300;
   position: absolute;
   transition: transform 0.15s cubic-bezier(0.3, 1.2, 0.2, 1);
   z-index: 500;
@@ -41,10 +41,10 @@
   height: 30px;
   border-radius: 15px;
   border-width: 1px;
-  border-color: black;
+  border-color: $color-primary-400;
   border-style: solid;
 
-  background-color: $color-primary-500;
+  background-color: $color-primary-200;
 
   position: absolute;
 

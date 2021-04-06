@@ -1,0 +1,21 @@
+@import 'layout';
+@import 'colors';
+
+.container {
+  @include col();
+  margin-top: 1rem;
+}
+
+.rowContainer {
+  @include row();
+}
+
+.imageItem {
+  border: 0.2rem solid white;
+  cursor: pointer;
+
+  &:hover {
+    opacity: 0.3;
+    border: 0.2rem solid $color-primary-500;
+  }
+}

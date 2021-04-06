@@ -3,20 +3,22 @@ import { EditorState, convertToRaw } from 'draft-js';
 
 export const useSidebarPosition = ({
   editorState,
+  isEditorReadOnly,
 }: {
   editorState: EditorState;
+  isEditorReadOnly: boolean;
 }) => {
   const [top, setTop] = useState<number>(0);
   const [left, setLeft] = useState<number>(0);
   const [scale, setScale] = useState<number>(0);
 
   useEffect(() => {
-    // Check from window object
+    // #1. Check from window object
     const windowSelection = window.getSelection();
     const windowFocusOffset = windowSelection?.focusOffset;
     const isThrereOffsetFromFocus = windowFocusOffset && windowFocusOffset > 0;
 
-    // Check from draft.js selectionState
+    // #2. Check from draft.js selectionState
     const selectionState = editorState.getSelection();
     const contentState = editorState.getCurrentContent();
     const focusKey = selectionState.getFocusKey();
@@ -24,8 +26,8 @@ export const useSidebarPosition = ({
     const focusedBlockText = focusedBlock.getText();
     const isThereTextOnBlock = focusedBlockText.length > 0;
 
-    // If threre is any text on block, hide sidebar
-    if (isThereTextOnBlock || isThrereOffsetFromFocus) {
+    // If threre is any text on block(by #1,#2) || readOnly mode, hide sidebar
+    if (isThereTextOnBlock || isThrereOffsetFromFocus || isEditorReadOnly) {
       setScale(0);
     }
     const anchorNode = windowSelection?.anchorNode;
