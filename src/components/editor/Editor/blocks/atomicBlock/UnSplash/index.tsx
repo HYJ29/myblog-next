@@ -2,17 +2,28 @@ import React, { useRef, useEffect, useState } from 'react';
 import axios from 'axios';
 import { EditorState, ContentBlock, SelectionState, Modifier } from 'draft-js';
 
-import { getBlockDeletedEditorState } from '@/utils/draft';
+import {
+  getBlockDeletedEditorState,
+  getReplacedEntityDataEditorState,
+} from '@/utils/draft';
 import api from '@/apiFetch';
 
 import styles from './style.module.scss';
 import SearchResults from './SearchResults';
+import UnsplashImage from './UnsplashImage';
 
 type Props = {
   setIsEditorReadOnly: (arg0: boolean) => void;
   editorState: EditorState;
   setEditorState: (ar0: EditorState) => void;
   block: ContentBlock;
+  src: string;
+};
+
+type SearchResultData = {
+  results: any[];
+  totalImageNumber: number;
+  totalPages: number;
 };
 
 export default function UnSplash({
@@ -20,10 +31,18 @@ export default function UnSplash({
   editorState,
   setEditorState,
   block,
+  src,
 }: Props) {
   const searchInputRef = useRef<HTMLInputElement | null>(null);
-  const [searchResults, setSearchResults] = useState<Array<any> | null>(null);
+  const [
+    searchResultData,
+    setSearchResultData,
+  ] = useState<SearchResultData | null>(null);
   const [currentPage, setCurrentPage] = useState<number>(1);
+
+  const searchResults = searchResultData?.results;
+  const totalImageNumber = searchResultData?.totalImageNumber;
+  const totalPages = searchResultData?.totalPages;
 
   useEffect(() => {
     setIsEditorReadOnly(true);
@@ -34,7 +53,9 @@ export default function UnSplash({
 
   useEffect(() => {
     const searchInputValue = searchInputRef.current?.value ?? '';
-    updateSearchResults({ keyword: searchInputValue, currentPage });
+    if (searchInputValue !== '') {
+      updateSearchResults({ keyword: searchInputValue, currentPage });
+    }
   }, [currentPage]);
 
   const onKeyDownHandler = async (e) => {
@@ -54,13 +75,11 @@ export default function UnSplash({
     currentPage?: number;
   }) => {
     const data = await api.unsplash.getPhotos({ keyword, currentPage });
-    const results = data.results;
-    setSearchResults(results);
+
+    setSearchResultData(data);
   };
 
   const onBlurHandler = async (e) => {
-    console.log(`e.target.id`, e.target.id);
-
     setIsEditorReadOnly(false);
     const newEditorState = getBlockDeletedEditorState({ editorState, block });
     setEditorState(newEditorState);
@@ -69,7 +88,21 @@ export default function UnSplash({
   const onFocusHandler = async (e) => {
     setIsEditorReadOnly(true);
   };
-  return (
+
+  const onSelectPhotoHandler = ({ photoSrc }: { photoSrc: string }) => {
+    const blockEntityKey = block.getEntityAt(0);
+    const newEdtitorState = getReplacedEntityDataEditorState({
+      data: { src: photoSrc },
+      editorState,
+      entityKey: blockEntityKey,
+    });
+
+    setEditorState(newEdtitorState);
+    setIsEditorReadOnly(false);
+  };
+  return src ? (
+    <UnsplashImage src={src} />
+  ) : (
     <div className={styles.container}>
       <form className={styles.searchForm} onKeyDown={onKeyDownHandler}>
         <input
@@ -82,27 +115,40 @@ export default function UnSplash({
       </form>
 
       {searchResults && (
-        <div onMouseDown={(e) => e.preventDefault()}>
-          <div
-            onMouseDown={(e) => {
-              e.preventDefault();
-              e.stopPropagation();
-              setCurrentPage((prev) => prev - 1);
-            }}
-          >
-            previsous
+        <div>
+          <div className={styles.resultNavContainer}>
+            {currentPage > 1 && (
+              <div
+                className={styles.resultPrevButton}
+                onMouseDown={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  setCurrentPage((prev) => prev - 1);
+                }}
+              >
+                Previsous
+              </div>
+            )}
+            <div className={styles.resultTotalText}>
+              {totalImageNumber} results
+            </div>
+            {totalPages && currentPage < totalPages && (
+              <div
+                className={styles.resultNextButton}
+                onMouseDown={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  setCurrentPage((prev) => prev + 1);
+                }}
+              >
+                Next
+              </div>
+            )}
           </div>
-          <div>total</div>
-          <div
-            onMouseDown={(e) => {
-              e.preventDefault();
-              e.stopPropagation();
-              setCurrentPage((prev) => prev + 1);
-            }}
-          >
-            next
-          </div>
-          <SearchResults searchResults={searchResults} />
+          <SearchResults
+            searchResults={searchResults}
+            onSelect={onSelectPhotoHandler}
+          />
         </div>
       )}
     </div>

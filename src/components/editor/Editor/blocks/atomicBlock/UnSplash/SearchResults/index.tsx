@@ -2,7 +2,7 @@ import React from 'react';
 
 import styles from './style.module.scss';
 
-export default function SearchResults({ searchResults }) {
+export default function SearchResults({ searchResults, onSelect }) {
   console.log(`searchResults`, searchResults);
   const imageRows = [
     [...searchResults.slice(0, 3)],
@@ -19,14 +19,22 @@ export default function SearchResults({ searchResults }) {
       {imageRows.map((row, index) => (
         <div key={index} className={styles.rowContainer}>
           {row.map((image) => {
-            const { thumbImageSrc, imageHeight, imageWidth } = image;
+            console.log(`images`, image);
+            const {
+              thumbImageSrc,
+              regularImageSrc,
+              imageHeight,
+              imageWidth,
+            } = image;
             const flexValue = imageWidth / imageHeight;
             return (
               <img
                 className={styles.imageItem}
                 src={thumbImageSrc}
                 key={thumbImageSrc}
-                onClick={() => {}}
+                onClick={() => {
+                  onSelect({ photoSrc: regularImageSrc });
+                }}
                 style={{
                   flex: `${flexValue} 1 0`,
                   height: 'auto',

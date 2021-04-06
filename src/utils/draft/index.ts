@@ -73,3 +73,19 @@ export const getBlockDeletedEditorState = ({
 
   return newEditorState;
 };
+
+export const getReplacedEntityDataEditorState = ({
+  data,
+  editorState,
+  entityKey,
+}) => {
+  const contentState = editorState.getCurrentContent();
+
+  const newContentState = contentState.replaceEntityData(entityKey, data);
+
+  const newEditorState = EditorState.set(editorState, {
+    currentContent: newContentState,
+  });
+
+  return newEditorState;
+};

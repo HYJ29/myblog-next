@@ -22,15 +22,24 @@ export default function AtomicBlockComponent({
   const entity = contentState.getEntity(block.getEntityAt(0));
   const type = entity.getType();
 
+  const data = entity.getData();
+
   if (type === 'UNSPLASH') {
+    const { src } = data;
     return (
       <UnSplash
         setIsEditorReadOnly={setIsEditorReadOnly}
         editorState={editorState}
         setEditorState={setEditorState}
         block={block}
+        src={src ?? null}
       />
     );
+  }
+
+  if (type === 'IMAGE') {
+    const { src } = data;
+    return <img src={src} style={{ width: 100, height: 100 }} alt="image" />;
   }
 
   return <div>AtomicBlockComponent</div>;
