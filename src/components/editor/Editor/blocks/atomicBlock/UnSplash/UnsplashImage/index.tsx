@@ -1,12 +1,18 @@
 import React from 'react';
 
+import { UnsplashImageInfo } from '@/types';
+
+type Props = {
+  unsplashImageInfo: UnsplashImageInfo;
+};
+
 import styles from './style.module.scss';
-export default function UnsplashImage({ unsplashImageInfo }) {
-  const { photoSrc, userName, userProfileLink } = unsplashImageInfo;
+export default function UnsplashImage({ unsplashImageInfo }: Props) {
+  const { regularImageSrc, userName, userProfileLink } = unsplashImageInfo;
   return (
     <div>
       <img
-        src={photoSrc}
+        src={regularImageSrc}
         alt="Unsplash Image"
         className={styles.unsplashImage}
       />

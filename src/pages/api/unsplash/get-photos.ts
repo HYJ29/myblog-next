@@ -1,6 +1,7 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 
 import apiHelper from '@/apiHelper';
+import { UnsplashImageInfo } from '@/types';
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
   const { keyword, currentPage } = req.query;
@@ -9,14 +10,16 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     currentPage: +currentPage ?? 1,
   });
   const { results, totalPages, totalImageNumber } = response;
-  const filteredResult = results?.map((result) => ({
-    thumbImageSrc: result.urls.thumb,
-    regularImageSrc: result.urls.regular,
-    userProfileLink: result.user.links.html,
-    userName: result.user.name,
-    imageHeight: result.height,
-    imageWidth: result.width,
-  }));
+  const filteredResult: UnsplashImageInfo[] | undefined = results?.map(
+    (result) => ({
+      thumbImageSrc: result.urls.thumb,
+      regularImageSrc: result.urls.regular,
+      userProfileLink: result.user.links.html,
+      userName: result.user.name,
+      imageHeight: result.height,
+      imageWidth: result.width,
+    })
+  );
 
   res.json({ results: filteredResult, totalPages, totalImageNumber });
 };

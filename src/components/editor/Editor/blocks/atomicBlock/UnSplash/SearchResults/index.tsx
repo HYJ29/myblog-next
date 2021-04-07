@@ -32,7 +32,7 @@ export default function SearchResults({ searchResults, onSelect }) {
             const unsplashImageInfo = {
               userProfileLink,
               userName,
-              photoSrc: regularImageSrc,
+              regularImageSrc,
             };
             return (
               <img
