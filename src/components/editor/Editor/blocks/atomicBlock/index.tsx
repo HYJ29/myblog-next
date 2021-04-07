@@ -25,14 +25,14 @@ export default function AtomicBlockComponent({
   const data = entity.getData();
 
   if (type === 'UNSPLASH') {
-    const { src } = data;
+    const { unsplashImageInfo } = data;
     return (
       <UnSplash
         setIsEditorReadOnly={setIsEditorReadOnly}
         editorState={editorState}
         setEditorState={setEditorState}
         block={block}
-        src={src ?? null}
+        unsplashImageInfo={unsplashImageInfo ?? null}
       />
     );
   }

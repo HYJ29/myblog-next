@@ -17,7 +17,7 @@ type Props = {
   editorState: EditorState;
   setEditorState: (ar0: EditorState) => void;
   block: ContentBlock;
-  src: string;
+  unsplashImageInfo: any;
 };
 
 type SearchResultData = {
@@ -31,7 +31,7 @@ export default function UnSplash({
   editorState,
   setEditorState,
   block,
-  src,
+  unsplashImageInfo,
 }: Props) {
   const searchInputRef = useRef<HTMLInputElement | null>(null);
   const [
@@ -89,10 +89,14 @@ export default function UnSplash({
     setIsEditorReadOnly(true);
   };
 
-  const onSelectPhotoHandler = ({ photoSrc }: { photoSrc: string }) => {
+  const onSelectPhotoHandler = ({
+    unsplashImageInfo,
+  }: {
+    unsplashImageInfo: any;
+  }) => {
     const blockEntityKey = block.getEntityAt(0);
     const newEdtitorState = getReplacedEntityDataEditorState({
-      data: { src: photoSrc },
+      data: { unsplashImageInfo },
       editorState,
       entityKey: blockEntityKey,
     });
@@ -100,8 +104,8 @@ export default function UnSplash({
     setEditorState(newEdtitorState);
     setIsEditorReadOnly(false);
   };
-  return src ? (
-    <UnsplashImage src={src} />
+  return unsplashImageInfo ? (
+    <UnsplashImage unsplashImageInfo={unsplashImageInfo} />
   ) : (
     <div className={styles.container}>
       <form className={styles.searchForm} onKeyDown={onKeyDownHandler}>

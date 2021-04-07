@@ -12,7 +12,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
   const filteredResult = results?.map((result) => ({
     thumbImageSrc: result.urls.thumb,
     regularImageSrc: result.urls.regular,
-    userProfile: result.user.links.html,
+    userProfileLink: result.user.links.html,
     userName: result.user.name,
     imageHeight: result.height,
     imageWidth: result.width,

@@ -25,15 +25,22 @@ export default function SearchResults({ searchResults, onSelect }) {
               regularImageSrc,
               imageHeight,
               imageWidth,
+              userProfileLink,
+              userName,
             } = image;
             const flexValue = imageWidth / imageHeight;
+            const unsplashImageInfo = {
+              userProfileLink,
+              userName,
+              photoSrc: regularImageSrc,
+            };
             return (
               <img
                 className={styles.imageItem}
                 src={thumbImageSrc}
                 key={thumbImageSrc}
                 onClick={() => {
-                  onSelect({ photoSrc: regularImageSrc });
+                  onSelect({ unsplashImageInfo });
                 }}
                 style={{
                   flex: `${flexValue} 1 0`,
