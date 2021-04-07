@@ -9,19 +9,19 @@ import {
 type addAtomicProps = {
   editorState: EditorState;
   entityType: string;
-  src?: any;
+  data?: any;
 };
 
 export const addAtomicBlock = ({
   editorState,
   entityType,
-  src,
+  data,
 }: addAtomicProps) => {
   const contentState = editorState.getCurrentContent();
   const contentStateWithEntity = contentState.createEntity(
     entityType,
     'IMMUTABLE',
-    src
+    data
   );
   const entityKey = contentStateWithEntity.getLastCreatedEntityKey();
   const editorStateWithNewEntity = EditorState.set(editorState, {

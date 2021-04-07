@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { EditorState } from 'draft-js';
 
 import {
@@ -33,9 +33,24 @@ export default function SideBar({
 }: Props) {
   const [isOpen, setIsOpen] = useState<boolean>(false);
 
+  const fileUploadInputRef = useRef<HTMLInputElement>(null);
+
   const toggleButtonHandler = (e: React.MouseEvent) => {
     e.stopPropagation();
     setIsOpen((prev) => !prev);
+  };
+
+  const onFileUploadHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files ?? [];
+    const selectedFile = files[0];
+
+    const newEditorState = addAtomicBlock({
+      editorState,
+      entityType: 'GENERAL_IMAGE',
+      data: { selectedFile },
+    });
+    setEditorState(newEditorState);
+    setIsOpen(false);
   };
 
   useEffect(() => {
@@ -55,7 +70,9 @@ export default function SideBar({
     },
     {
       icon: <Camera />,
-      onClick: () => {},
+      onClick: () => {
+        fileUploadInputRef.current?.click();
+      },
     },
     {
       icon: <Search />,
@@ -89,6 +106,12 @@ export default function SideBar({
           <PlusCircle />
         </div>
         <div className={styles.subButtons}>
+          <input
+            className={styles.fileUploadInput}
+            type="file"
+            onChange={onFileUploadHandler}
+            ref={fileUploadInputRef}
+          />
           {subButtons.map((button, index) => (
             <div
               key={index}

@@ -2,6 +2,7 @@ import React from 'react';
 import { ContentState, ContentBlock, EditorState } from 'draft-js';
 
 import UnSplash from './UnSplash';
+import GeneralImage from './GeneralImage';
 
 type Props = {
   contentState: ContentState;
@@ -35,6 +36,11 @@ export default function AtomicBlockComponent({
         unsplashImageInfo={unsplashImageInfo ?? null}
       />
     );
+  }
+
+  if (type === 'GENERAL_IMAGE') {
+    const { selectedFile } = data;
+    return <GeneralImage selectedFile={selectedFile} />;
   }
 
   if (type === 'IMAGE') {
