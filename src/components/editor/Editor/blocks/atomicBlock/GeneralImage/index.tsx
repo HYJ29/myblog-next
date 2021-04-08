@@ -16,5 +16,7 @@ export default function GeneralImage({ selectedFile }) {
     <div>
       <img className={styles.image} src={imageUrl} alt="local image" />
     </div>
-  ) : null;
+  ) : (
+    <div>loading...</div>
+  );
 }

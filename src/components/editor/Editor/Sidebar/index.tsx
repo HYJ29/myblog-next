@@ -20,7 +20,6 @@ type Props = {
   isEditorFocused: boolean;
   setEditorState: (arg0: EditorState) => void;
   editorState: EditorState;
-  setIsEditorReadOnly: (arg: boolean) => void;
 };
 export default function SideBar({
   top,
@@ -29,7 +28,6 @@ export default function SideBar({
   isEditorFocused,
   setEditorState,
   editorState,
-  setIsEditorReadOnly,
 }: Props) {
   const [isOpen, setIsOpen] = useState<boolean>(false);
 

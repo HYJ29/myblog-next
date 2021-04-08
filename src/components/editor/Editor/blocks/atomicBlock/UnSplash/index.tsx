@@ -45,9 +45,11 @@ export default function UnSplash({
   const totalPages = searchResultData?.totalPages;
 
   useEffect(() => {
-    setIsEditorReadOnly(true);
-    if (searchInputRef && searchInputRef.current) {
-      searchInputRef.current.focus();
+    if (!unsplashImageInfo) {
+      setIsEditorReadOnly(true);
+      if (searchInputRef && searchInputRef.current) {
+        searchInputRef.current.focus();
+      }
     }
   }, []);
 

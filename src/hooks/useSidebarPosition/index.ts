@@ -42,7 +42,7 @@ export const useSidebarPosition = ({
       if (blockNode) {
         const blockNodeRect = blockNode.getBoundingClientRect();
         const { x, top } = blockNodeRect;
-        setTop(top);
+        setTop(top + window.scrollY);
         setLeft(x);
         setScale(1);
       }
