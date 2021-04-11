@@ -4,6 +4,7 @@ import blockRenderMap from './blockRenderMap';
 import keyBindingFn from './keyBindingFn';
 import createHandleKeyCommand from './handleKeyCommand';
 import createBlockRendererFn from './blockRendererFn';
+import createHandlePastedFiles from './handlePastedFiles';
 
 type Props = {
   editorState: EditorState;
@@ -22,11 +23,16 @@ export default ({
     editorState,
     setEditorState,
   });
+  const handlePastedFiles = createHandlePastedFiles({
+    editorState,
+    setEditorState,
+  });
 
   return {
     blockRenderMap,
     handleKeyCommand,
     keyBindingFn,
     blockRendererFn,
+    handlePastedFiles,
   };
 };
