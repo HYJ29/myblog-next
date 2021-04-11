@@ -3,6 +3,7 @@ import { ContentState, ContentBlock, EditorState } from 'draft-js';
 
 import UnSplash from './UnSplash';
 import GeneralImage from './GeneralImage';
+import Video from './Video';
 
 type Props = {
   contentState: ContentState;
@@ -46,6 +47,19 @@ export default function AtomicBlockComponent({
   if (type === 'IMAGE') {
     const { src } = data;
     return <img src={src} style={{ width: 100, height: 100 }} alt="image" />;
+  }
+
+  if (type === 'VIDEO') {
+    const { youtubeSrcInfo } = data;
+    return (
+      <Video
+        setIsEditorReadOnly={setIsEditorReadOnly}
+        editorState={editorState}
+        setEditorState={setEditorState}
+        block={block}
+        youtubeSrcInfo={youtubeSrcInfo ?? null}
+      />
+    );
   }
 
   return <div>AtomicBlockComponent</div>;

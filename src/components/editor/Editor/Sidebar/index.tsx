@@ -85,7 +85,14 @@ export default function SideBar({
     },
     {
       icon: <Video />,
-      onClick: () => {},
+      onClick: () => {
+        const newEditorState = addAtomicBlock({
+          editorState,
+          entityType: 'VIDEO',
+        });
+        setEditorState(newEditorState);
+        setIsOpen(false);
+      },
     },
   ];
 

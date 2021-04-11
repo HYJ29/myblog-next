@@ -1,0 +1,19 @@
+@import 'layout';
+@import 'colors';
+
+.container {
+  width: 100%;
+}
+
+.searchForm {
+  @include row();
+  width: 100%;
+}
+
+.youtubeInput {
+  border: none;
+  border-bottom: solid 1px $color-basic-500;
+  width: 100%;
+  outline: none;
+  font-size: 20px;
+}
