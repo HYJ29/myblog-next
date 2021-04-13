@@ -11,6 +11,7 @@ export default function Youtube({
   const splitLetter = isWatch ? '=' : '/';
   const newSrc =
     'https://www.youtube.com/embed/' + src.split(splitLetter).reverse()[0];
+  console.log(`newSrc`, newSrc);
   return (
     <div className={styles.container}>
       <iframe

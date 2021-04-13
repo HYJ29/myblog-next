@@ -16,6 +16,8 @@ export default function EditorComponent() {
   const [isEditorReadOnly, setIsEditorReadOnly] = useState(false);
   const editorrRef = useRef<Editor>(null);
 
+  const isEditorReadOnlyObj = { value: isEditorReadOnly };
+
   const { left, top, scale } = useSidebarPosition({
     editorState,
     isEditorReadOnly,
@@ -38,7 +40,10 @@ export default function EditorComponent() {
     editorState,
     setEditorState,
     setIsEditorReadOnly,
+    isEditorReadOnly: isEditorReadOnlyObj,
   });
+
+  console.log(`isEditorReadOnly at Editor`, isEditorReadOnly);
 
   return (
     <div className={styles.container}>

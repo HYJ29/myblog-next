@@ -8,6 +8,7 @@ import styles from './style.module.scss';
 
 type Props = {
   setIsEditorReadOnly: (arg0: boolean) => void;
+  isEditorReadOnly: { value: boolean };
   editorState: EditorState;
   setEditorState: (ar0: EditorState) => void;
   block: ContentBlock;
@@ -16,24 +17,41 @@ type Props = {
 
 export default function CodeBlock({
   setIsEditorReadOnly,
+  isEditorReadOnly,
   editorState,
   setEditorState,
   block,
   codeBlockText: codeBlockTextProps,
 }: Props) {
-  const [textAreaValue, setTextAreaValue] = useState('');
-  const [codeBlockText, setCodeBlockText] = useState(codeBlockTextProps);
-  const [showTextArea, setShowTextArea] = useState(false);
-  console.log(`(codeBlockTextProps)`, codeBlockTextProps);
+  const [codeBlockText, setCodeBlockText] = useState(codeBlockTextProps ?? '');
+  const [textAreaValue, setTextAreaValue] = useState(codeBlockText ?? '');
+  const [showTextArea, setShowTextArea] = useState(true);
+
+  const textAreaInputRef = useRef<HTMLTextAreaElement | null>(null);
+
+  const focusOnTextArea = () => {
+    if (textAreaInputRef && textAreaInputRef.current) {
+      textAreaInputRef.current.focus();
+      textAreaInputRef.current.selectionStart =
+        textAreaInputRef.current.value.length;
+    }
+  };
   useEffect(() => {
-    if (!codeBlockText) {
-      setShowTextArea(true);
-      setTextAreaValue('');
+    if (codeBlockText) {
+      setShowTextArea(false);
     }
   }, []);
 
-  const onFocusHandler = async (e) => {
+  useEffect(() => {
+    focusOnTextArea();
+  }, []);
+
+  const onFocusTextAreaHandler = async (e) => {
     setIsEditorReadOnly(true);
+  };
+
+  const onBlurTextAreaHandler = async (e) => {
+    setIsEditorReadOnly(false);
   };
 
   const onChangeHalder = (e) => {
@@ -41,17 +59,21 @@ export default function CodeBlock({
     setTextAreaValue(value);
   };
 
-  const onClickCodBlockHandler = (e) => {
+  const onClickCodBlockHandler = async (e) => {
     e.preventDefault();
     e.stopPropagation();
 
-    setTextAreaValue(codeBlockText);
-    setShowTextArea(true);
+    if (showTextArea) {
+      setShowTextArea(false);
+      finishCodeEdit();
+    } else {
+      setTextAreaValue(codeBlockText);
+      await setShowTextArea(true);
+      focusOnTextArea();
+    }
   };
 
-  const onSubmit = (e) => {
-    e.preventDefault();
-    e.stopPropagation();
+  const finishCodeEdit = () => {
     const blockEntityKey = block.getEntityAt(0);
     const newEditorState = getReplacedEntityDataEditorState({
       data: { codeBlockText: textAreaValue },
@@ -64,13 +86,28 @@ export default function CodeBlock({
     setCodeBlockText(textAreaValue);
   };
 
+  const onKeyDownHandler = async (e) => {
+    if (e.keyCode === 13 && e.shiftKey) {
+      e.preventDefault();
+      e.stopPropagation();
+      finishCodeEdit();
+    }
+  };
+
   return (
-    <div className={styles.container} onClick={onClickCodBlockHandler}>
+    <div className={styles.container}>
       <Highlight {...defaultProps} code={textAreaValue ?? ''} language="jsx">
         {({ className, style, tokens, getLineProps, getTokenProps }) => (
           <pre
             className={className}
-            style={{ ...style, padding: '1rem', borderRadius: '.5rem' }}
+            style={{
+              ...style,
+              padding: '1rem',
+              borderRadius: '.5rem',
+              cursor: 'pointer',
+              overflow: 'scroll',
+            }}
+            onClick={onClickCodBlockHandler}
           >
             {tokens.map((line, i) => (
               <div {...getLineProps({ line, key: i })}>
@@ -85,11 +122,16 @@ export default function CodeBlock({
       {showTextArea && (
         <>
           <textarea
-            onFocus={onFocusHandler}
+            className={styles.textAreaInput}
+            onFocus={onFocusTextAreaHandler}
+            onBlur={onBlurTextAreaHandler}
             onChange={onChangeHalder}
             value={textAreaValue}
+            ref={textAreaInputRef}
+            onKeyDown={onKeyDownHandler}
+            placeholder="Put code and press shift + Enter."
           />
-          <button onClick={onSubmit}>확인</button>
+          {/* <button onClick={onSubmit}>확인</button> */}
         </>
       )}
     </div>

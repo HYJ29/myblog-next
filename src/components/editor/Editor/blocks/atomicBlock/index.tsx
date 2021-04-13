@@ -14,6 +14,7 @@ type Props = {
     setIsEditorReadOnly: (arg0: boolean) => void;
     editorState: EditorState;
     setEditorState: (arg: EditorState) => void;
+    isEditorReadOnly: { value: boolean };
   };
 };
 
@@ -22,7 +23,12 @@ export default function AtomicBlockComponent({
   block,
   blockProps,
 }: Props) {
-  const { setIsEditorReadOnly, editorState, setEditorState } = blockProps;
+  const {
+    setIsEditorReadOnly,
+    editorState,
+    setEditorState,
+    isEditorReadOnly,
+  } = blockProps;
   const entity = contentState.getEntity(block.getEntityAt(0));
   const type = entity.getType();
 
@@ -73,6 +79,7 @@ export default function AtomicBlockComponent({
     return (
       <CodeBlock
         setIsEditorReadOnly={setIsEditorReadOnly}
+        isEditorReadOnly={isEditorReadOnly}
         editorState={editorState}
         setEditorState={setEditorState}
         block={block}
