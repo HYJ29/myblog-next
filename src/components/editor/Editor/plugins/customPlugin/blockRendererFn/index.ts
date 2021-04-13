@@ -13,9 +13,9 @@ export default ({
   editorState,
   setEditorState,
 }: Props) => (block: ContentBlock) => {
-  const type = block.getType();
+  const blockType = block.getType();
 
-  switch (type) {
+  switch (blockType) {
     case 'atomic':
       return {
         component: AtomicBlockComponent,

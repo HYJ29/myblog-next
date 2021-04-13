@@ -1,0 +1,6 @@
+@import 'layout';
+@import 'colors';
+
+.container {
+  @include col();
+}

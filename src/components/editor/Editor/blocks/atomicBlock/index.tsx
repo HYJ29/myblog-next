@@ -4,6 +4,8 @@ import { ContentState, ContentBlock, EditorState } from 'draft-js';
 import UnSplash from './UnSplash';
 import GeneralImage from './GeneralImage';
 import Video from './Video';
+import Dash from './Dash';
+import CodeBlock from './CodeBlock';
 
 type Props = {
   contentState: ContentState;
@@ -58,6 +60,23 @@ export default function AtomicBlockComponent({
         setEditorState={setEditorState}
         block={block}
         youtubeSrcInfo={youtubeSrcInfo ?? null}
+      />
+    );
+  }
+
+  if (type === 'DASH') {
+    return <Dash />;
+  }
+
+  if (type === 'CODE_BLOCK') {
+    const { codeBlockText } = data;
+    return (
+      <CodeBlock
+        setIsEditorReadOnly={setIsEditorReadOnly}
+        editorState={editorState}
+        setEditorState={setEditorState}
+        block={block}
+        codeBlockText={codeBlockText}
       />
     );
   }

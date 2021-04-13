@@ -60,11 +60,25 @@ export default function SideBar({
   const subButtons = [
     {
       icon: <Minus />,
-      onClick: () => {},
+      onClick: () => {
+        const newEditorState = addAtomicBlock({
+          editorState,
+          entityType: 'DASH',
+        });
+        setEditorState(newEditorState);
+        setIsOpen(false);
+      },
     },
     {
       icon: <Code />,
-      onClick: () => {},
+      onClick: () => {
+        const newEditorState = addAtomicBlock({
+          editorState,
+          entityType: 'CODE_BLOCK',
+        });
+        setEditorState(newEditorState);
+        setIsOpen(false);
+      },
     },
     {
       icon: <Camera />,

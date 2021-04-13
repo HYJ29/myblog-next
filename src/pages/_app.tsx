@@ -12,6 +12,12 @@ function MyApp({ Component, pageProps }: AppProps) {
       <Head>
         <title>LOG</title>
         <link rel="icon" href="/favicon.ico" />
+        <link
+          rel="preload"
+          href="/fonts/Pacifico-Regular.ttf"
+          as="font"
+          crossOrigin=""
+        />
       </Head>
       <Component {...pageProps} />
     </DefaultLayout>
