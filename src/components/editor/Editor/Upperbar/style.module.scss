@@ -1,0 +1,48 @@
+@import 'layout';
+@import 'colors';
+
+.upperbarContainer {
+  @include row();
+  justify-content: space-between;
+  position: absolute;
+  width: 300px;
+  // height: 30px;
+  padding: 0.5rem 1rem;
+  background-color: $color-primary-300;
+  opacity: 0.8;
+  border-radius: 1rem;
+  z-index: 100;
+
+  border: 1px solid $color-primary-400;
+}
+
+.seperator {
+  display: inline-block;
+  border-right: 1px solid $color-basic-100;
+  height: 24px;
+  margin: 0 0.5rem;
+}
+
+.upperbarButton {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 30px;
+  height: 30px;
+  margin: 0 0.2rem;
+  cursor: pointer;
+  &:after {
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    border: solid transparent;
+    border-top-color: $color-primary-300;
+    border-width: 4px;
+    margin-left: -4px;
+
+    pointer-events: none;
+    content: ' ';
+    height: 0;
+    width: 0;
+  }
+}

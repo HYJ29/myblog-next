@@ -4,11 +4,13 @@ import { EditorState } from 'draft-js';
 import Editor from '@draft-js-plugins/editor';
 import 'draft-js/dist/Draft.css';
 
-import { useSidebarPosition } from '@/hooks/useSidebarPosition';
+import { useSidebarPosition, useUpperbarPosition } from '@/hooks';
 
 import Sidebar from './Sidebar';
+import Uppperbar from './Upperbar';
 import { createCustomPlugin } from './plugins';
 import styles from './style.module.scss';
+import Upperbar from './Upperbar';
 
 export default function EditorComponent() {
   const [editorState, setEditorState] = useState(EditorState.createEmpty());
@@ -18,10 +20,20 @@ export default function EditorComponent() {
 
   const isEditorReadOnlyObj = { value: isEditorReadOnly };
 
-  const { left, top, scale } = useSidebarPosition({
+  const {
+    left: sidebarLeft,
+    top: sidbarTop,
+    scale: sidebarScale,
+  } = useSidebarPosition({
     editorState,
     isEditorReadOnly,
   });
+
+  const {
+    left: upperbarLeft,
+    top: upperbarTop,
+    scale: upperbarScale,
+  } = useUpperbarPosition({ editorState, isEditorReadOnly });
 
   useEffect(() => {
     editorrRef.current?.focus();
@@ -77,13 +89,19 @@ export default function EditorComponent() {
       </div>
 
       <Sidebar
-        top={top}
-        left={left}
-        scale={scale}
+        top={sidbarTop}
+        left={sidebarLeft}
+        scale={sidebarScale}
         isEditorFocused={isEditorFocused}
         setEditorState={setEditorState}
         editorState={editorState}
-        setIsEditorReadOnly={setIsEditorReadOnly}
+      />
+      <Upperbar
+        top={upperbarTop}
+        left={upperbarLeft}
+        scale={upperbarScale}
+        editorState={editorState}
+        setEditorState={setEditorState}
       />
     </div>
   );
