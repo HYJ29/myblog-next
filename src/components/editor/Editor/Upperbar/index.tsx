@@ -52,10 +52,7 @@ export default function Upperbar({
       title: 'subject',
       icon: '/icons/upperbar/subject.svg',
       onClick: () => {
-        const newEditorState = RichUtils.toggleBlockType(
-          editorState,
-          'SUBJECT'
-        );
+        const newEditorState = RichUtils.toggleBlockType(editorState, 'h5');
         setEditorState(newEditorState);
         setIsOpen(false);
       },
@@ -66,7 +63,7 @@ export default function Upperbar({
       onClick: () => {
         const newEditorState = RichUtils.toggleBlockType(
           editorState,
-          'QUOTEBLOCK'
+          'blockquote'
         );
         setEditorState(newEditorState);
         setIsOpen(false);
@@ -76,10 +73,7 @@ export default function Upperbar({
       title: 'subTitle',
       icon: '/icons/upperbar/subTitle.svg',
       onClick: () => {
-        const newEditorState = RichUtils.toggleBlockType(
-          editorState,
-          'SUBTITLE'
-        );
+        const newEditorState = RichUtils.toggleBlockType(editorState, 'h4');
         setEditorState(newEditorState);
         setIsOpen(false);
       },
@@ -88,7 +82,7 @@ export default function Upperbar({
       title: 'Title',
       icon: '/icons/upperbar/Title.svg',
       onClick: () => {
-        const newEditorState = RichUtils.toggleBlockType(editorState, 'TITLE');
+        const newEditorState = RichUtils.toggleBlockType(editorState, 'h3');
         setEditorState(newEditorState);
         setIsOpen(false);
       },
