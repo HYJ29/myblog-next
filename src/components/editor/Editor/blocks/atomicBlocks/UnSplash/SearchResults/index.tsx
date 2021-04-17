@@ -3,7 +3,6 @@ import React from 'react';
 import styles from './style.module.scss';
 
 export default function SearchResults({ searchResults, onSelect }) {
-  console.log(`searchResults`, searchResults);
   const imageRows = [
     [...searchResults.slice(0, 3)],
     [...searchResults.slice(3, 6)],
@@ -19,7 +18,6 @@ export default function SearchResults({ searchResults, onSelect }) {
       {imageRows.map((row, index) => (
         <div key={index} className={styles.rowContainer}>
           {row.map((image) => {
-            console.log(`images`, image);
             const {
               thumbImageSrc,
               regularImageSrc,

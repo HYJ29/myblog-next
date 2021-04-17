@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { RichUtils, EditorState } from 'draft-js';
 
 import styles from './style.module.scss';
+import LinkInput from './LinkInput';
 
 type Props = {
   top: number;
@@ -10,17 +11,21 @@ type Props = {
   // isEditorFocused: boolean;
   setEditorState: (arg0: EditorState) => void;
   editorState: EditorState;
+  setIsEditorReadOnly: (arg0: boolean) => void;
 };
 
 export default function Upperbar({
   editorState,
   setEditorState,
+  setIsEditorReadOnly,
   top,
   left,
   scale,
 }: Props) {
   const [isLinkInputActivated, setIsLinkInputActivated] = useState(false);
-  const [isOpen, setIsOpen] = useState<boolean>(false);
+  const [isOpen, setIsOpen] = useState<boolean>(
+    isLinkInputActivated ? true : false
+  );
 
   const inlineButtons = [
     {
@@ -44,7 +49,17 @@ export default function Upperbar({
         setIsOpen(false);
       },
     },
-    { title: 'link', icon: '/icons/upperbar/link.svg', onClick: () => {} },
+    {
+      title: 'link',
+      icon: '/icons/upperbar/link.svg',
+      onClick: (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        setIsLinkInputActivated(true);
+        setIsOpen(true);
+        setIsEditorReadOnly(true);
+      },
+    },
   ];
 
   const blocButtons = [
@@ -52,7 +67,10 @@ export default function Upperbar({
       title: 'subject',
       icon: '/icons/upperbar/subject.svg',
       onClick: () => {
-        const newEditorState = RichUtils.toggleBlockType(editorState, 'h5');
+        const newEditorState = RichUtils.toggleBlockType(
+          editorState,
+          'header-five'
+        );
         setEditorState(newEditorState);
         setIsOpen(false);
       },
@@ -73,7 +91,10 @@ export default function Upperbar({
       title: 'subTitle',
       icon: '/icons/upperbar/subTitle.svg',
       onClick: () => {
-        const newEditorState = RichUtils.toggleBlockType(editorState, 'h4');
+        const newEditorState = RichUtils.toggleBlockType(
+          editorState,
+          'header-four'
+        );
         setEditorState(newEditorState);
         setIsOpen(false);
       },
@@ -82,7 +103,10 @@ export default function Upperbar({
       title: 'Title',
       icon: '/icons/upperbar/Title.svg',
       onClick: () => {
-        const newEditorState = RichUtils.toggleBlockType(editorState, 'h3');
+        const newEditorState = RichUtils.toggleBlockType(
+          editorState,
+          'header-three'
+        );
         setEditorState(newEditorState);
         setIsOpen(false);
       },
@@ -100,11 +124,16 @@ export default function Upperbar({
       className={styles.upperbarContainer}
     >
       {isLinkInputActivated ? (
-        <div>linkInput</div>
+        <LinkInput
+          setIsLinkInputActivated={setIsLinkInputActivated}
+          editorState={editorState}
+          setEditorState={setEditorState}
+          setIsEditorReadOnly={setIsEditorReadOnly}
+        />
       ) : (
         <>
           {inlineButtons.map((button) => (
-            <div className={styles.upperbarButton}>
+            <div className={styles.upperbarButton} key={button.title}>
               <img
                 src={button.icon}
                 alt={button.title}
@@ -114,7 +143,7 @@ export default function Upperbar({
           ))}
           <div className={styles.seperator} />
           {blocButtons.map((button) => (
-            <div className={styles.upperbarButton}>
+            <div className={styles.upperbarButton} key={button.title}>
               <img
                 src={button.icon}
                 alt={button.title}

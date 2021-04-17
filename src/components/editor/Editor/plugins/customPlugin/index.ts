@@ -5,6 +5,7 @@ import keyBindingFn from './keyBindingFn';
 import createHandleKeyCommand from './handleKeyCommand';
 import createBlockRendererFn from './blockRendererFn';
 import createHandlePastedFiles from './handlePastedFiles';
+import decorators from './decorators';
 
 type Props = {
   editorState: EditorState;
@@ -13,7 +14,7 @@ type Props = {
   isEditorReadOnly: { value: boolean };
 };
 
-export default ({
+export const createCustomPlugin = ({
   editorState,
   setEditorState,
   setIsEditorReadOnly,
@@ -39,3 +40,5 @@ export default ({
     handlePastedFiles,
   };
 };
+
+export default createCustomPlugin;

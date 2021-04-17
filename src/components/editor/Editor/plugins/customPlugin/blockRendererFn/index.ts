@@ -1,6 +1,6 @@
 import { ContentBlock, EditorState } from 'draft-js';
 
-import AtomicBlockComponent from '@/components/editor/Editor/blocks/atomicBlock';
+import AtomicBlockComponent from '@/components/editor/Editor/blocks/atomicBlocks';
 
 type Props = {
   setIsEditorReadOnly: (arg0: boolean) => void;
@@ -9,7 +9,7 @@ type Props = {
   isEditorReadOnly: { value: boolean };
 };
 
-export default ({
+export const createBlockRendereFn = ({
   setIsEditorReadOnly,
   editorState,
   setEditorState,
@@ -31,3 +31,5 @@ export default ({
       };
   }
 };
+
+export default createBlockRendereFn;

@@ -3,10 +3,8 @@ import { EditorState, getVisibleSelectionRect, ContentState } from 'draft-js';
 
 export const useUpperbarPosition = ({
   editorState,
-  isEditorReadOnly,
 }: {
   editorState: EditorState;
-  isEditorReadOnly: boolean;
 }) => {
   const [top, setTop] = useState<number>(0);
   const [left, setLeft] = useState<number>(0);
@@ -15,7 +13,6 @@ export const useUpperbarPosition = ({
   useEffect(() => {
     // 1. get SelctionRect
     const selectionRect = getVisibleSelectionRect(window);
-    console.log(`selectionRect`, selectionRect);
 
     // 2. get selectionState
     const contentState = editorState.getCurrentContent();
@@ -35,7 +32,7 @@ export const useUpperbarPosition = ({
     //   } while (currentKey !== endKey);
     // }
 
-    if (selectionRect && selectionRect.width > 1 && !isEditorReadOnly) {
+    if (selectionRect && selectionRect.width > 1) {
       // const rightPosition = hasSeveralBlock
       //   ? finalMaxWidth
       //   : selectionRect.right;
@@ -48,21 +45,4 @@ export const useUpperbarPosition = ({
   }, [editorState]);
 
   return { top, left, scale };
-};
-
-const getBlockTextWidth = ({
-  currentKey,
-  contentState,
-}: {
-  currentKey: string;
-  contentState: ContentState;
-}) => {
-  const block = contentState.getBlockForKey(currentKey);
-  const text = block.getText();
-  const splitedText = text.split('\n');
-  console.log(`splitedText`, splitedText);
-  const maxLength = Math.max(...splitedText.map((text) => text.length));
-  const maxWidth = 9.515625 * maxLength;
-  console.log(`maxWidth`, maxWidth);
-  return maxWidth;
 };

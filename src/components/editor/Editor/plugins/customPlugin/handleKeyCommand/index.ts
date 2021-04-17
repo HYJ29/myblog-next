@@ -1,6 +1,8 @@
 import { RichUtils, EditorState, DraftEditorCommand } from 'draft-js';
 
-export default (setEditorState: (arg0: EditorState) => void) => (
+export const createHandleKeyCommand = (
+  setEditorState: (arg0: EditorState) => void
+) => (
   command: DraftEditorCommand | 'add-soft-new-line',
   editorState: EditorState
 ) => {
@@ -19,3 +21,5 @@ export default (setEditorState: (arg0: EditorState) => void) => (
 
   return 'not-handled';
 };
+
+export default createHandleKeyCommand;

@@ -2,7 +2,7 @@ import { EditorState } from 'draft-js';
 
 import { addAtomicBlock } from '@/utils';
 
-export default ({
+export const createHandlerPastedFiles = ({
   editorState,
   setEditorState,
 }: {
@@ -17,3 +17,5 @@ export default ({
   });
   setEditorState(newEditorState);
 };
+
+export default createHandlerPastedFiles;

@@ -37,6 +37,8 @@ export const addAtomicBlock = ({
   return newEditorState;
 };
 
+export const tollgeToLinkBlock = {};
+
 type getBlockDeletedEditorStateProps = {
   editorState: EditorState;
   block: ContentBlock;

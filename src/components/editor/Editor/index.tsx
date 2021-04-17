@@ -3,17 +3,25 @@ import React, { useState, useRef, useEffect } from 'react';
 import { EditorState } from 'draft-js';
 import Editor from '@draft-js-plugins/editor';
 import 'draft-js/dist/Draft.css';
+import createLinkifyPlugin from '@draft-js-plugins/linkify';
+import '@draft-js-plugins/linkify/lib/plugin.css';
 
 import { useSidebarPosition, useUpperbarPosition } from '@/hooks';
+import { getConvertedToRawContentState } from '@/utils/draft/convert';
 
 import Sidebar from './Sidebar';
 import Uppperbar from './Upperbar';
 import { createCustomPlugin } from './plugins';
+import compositeDecorator from './plugins/customPlugin/decorators';
 import styles from './style.module.scss';
 import Upperbar from './Upperbar';
 
+// const linkifyPlugin = createLinkifyPlugin();
+
 export default function EditorComponent() {
-  const [editorState, setEditorState] = useState(EditorState.createEmpty());
+  const [editorState, setEditorState] = useState(
+    EditorState.createEmpty(compositeDecorator)
+  );
   const [isEditorFocused, setIsEditorFocused] = useState(false);
   const [isEditorReadOnly, setIsEditorReadOnly] = useState(false);
   const editorrRef = useRef<Editor>(null);
@@ -33,14 +41,15 @@ export default function EditorComponent() {
     left: upperbarLeft,
     top: upperbarTop,
     scale: upperbarScale,
-  } = useUpperbarPosition({ editorState, isEditorReadOnly });
+  } = useUpperbarPosition({
+    editorState,
+  });
 
   useEffect(() => {
     editorrRef.current?.focus();
   }, []);
 
-  const jsEditorState = editorState.toJS();
-  console.log(`jsEditorState`, jsEditorState);
+  const rawContentState = getConvertedToRawContentState({ editorState });
 
   const onClickEditorContainerHandler = () => {
     if (editorrRef && editorrRef.current) {
@@ -54,8 +63,6 @@ export default function EditorComponent() {
     setIsEditorReadOnly,
     isEditorReadOnly: isEditorReadOnlyObj,
   });
-
-  console.log(`isEditorReadOnly at Editor`, isEditorReadOnly);
 
   return (
     <div className={styles.container}>
@@ -79,11 +86,13 @@ export default function EditorComponent() {
               onBlur={() => setIsEditorFocused(false)}
               ref={editorrRef}
               plugins={[customPlugin]}
+              // decorators={[compositeDecorator]}
               readOnly={isEditorReadOnly}
             />
           </div>
           <pre style={{ minHeight: '100vh', width: 100 }}>
-            {JSON.stringify(jsEditorState.currentContent.blockMap, null, 2)}
+            {JSON.stringify(rawContentState, null, 2)}
+            {/* {JSON.stringify(jsEditorState.currentContent.blockMap, null, 2)} */}
           </pre>
         </div>
       </div>
@@ -102,6 +111,7 @@ export default function EditorComponent() {
         scale={upperbarScale}
         editorState={editorState}
         setEditorState={setEditorState}
+        setIsEditorReadOnly={setIsEditorReadOnly}
       />
     </div>
   );
