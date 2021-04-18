@@ -8,7 +8,7 @@ import './globals.scss';
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
-    <DefaultLayout>
+    <>
       <Head>
         <title>LOG</title>
         <link rel="icon" href="/favicon.ico" />
@@ -20,7 +20,7 @@ function MyApp({ Component, pageProps }: AppProps) {
         />
       </Head>
       <Component {...pageProps} />
-    </DefaultLayout>
+    </>
   );
 }
 

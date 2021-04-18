@@ -4,7 +4,7 @@ import Link from 'next/link';
 
 import styles from './style.module.scss';
 
-import NavigationItem from './NavigationItem';
+import NavigationItem from '../Items/NavigationItem';
 
 export default function MainHeader() {
   const router = useRouter();

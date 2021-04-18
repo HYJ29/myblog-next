@@ -2,6 +2,7 @@ import React from 'react';
 import { GetStaticProps } from 'next';
 
 import { Card } from '@/components/ui';
+import { DefaultLayout } from '@/components/layout';
 import { getAllPosts } from '@/data';
 
 import styles from './style.module.scss';
@@ -12,23 +13,25 @@ type Props = {
 
 export default function HomePage({ posts }: Props): JSX.Element {
   return (
-    <div className={styles.container}>
-      <main>
-        <ul className={styles.postListContainer}>
-          {posts.map((post) => (
-            <Card
-              key={post.id}
-              postId={post.id}
-              titlePhoto={post.titlePhoto}
-              title={post.title}
-              subTitle={post.subTitle}
-              createdAt={post.createdAt}
-            />
-          ))}
-        </ul>
-      </main>
-      <footer></footer>
-    </div>
+    <DefaultLayout>
+      <div className={styles.container}>
+        <main>
+          <ul className={styles.postListContainer}>
+            {posts.map((post) => (
+              <Card
+                key={post.id}
+                postId={post.id}
+                titlePhoto={post.titlePhoto}
+                title={post.title}
+                subTitle={post.subTitle}
+                createdAt={post.createdAt}
+              />
+            ))}
+          </ul>
+        </main>
+        <footer></footer>
+      </div>
+    </DefaultLayout>
   );
 }
 

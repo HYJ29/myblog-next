@@ -1,0 +1,11 @@
+@import 'colors';
+
+.controllerItem {
+  margin: 0 1rem;
+  background-color: $color-primary-200;
+  color: $color-primary-500;
+  cursor: pointer;
+
+  padding: 5px 10px;
+  border-radius: 0.5rem;
+}

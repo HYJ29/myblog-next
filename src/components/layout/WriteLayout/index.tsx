@@ -1,17 +1,17 @@
 import React from 'react';
 
 import styles from './style.module.scss';
-import MainHeader from '../Headers/MainHeader';
+import WriteHeader from '../Headers/WriteHeader';
 
 type Props = {
   children?: JSX.Element | JSX.Element[];
 };
 
-export default function WriteLayout({ children }: Props): JSX.Element {
+export default function DefaultLayout({ children }: Props): JSX.Element {
   return (
     <div className={styles.container}>
       <div className={styles.headerContainer}>
-        <MainHeader />
+        <WriteHeader />
       </div>
       <div className={styles.headerPlaceholder} />
       {children}
