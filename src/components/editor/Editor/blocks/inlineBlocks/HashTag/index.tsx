@@ -1,9 +1,6 @@
 import React from 'react';
 
+import styles from './style.module.scss';
 export default function HashTag({ children }) {
-  return (
-    <span style={{ color: 'red', backgroundColor: 'blue' }}>
-      hash{children}
-    </span>
-  );
+  return <span className={styles.tag}>{children}</span>;
 }

@@ -1,2 +1,8 @@
+@import 'colors';
+
 .container {
+  margin: 10px 5px;
+  padding: 10px 20px 10px;
+  border-left: 3px solid $color-basic-900;
+  color: $color-basic-600;
 }

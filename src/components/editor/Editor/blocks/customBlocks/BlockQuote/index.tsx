@@ -7,5 +7,5 @@ export default function BlockQuote({
 }: {
   children: React.ReactNode;
 }) {
-  return <blockquote>{children}</blockquote>;
+  return <blockquote className={styles.container}>{children}</blockquote>;
 }

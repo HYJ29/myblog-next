@@ -1,5 +1,7 @@
 import React from 'react';
 
+import styles from './style.module.scss';
+
 export default function Paragraph({ children }: { children: React.ReactNode }) {
-  return <div>{children}</div>;
+  return <p className={styles.paragraph}>{children}</p>;
 }
