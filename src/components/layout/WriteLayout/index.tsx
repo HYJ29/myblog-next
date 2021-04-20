@@ -13,6 +13,7 @@ export default function DefaultLayout({ children }: Props): JSX.Element {
       <div className={styles.headerContainer}>
         <WriteHeader />
       </div>
+
       <div className={styles.headerPlaceholder} />
       {children}
     </div>
