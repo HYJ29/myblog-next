@@ -1,0 +1,15 @@
+@import 'layout';
+@import 'colors';
+
+.modalOverlay {
+  @include row();
+  justify-content: center;
+  align-items: center;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: $color-primary-transparent-100;
+  z-index: 1000;
+}

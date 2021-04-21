@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 
+import { Button } from '@/components/button';
+
 import styles from './style.module.scss';
 
 type Props = {
@@ -10,9 +12,7 @@ type Props = {
 export default function ControllerItem({ text, onClick }: Props): JSX.Element {
   return (
     <li>
-      <button onClick={onClick} className={styles.controllerItem}>
-        {text}
-      </button>
+      <Button children={text} onClick={onClick} style={{ margin: '0 1rem' }} />
     </li>
   );
 }

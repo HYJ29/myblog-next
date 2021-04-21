@@ -22,36 +22,38 @@
   @include row();
 }
 
-.modalOverlay {
-  @include row();
-  justify-content: center;
-  align-items: center;
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: black;
-
-  z-index: 1000;
-}
-
 .modalContainer {
+  @include col();
+
   width: 500px;
   min-height: 300px;
   background-color: $color-basic-100;
   border-radius: 0.5rem;
   opacity: initial;
+  padding: 1rem;
 }
 
 .modalHeader {
   @include row();
-  justify-content: space-between;
+  justify-content: flex-end;
 }
 
 .modalXIcon {
-  width: 30px;
-  height: 30px;
+  width: 24px;
+  height: 24px;
   color: $color-primary-500;
   cursor: pointer;
+}
+
+.infoTextContainer {
+  @include row();
+}
+
+.modalLabel {
+  width: 100px;
+}
+
+.titlePhoto {
+  width: 100%;
+  border-radius: 0.5rem;
 }
