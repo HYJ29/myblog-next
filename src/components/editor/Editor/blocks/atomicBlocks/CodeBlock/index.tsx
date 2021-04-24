@@ -8,7 +8,6 @@ import styles from './style.module.scss';
 
 type Props = {
   setIsEditorReadOnly: (arg0: boolean) => void;
-  isEditorReadOnly: { value: boolean };
   editorState: EditorState;
   setEditorState: (ar0: EditorState) => void;
   block: ContentBlock;
@@ -17,7 +16,6 @@ type Props = {
 
 export default function CodeBlock({
   setIsEditorReadOnly,
-  isEditorReadOnly,
   editorState,
   setEditorState,
   block,

@@ -7,7 +7,7 @@ type Props = {
   children?: JSX.Element | JSX.Element[];
 };
 
-export default function WriteLayout({ children }: Props): JSX.Element {
+export default function DefaultLayout({ children }: Props): JSX.Element {
   return (
     <div className={styles.container}>
       <div className={styles.headerContainer}>

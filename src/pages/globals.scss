@@ -1,6 +1,14 @@
+@import 'colors';
+
 @font-face {
   font-family: 'Pacifico';
   src: url('/fonts/Pacifico-Regular.ttf');
+}
+
+:root {
+  --amplify-primary-color: #f1ae03;
+  --amplify-primary-tint: #f6c83f;
+  --amplify-primary-shade: #fad966;
 }
 
 html,

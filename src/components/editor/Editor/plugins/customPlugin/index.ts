@@ -11,21 +11,18 @@ type Props = {
   editorState: EditorState;
   setEditorState: (ar0: EditorState) => void;
   setIsEditorReadOnly: (arg0: boolean) => void;
-  isEditorReadOnly: { value: boolean };
 };
 
 export const createCustomPlugin = ({
   editorState,
   setEditorState,
   setIsEditorReadOnly,
-  isEditorReadOnly,
 }: Props) => {
   const handleKeyCommand = createHandleKeyCommand(setEditorState);
   const blockRendererFn = createBlockRendererFn({
     setIsEditorReadOnly,
     editorState,
     setEditorState,
-    isEditorReadOnly,
   });
   const handlePastedFiles = createHandlePastedFiles({
     editorState,

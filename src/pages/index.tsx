@@ -1,5 +1,6 @@
 import React from 'react';
 import { GetStaticProps } from 'next';
+import { withSSRContext } from 'aws-amplify';
 
 import { Card } from '@/components/ui';
 import { DefaultLayout } from '@/components/layout';

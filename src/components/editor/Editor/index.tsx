@@ -26,8 +26,6 @@ export default function EditorComponent() {
   const [isEditorReadOnly, setIsEditorReadOnly] = useState(false);
   const editorrRef = useRef<Editor>(null);
 
-  const isEditorReadOnlyObj = { value: isEditorReadOnly };
-
   const {
     left: sidebarLeft,
     top: sidbarTop,
@@ -61,7 +59,6 @@ export default function EditorComponent() {
     editorState,
     setEditorState,
     setIsEditorReadOnly,
-    isEditorReadOnly: isEditorReadOnlyObj,
   });
 
   return (
