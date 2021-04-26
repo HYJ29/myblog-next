@@ -9,9 +9,8 @@ export const createUser = /* GraphQL */ `
   ) {
     createUser(input: $input, condition: $condition) {
       id
-      providerType
       providerKey
-      name
+      userNickname
       photoUrl
       email
       createdAt
@@ -41,9 +40,8 @@ export const updateUser = /* GraphQL */ `
   ) {
     updateUser(input: $input, condition: $condition) {
       id
-      providerType
       providerKey
-      name
+      userNickname
       photoUrl
       email
       createdAt
@@ -73,9 +71,8 @@ export const deleteUser = /* GraphQL */ `
   ) {
     deleteUser(input: $input, condition: $condition) {
       id
-      providerType
       providerKey
-      name
+      userNickname
       photoUrl
       email
       createdAt

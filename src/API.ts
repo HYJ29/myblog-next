@@ -4,17 +4,15 @@
 
 export type CreateUserInput = {
   id?: string | null,
-  providerType: string,
   providerKey: string,
-  name: string,
+  userNickname: string,
   photoUrl?: string | null,
   email?: string | null,
 };
 
 export type ModelUserConditionInput = {
-  providerType?: ModelStringInput | null,
   providerKey?: ModelStringInput | null,
-  name?: ModelStringInput | null,
+  userNickname?: ModelStringInput | null,
   photoUrl?: ModelStringInput | null,
   email?: ModelStringInput | null,
   and?: Array< ModelUserConditionInput | null > | null,
@@ -65,9 +63,8 @@ export type ModelSizeInput = {
 export type User = {
   __typename: "User",
   id?: string,
-  providerType?: string,
   providerKey?: string,
-  name?: string,
+  userNickname?: string,
   photoUrl?: string | null,
   email?: string | null,
   createdAt?: string,
@@ -127,9 +124,8 @@ export type Tag = {
 
 export type UpdateUserInput = {
   id: string,
-  providerType?: string | null,
   providerKey?: string | null,
-  name?: string | null,
+  userNickname?: string | null,
   photoUrl?: string | null,
   email?: string | null,
 };
@@ -237,9 +233,8 @@ export type DeleteTagInput = {
 
 export type ModelUserFilterInput = {
   id?: ModelIDInput | null,
-  providerType?: ModelStringInput | null,
   providerKey?: ModelStringInput | null,
-  name?: ModelStringInput | null,
+  userNickname?: ModelStringInput | null,
   photoUrl?: ModelStringInput | null,
   email?: ModelStringInput | null,
   and?: Array< ModelUserFilterInput | null > | null,
@@ -252,6 +247,12 @@ export type ModelUserConnection = {
   items?:  Array<User | null > | null,
   nextToken?: string | null,
 };
+
+export enum ModelSortDirection {
+  ASC = "ASC",
+  DESC = "DESC",
+}
+
 
 export type ModelPostFilterInput = {
   id?: ModelIDInput | null,
@@ -298,9 +299,8 @@ export type CreateUserMutation = {
   createUser?:  {
     __typename: "User",
     id: string,
-    providerType: string,
     providerKey: string,
-    name: string,
+    userNickname: string,
     photoUrl?: string | null,
     email?: string | null,
     createdAt: string,
@@ -334,9 +334,8 @@ export type UpdateUserMutation = {
   updateUser?:  {
     __typename: "User",
     id: string,
-    providerType: string,
     providerKey: string,
-    name: string,
+    userNickname: string,
     photoUrl?: string | null,
     email?: string | null,
     createdAt: string,
@@ -370,9 +369,8 @@ export type DeleteUserMutation = {
   deleteUser?:  {
     __typename: "User",
     id: string,
-    providerType: string,
     providerKey: string,
-    name: string,
+    userNickname: string,
     photoUrl?: string | null,
     email?: string | null,
     createdAt: string,
@@ -735,9 +733,8 @@ export type GetUserQuery = {
   getUser?:  {
     __typename: "User",
     id: string,
-    providerType: string,
     providerKey: string,
-    name: string,
+    userNickname: string,
     photoUrl?: string | null,
     email?: string | null,
     createdAt: string,
@@ -774,9 +771,38 @@ export type ListUsersQuery = {
     items?:  Array< {
       __typename: "User",
       id: string,
-      providerType: string,
       providerKey: string,
-      name: string,
+      userNickname: string,
+      photoUrl?: string | null,
+      email?: string | null,
+      createdAt: string,
+      updatedAt: string,
+      owner?: string | null,
+      Posts?:  {
+        __typename: "ModelPostConnection",
+        nextToken?: string | null,
+      } | null,
+    } | null > | null,
+    nextToken?: string | null,
+  } | null,
+};
+
+export type UserByProviderKeyQueryVariables = {
+  providerKey?: string | null,
+  sortDirection?: ModelSortDirection | null,
+  filter?: ModelUserFilterInput | null,
+  limit?: number | null,
+  nextToken?: string | null,
+};
+
+export type UserByProviderKeyQuery = {
+  userByProviderKey?:  {
+    __typename: "ModelUserConnection",
+    items?:  Array< {
+      __typename: "User",
+      id: string,
+      providerKey: string,
+      userNickname: string,
       photoUrl?: string | null,
       email?: string | null,
       createdAt: string,
@@ -999,9 +1025,8 @@ export type OnCreateUserSubscription = {
   onCreateUser?:  {
     __typename: "User",
     id: string,
-    providerType: string,
     providerKey: string,
-    name: string,
+    userNickname: string,
     photoUrl?: string | null,
     email?: string | null,
     createdAt: string,
@@ -1030,9 +1055,8 @@ export type OnUpdateUserSubscription = {
   onUpdateUser?:  {
     __typename: "User",
     id: string,
-    providerType: string,
     providerKey: string,
-    name: string,
+    userNickname: string,
     photoUrl?: string | null,
     email?: string | null,
     createdAt: string,
@@ -1061,9 +1085,8 @@ export type OnDeleteUserSubscription = {
   onDeleteUser?:  {
     __typename: "User",
     id: string,
-    providerType: string,
     providerKey: string,
-    name: string,
+    userNickname: string,
     photoUrl?: string | null,
     email?: string | null,
     createdAt: string,

@@ -1,13 +1,14 @@
 import React, { useEffect, useContext, createContext, useReducer } from 'react';
 import { AppProps } from 'next/app';
 import { useRouter } from 'next/router';
+import produce from 'immer';
 
-import { withSSRContext } from 'aws-amplify';
 import Head from 'next/head';
-import Amplify, { API, Storage, Auth, Hub } from 'aws-amplify';
+import Amplify, { API, Storage, Auth, Hub, withSSRContext } from 'aws-amplify';
+
+import { userByProviderKey } from '@/graphql/queries';
 
 import config from '../aws-exports';
-
 import './globals.scss';
 
 Amplify.configure({
@@ -15,40 +16,71 @@ Amplify.configure({
   ssr: true,
 });
 
-const authReduceer = (state, action) => {
-  switch (action.type) {
-    case 'SIGN_IN':
-      return { user: action.payload, isAuthenticated: true };
+const INITIAL_AUTH_STATE = {
+  user: null,
+  auth: null,
+  isAuthenticated: false,
+  isSignIned: false,
+};
 
+const authReduceer = produce((draft, action) => {
+  switch (action.type) {
+    case 'AUTHENTICATE':
+      draft.auth = action.payload;
+      draft.isAuthenticated = true;
+      break;
+    case 'USER_SIGN_IN':
+      draft.user = action.payload;
+      draft.isSignIned = true;
+      break;
     case 'SIGN_OUT':
-      return { user: null, isAuthenticated: false };
+      return INITIAL_AUTH_STATE;
 
     default:
-      throw Error('No matching type');
+      // throw Error('No matching type');
+      return;
   }
-};
+}, INITIAL_AUTH_STATE);
 
 export const AuthContext = createContext({});
 
 function MyApp({ Component, pageProps }: AppProps) {
   const router = useRouter();
-  const [authState, dispatch] = useReducer(authReduceer, {
-    user: null,
-    isAuthenticated: false,
-  });
+  const [authState, dispatch] = useReducer(authReduceer, INITIAL_AUTH_STATE);
 
-  const listenAuthHandler = ({ payload: { event, data } }) => {
+  const listenAuthHandler = async ({ payload: { event, data } }) => {
     switch (event) {
       case 'signIn':
-        dispatch({ type: 'SIGN_IN', payload: data });
+        dispatch({ type: 'AUTHENTICATE', payload: data });
         break;
       case 'signOut':
         dispatch({ type: 'SIGN_OUT' });
         break;
       case 'customOAuthState':
-        console.log(`customOAuthState data`, data);
-        router.push('/user/register');
+        try {
+          const cognitoUser = await Auth.currentAuthenticatedUser();
+          await userSignIn(cognitoUser);
+        } catch (e) {
+          console.log(`e`, e);
+        }
         break;
+    }
+  };
+
+  const userSignIn = async (cognitoUser) => {
+    const providerKey = cognitoUser.username;
+    const userOfProviderKey = await API.graphql({
+      query: userByProviderKey,
+      variables: { providerKey },
+    });
+
+    const dbUser = userOfProviderKey.data.userByProviderKey.items[0] ?? null;
+
+    if (dbUser) {
+      dispatch({ type: 'USER_SIGN_IN', payload: dbUser });
+      console.log(`dbUser`, dbUser);
+    } else {
+      router.push('/user/register');
     }
   };
 
@@ -56,7 +88,13 @@ function MyApp({ Component, pageProps }: AppProps) {
     Hub.listen('auth', listenAuthHandler);
 
     Auth.currentAuthenticatedUser()
-      .then((user) => dispatch({ type: 'SIGN_IN', payload: user }))
+      .then((cognitoUser) => {
+        dispatch({ type: 'AUTHENTICATE', payload: cognitoUser });
+        return cognitoUser;
+      })
+      .then((cognitoUser) => {
+        userSignIn(cognitoUser);
+      })
       .catch((e) => dispatch({ type: 'SIGN_OUT' }));
 
     return () => {

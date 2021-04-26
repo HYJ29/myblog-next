@@ -32,6 +32,7 @@ export default function AuthPage() {
           onClick={async () => {
             Auth.federatedSignIn({
               provider: CognitoHostedUIIdentityProvider.Google,
+              customState: 'signinWithGoogle',
             }).then((cred) => {
               console.log(`cred`, cred);
             });
@@ -39,7 +40,7 @@ export default function AuthPage() {
         >
           login with google
         </GoogleLoginButton>
-        <GoogleLogin />
+        {/* <GoogleLogin /> */}
       </div>
     </DefaultLayout>
   );

@@ -15,6 +15,8 @@ export default function Profile() {
   console.log(`authState`, authState);
   const { user, isAuthenticated } = authState;
 
+  console.log(`user`, user);
+
   return (
     <DefaultLayout>
       <div style={{ width: '100%', height: '100%' }}>

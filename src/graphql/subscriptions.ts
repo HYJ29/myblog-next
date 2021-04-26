@@ -6,9 +6,8 @@ export const onCreateUser = /* GraphQL */ `
   subscription OnCreateUser {
     onCreateUser {
       id
-      providerType
       providerKey
-      name
+      userNickname
       photoUrl
       email
       createdAt
@@ -35,9 +34,8 @@ export const onUpdateUser = /* GraphQL */ `
   subscription OnUpdateUser {
     onUpdateUser {
       id
-      providerType
       providerKey
-      name
+      userNickname
       photoUrl
       email
       createdAt
@@ -64,9 +62,8 @@ export const onDeleteUser = /* GraphQL */ `
   subscription OnDeleteUser {
     onDeleteUser {
       id
-      providerType
       providerKey
-      name
+      userNickname
       photoUrl
       email
       createdAt

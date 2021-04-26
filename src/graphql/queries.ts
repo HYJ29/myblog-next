@@ -6,9 +6,8 @@ export const getUser = /* GraphQL */ `
   query GetUser($id: ID!) {
     getUser(id: $id) {
       id
-      providerType
       providerKey
-      name
+      userNickname
       photoUrl
       email
       createdAt
@@ -40,9 +39,40 @@ export const listUsers = /* GraphQL */ `
     listUsers(filter: $filter, limit: $limit, nextToken: $nextToken) {
       items {
         id
-        providerType
         providerKey
-        name
+        userNickname
+        photoUrl
+        email
+        createdAt
+        updatedAt
+        owner
+        Posts {
+          nextToken
+        }
+      }
+      nextToken
+    }
+  }
+`;
+export const userByProviderKey = /* GraphQL */ `
+  query UserByProviderKey(
+    $providerKey: String
+    $sortDirection: ModelSortDirection
+    $filter: ModelUserFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    userByProviderKey(
+      providerKey: $providerKey
+      sortDirection: $sortDirection
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+    ) {
+      items {
+        id
+        providerKey
+        userNickname
         photoUrl
         email
         createdAt
