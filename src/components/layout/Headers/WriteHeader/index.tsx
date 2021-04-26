@@ -5,14 +5,31 @@ import Link from 'next/link';
 import { useModal } from '@/hooks/useModal';
 import { XCircle } from '@/components/icons';
 import { Button } from '@/components/button';
+import { getRawJsonContentStateFrom } from '@/utils/draft/convert';
+import {
+  getTitlePhtoFromEditorState,
+  getPostInfoFromEditorState,
+} from '@/utils/draft/filter';
 
 import styles from './style.module.scss';
 
 import ControllerItem from '../Items/ControllerItem';
 
-export default function WriteHeader() {
+export default function WriteHeader({ editorState }) {
   const router = useRouter();
   const { Modal, setShowModal } = useModal();
+
+  const onPublishHandler = () => {
+    const rawJsonContentState = getRawJsonContentStateFrom({ editorState });
+    const titlePhoto = getTitlePhtoFromEditorState({ editorState });
+    const { titleText, subTitleText } = getPostInfoFromEditorState({
+      editorState,
+    });
+
+    console.log(`rawJsonContentState`, rawJsonContentState);
+    console.log('titlePhoto', titlePhoto);
+    console.log(`titleText,subTitleText`, titleText, subTitleText);
+  };
 
   const ModalContent = () => {
     return (
@@ -44,6 +61,7 @@ export default function WriteHeader() {
           style={{ width: 100, alignSelf: 'center', marginTop: '1rem' }}
           onClick={() => {
             setShowModal(false);
+            onPublishHandler();
           }}
         >
           Publish

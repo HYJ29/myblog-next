@@ -1,13 +1,2 @@
-@import 'layout';
 @import 'colors';
-.container {
-  @include col();
-  align-items: center;
-  width: 100%;
-}
 
-.editorContainer {
-  width: 680px;
-  min-height: 100vh;
-  margin: 0 24px;
-}

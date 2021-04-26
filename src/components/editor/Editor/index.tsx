@@ -18,10 +18,10 @@ import Upperbar from './Upperbar';
 
 // const linkifyPlugin = createLinkifyPlugin();
 
-export default function EditorComponent() {
-  const [editorState, setEditorState] = useState(
-    EditorState.createEmpty(compositeDecorator)
-  );
+export default function EditorComponent({
+  editorState,
+  setEditorState,
+}): React.ReactNode {
   const [isEditorFocused, setIsEditorFocused] = useState(false);
   const [isEditorReadOnly, setIsEditorReadOnly] = useState(false);
   const editorrRef = useRef<Editor>(null);
