@@ -12,18 +12,21 @@ import {
   getPostInfoFromEditorState,
   getTagsFromEditorState,
 } from '@/utils/draft/filter';
-import { createPost } from '@/graphql/mutations';
+import { deletePost } from '@/graphql/mutations';
 import { AuthContext } from '@/pages/_app';
 
 import styles from './style.module.scss';
 
 import ControllerItem from '../Items/ControllerItem';
 
-export default function WriteHeader({ editorState }) {
+export default function PostHeader({ editorState, owner, postId }) {
   const router = useRouter();
   const { Modal, setShowModal } = useModal();
   const { authState } = useContext(AuthContext);
-  const { user } = authState;
+  const { auth } = authState;
+  const username = auth.username;
+
+  const isUserOwnerOfPost = username === owner;
 
   const rawJsonContentState = getRawJsonContentStateFrom({ editorState });
   const titlePhoto = getTitlePhtoFromEditorState({ editorState });
@@ -35,24 +38,10 @@ export default function WriteHeader({ editorState }) {
   });
   const tags = getTagsFromEditorState({ editorState });
 
-  const onPublishHandler = async () => {
-    const res = await API.graphql({
-      query: createPost,
-      variables: {
-        input: {
-          rawContentState: rawJsonContentState,
-          titlePhoto,
-          title,
-          subTitle,
-          userId: user.id,
-        },
-      },
-    });
+  const onEditHandler = async () => {};
 
-    const post = res.data.createPost;
-
-    const postId = post.id;
-    return postId;
+  const onDeleteHandler = async () => {
+    setShowModal(true);
   };
 
   const ModalContent = () => {
@@ -67,31 +56,21 @@ export default function WriteHeader({ editorState }) {
           </div>
         </div>
         <div className={styles.modalBody}>
-          <div className={styles.infoTextContainer}>
-            <h4 className={styles.modalLabel}>Title</h4>
-            <h3 className={styles.modalTitle}>{title}.</h3>
-          </div>
-
-          <div className={styles.infoTextContainer}>
-            <h4 className={styles.modalLabel}>Subtitle</h4>
-            <h3 className={styles.modalSubTitle}>{subTitle}</h3>
-          </div>
-          <div className={styles.tagContainer}>
-            {tags.map((tag) => (
-              <div className={styles.tag}>{tag}</div>
-            ))}
-          </div>
-          <img className={styles.titlePhoto} src={titlePhoto} />
+          <span className={styles.modalBodyText}>
+            Are you sure to delete this Post?
+          </span>
         </div>
         <Button
           style={{ width: 100, alignSelf: 'center', marginTop: '1rem' }}
           onClick={async () => {
             setShowModal(false);
-            const postId = await onPublishHandler();
-            router.push(`/post/${postId}`);
+            await API.graphql({
+              query: deletePost,
+              variables: { input: { id: postId } },
+            });
           }}
         >
-          Publish
+          DELETE
         </Button>
       </div>
     );
@@ -108,15 +87,13 @@ export default function WriteHeader({ editorState }) {
           />
         </div>
       </Link>
-      <ul className={styles.navigationContainer}>
-        <ControllerItem text="Save" onClick={() => {}} />
-        <ControllerItem
-          text="Publish"
-          onClick={() => {
-            setShowModal(true);
-          }}
-        />
-      </ul>
+      {isUserOwnerOfPost && (
+        <ul className={styles.navigationContainer}>
+          <ControllerItem text="Edit" onClick={onEditHandler} />
+          <ControllerItem text="Delete" onClick={onDeleteHandler} />
+        </ul>
+      )}
+
       <Modal>
         <ModalContent />
       </Modal>

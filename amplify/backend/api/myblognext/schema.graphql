@@ -31,11 +31,10 @@ type Post
   )
   @key(name: "byUser", fields: ["userId"]) {
   id: ID!
-  editorState: String!
-  titlePhoto: String!
+  rawContentState: String!
+  titlePhoto: String
   title: String!
-  subTitle: String!
-
+  subTitle: String
   userId: ID!
   tags: [PostTag] @connection(keyName: "byPostByUser", fields: ["id"])
 }

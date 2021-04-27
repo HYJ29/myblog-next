@@ -82,7 +82,7 @@ export type ModelPostConnection = {
 export type Post = {
   __typename: "Post",
   id?: string,
-  editorState?: string,
+  rawContentState?: string,
   titlePhoto?: string,
   title?: string,
   subTitle?: string,
@@ -136,7 +136,7 @@ export type DeleteUserInput = {
 
 export type CreatePostInput = {
   id?: string | null,
-  editorState: string,
+  rawContentState: string,
   titlePhoto: string,
   title: string,
   subTitle: string,
@@ -144,7 +144,7 @@ export type CreatePostInput = {
 };
 
 export type ModelPostConditionInput = {
-  editorState?: ModelStringInput | null,
+  rawContentState?: ModelStringInput | null,
   titlePhoto?: ModelStringInput | null,
   title?: ModelStringInput | null,
   subTitle?: ModelStringInput | null,
@@ -172,7 +172,7 @@ export type ModelIDInput = {
 
 export type UpdatePostInput = {
   id: string,
-  editorState?: string | null,
+  rawContentState?: string | null,
   titlePhoto?: string | null,
   title?: string | null,
   subTitle?: string | null,
@@ -256,7 +256,7 @@ export enum ModelSortDirection {
 
 export type ModelPostFilterInput = {
   id?: ModelIDInput | null,
-  editorState?: ModelStringInput | null,
+  rawContentState?: ModelStringInput | null,
   titlePhoto?: ModelStringInput | null,
   title?: ModelStringInput | null,
   subTitle?: ModelStringInput | null,
@@ -311,7 +311,7 @@ export type CreateUserMutation = {
       items?:  Array< {
         __typename: "Post",
         id: string,
-        editorState: string,
+        rawContentState: string,
         titlePhoto: string,
         title: string,
         subTitle: string,
@@ -346,7 +346,7 @@ export type UpdateUserMutation = {
       items?:  Array< {
         __typename: "Post",
         id: string,
-        editorState: string,
+        rawContentState: string,
         titlePhoto: string,
         title: string,
         subTitle: string,
@@ -381,7 +381,7 @@ export type DeleteUserMutation = {
       items?:  Array< {
         __typename: "Post",
         id: string,
-        editorState: string,
+        rawContentState: string,
         titlePhoto: string,
         title: string,
         subTitle: string,
@@ -404,7 +404,7 @@ export type CreatePostMutation = {
   createPost?:  {
     __typename: "Post",
     id: string,
-    editorState: string,
+    rawContentState: string,
     titlePhoto: string,
     title: string,
     subTitle: string,
@@ -438,7 +438,7 @@ export type UpdatePostMutation = {
   updatePost?:  {
     __typename: "Post",
     id: string,
-    editorState: string,
+    rawContentState: string,
     titlePhoto: string,
     title: string,
     subTitle: string,
@@ -472,7 +472,7 @@ export type DeletePostMutation = {
   deletePost?:  {
     __typename: "Post",
     id: string,
-    editorState: string,
+    rawContentState: string,
     titlePhoto: string,
     title: string,
     subTitle: string,
@@ -514,7 +514,7 @@ export type CreatePostTagMutation = {
     post:  {
       __typename: "Post",
       id: string,
-      editorState: string,
+      rawContentState: string,
       titlePhoto: string,
       title: string,
       subTitle: string,
@@ -560,7 +560,7 @@ export type UpdatePostTagMutation = {
     post:  {
       __typename: "Post",
       id: string,
-      editorState: string,
+      rawContentState: string,
       titlePhoto: string,
       title: string,
       subTitle: string,
@@ -606,7 +606,7 @@ export type DeletePostTagMutation = {
     post:  {
       __typename: "Post",
       id: string,
-      editorState: string,
+      rawContentState: string,
       titlePhoto: string,
       title: string,
       subTitle: string,
@@ -745,7 +745,7 @@ export type GetUserQuery = {
       items?:  Array< {
         __typename: "Post",
         id: string,
-        editorState: string,
+        rawContentState: string,
         titlePhoto: string,
         title: string,
         subTitle: string,
@@ -829,7 +829,7 @@ export type ListPostsQuery = {
     items?:  Array< {
       __typename: "Post",
       id: string,
-      editorState: string,
+      rawContentState: string,
       titlePhoto: string,
       title: string,
       subTitle: string,
@@ -854,7 +854,7 @@ export type GetPostQuery = {
   getPost?:  {
     __typename: "Post",
     id: string,
-    editorState: string,
+    rawContentState: string,
     titlePhoto: string,
     title: string,
     subTitle: string,
@@ -895,7 +895,7 @@ export type GetPostTagQuery = {
     post:  {
       __typename: "Post",
       id: string,
-      editorState: string,
+      rawContentState: string,
       titlePhoto: string,
       title: string,
       subTitle: string,
@@ -944,7 +944,7 @@ export type ListPostTagsQuery = {
       post:  {
         __typename: "Post",
         id: string,
-        editorState: string,
+        rawContentState: string,
         titlePhoto: string,
         title: string,
         subTitle: string,
@@ -1037,7 +1037,7 @@ export type OnCreateUserSubscription = {
       items?:  Array< {
         __typename: "Post",
         id: string,
-        editorState: string,
+        rawContentState: string,
         titlePhoto: string,
         title: string,
         subTitle: string,
@@ -1067,7 +1067,7 @@ export type OnUpdateUserSubscription = {
       items?:  Array< {
         __typename: "Post",
         id: string,
-        editorState: string,
+        rawContentState: string,
         titlePhoto: string,
         title: string,
         subTitle: string,
@@ -1097,7 +1097,7 @@ export type OnDeleteUserSubscription = {
       items?:  Array< {
         __typename: "Post",
         id: string,
-        editorState: string,
+        rawContentState: string,
         titlePhoto: string,
         title: string,
         subTitle: string,
@@ -1115,7 +1115,7 @@ export type OnCreatePostSubscription = {
   onCreatePost?:  {
     __typename: "Post",
     id: string,
-    editorState: string,
+    rawContentState: string,
     titlePhoto: string,
     title: string,
     subTitle: string,
@@ -1144,7 +1144,7 @@ export type OnUpdatePostSubscription = {
   onUpdatePost?:  {
     __typename: "Post",
     id: string,
-    editorState: string,
+    rawContentState: string,
     titlePhoto: string,
     title: string,
     subTitle: string,
@@ -1173,7 +1173,7 @@ export type OnDeletePostSubscription = {
   onDeletePost?:  {
     __typename: "Post",
     id: string,
-    editorState: string,
+    rawContentState: string,
     titlePhoto: string,
     title: string,
     subTitle: string,
@@ -1210,7 +1210,7 @@ export type OnCreatePostTagSubscription = {
     post:  {
       __typename: "Post",
       id: string,
-      editorState: string,
+      rawContentState: string,
       titlePhoto: string,
       title: string,
       subTitle: string,
@@ -1251,7 +1251,7 @@ export type OnUpdatePostTagSubscription = {
     post:  {
       __typename: "Post",
       id: string,
-      editorState: string,
+      rawContentState: string,
       titlePhoto: string,
       title: string,
       subTitle: string,
@@ -1292,7 +1292,7 @@ export type OnDeletePostTagSubscription = {
     post:  {
       __typename: "Post",
       id: string,
-      editorState: string,
+      rawContentState: string,
       titlePhoto: string,
       title: string,
       subTitle: string,

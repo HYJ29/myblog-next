@@ -17,7 +17,7 @@ export const getTitlePhtoFromEditorState = ({
 
   const titlePhotoEntity = entityMap[titlePhotoEntityKey];
   if (titlePhotoEntity.type === 'UNSPLASH') {
-    return titlePhotoEntity.data.unsplashImageInfo.regularImageSrc;
+    return titlePhotoEntity?.data?.unsplashImageInfo?.regularImageSrc || null;
   } else if (titlePhotoEntity.type === 'GENERAL_IMAGE') {
     // titlePhotoEntity.data.selectedFile.
     return null;
@@ -43,4 +43,28 @@ export const getPostInfoFromEditorState = ({
   const subTitleText = firstSubTitleBlock ? firstSubTitleBlock.text : '';
 
   return { titleText, subTitleText };
+};
+
+export const getTagsFromEditorState = ({
+  editorState,
+}: {
+  editorState: EditorState;
+}) => {
+  const HASHTAG_REGEX = /#[가-힣\w\u0590-\u05ff]+/g;
+
+  const contentState = editorState.getCurrentContent();
+  const rawContentState = convertToRaw(contentState);
+  const { blocks } = rawContentState;
+  return blocks.reduce((tags: string[], block) => {
+    const text = block.text;
+    let matchArr;
+    while ((matchArr = HASHTAG_REGEX.exec(text)) !== null) {
+      const matchString = matchArr[0];
+      const sameIndex = tags.findIndex((tag) => tag === matchString);
+
+      const stringWithoutHashTag = matchString.slice(1);
+      if (sameIndex === -1) tags.push(stringWithoutHashTag);
+    }
+    return tags;
+  }, []);
 };

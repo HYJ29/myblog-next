@@ -8,19 +8,18 @@ import { AuthState } from '@aws-amplify/ui-components';
 import { DefaultLayout } from '@/components/layout';
 import { AuthContext } from '@/pages/_app';
 
+import styles from './style.module.scss';
+
 export default function Profile() {
   const router = useRouter();
 
   const { authState } = useContext(AuthContext);
-  console.log(`authState`, authState);
   const { user, isAuthenticated } = authState;
-
-  console.log(`user`, user);
 
   return (
     <DefaultLayout>
-      <div style={{ width: '100%', height: '100%' }}>
-        {user && <div>{user.username}</div>}
+      <div className={styles.container}>
+        {user && <div>Hi! {user.userNickname}</div>}
         <AmplifySignOut
           handleAuthStateChange={(nextAuthState, data) => {
             if (nextAuthState === AuthState.SignedOut) {

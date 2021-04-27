@@ -5,9 +5,10 @@ import { withSSRContext } from 'aws-amplify';
 import { Card } from '@/components/ui';
 import { DefaultLayout } from '@/components/layout';
 import { getAllPosts } from '@/data';
-import { userByProviderKey } from '@/graphql/queries';
+import { userByProviderKey, listPosts } from '@/graphql/queries';
 
 import styles from './style.module.scss';
+import { ModelSortDirection } from '@/API';
 
 type Props = {
   posts: any;
@@ -41,17 +42,26 @@ export const getServerSideProps = async ({ req, res }) => {
   const { Auth, API } = withSSRContext({ req });
   try {
     const cognitoUser = await Auth.currentAuthenticatedUser();
+
     if (cognitoUser) {
       //TODO : CHECK is user registered on DB
       const providerKey = cognitoUser.username;
-      const userOfProviderKey = API.graphql({
+      const userOfProviderKey = await API.graphql({
         query: userByProviderKey,
         variables: { providerKey },
       });
       const dbUser = userOfProviderKey.data.userByProviderKey.items[0] ?? null;
 
+      console.log(`dbUser`, dbUser);
+
       if (dbUser) {
-        const posts = getAllPosts();
+        const res = await API.graphql({
+          query: listPosts,
+
+          sortDirection: ModelSortDirection.DESC,
+        });
+        const posts = res.data.listPosts.items;
+
         return { props: { posts } };
       } else {
         // IF not registered, do below
@@ -60,7 +70,7 @@ export const getServerSideProps = async ({ req, res }) => {
       }
     }
   } catch (e) {
-    const posts = getAllPosts();
-    return { props: { posts } };
+    // const posts = await API.graphql({ query: listPosts });
+    return { props: { posts: [] } };
   }
 };

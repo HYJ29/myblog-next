@@ -21,6 +21,11 @@ import Upperbar from './Upperbar';
 export default function EditorComponent({
   editorState,
   setEditorState,
+  isPostMode,
+}: {
+  editorState: EditorState;
+  setEditorState: (arg: EditorState) => void;
+  isPostMode?: boolean;
 }): React.ReactNode {
   const [isEditorFocused, setIsEditorFocused] = useState(false);
   const [isEditorReadOnly, setIsEditorReadOnly] = useState(false);
@@ -47,7 +52,7 @@ export default function EditorComponent({
     editorrRef.current?.focus();
   }, []);
 
-  const rawContentState = getConvertedToRawContentState({ editorState });
+  // const rawContentState = getConvertedToRawContentState({ editorState });
 
   const onClickEditorContainerHandler = () => {
     if (editorrRef && editorrRef.current) {
@@ -68,48 +73,50 @@ export default function EditorComponent({
         onClick={onClickEditorContainerHandler}
       >
         {/* temp block for dev */}
-        <div
+        {/* <div
           style={{
             display: 'flex',
             justifyContent: 'space-between',
             width: 680,
           }}
-        >
-          <div style={{ width: 500 }}>
-            <Editor
-              editorState={editorState}
-              onChange={(editorState) => setEditorState(editorState)}
-              onFocus={() => setIsEditorFocused(true)}
-              onBlur={() => setIsEditorFocused(false)}
-              ref={editorrRef}
-              plugins={[customPlugin]}
-              // decorators={[compositeDecorator]}
-              readOnly={isEditorReadOnly}
-            />
-          </div>
-          <pre style={{ minHeight: '100vh', width: 100 }}>
-            {JSON.stringify(rawContentState, null, 2)}
-            {/* {JSON.stringify(jsEditorState.currentContent.blockMap, null, 2)} */}
-          </pre>
+        > */}
+        <div style={{ width: 500 }}>
+          <Editor
+            editorState={editorState}
+            onChange={(editorState) => setEditorState(editorState)}
+            onFocus={() => setIsEditorFocused(true)}
+            onBlur={() => setIsEditorFocused(false)}
+            ref={editorrRef}
+            plugins={[customPlugin]}
+            // decorators={[compositeDecorator]}
+            readOnly={isPostMode ? true : isEditorReadOnly}
+          />
         </div>
+        {/* <pre style={{ minHeight: '100vh', width: 100 }}>
+            {JSON.stringify(rawContentState, null, 2)}
+          </pre>
+        </div> */}
       </div>
-
-      <Sidebar
-        top={sidbarTop}
-        left={sidebarLeft}
-        scale={sidebarScale}
-        isEditorFocused={isEditorFocused}
-        setEditorState={setEditorState}
-        editorState={editorState}
-      />
-      <Upperbar
-        top={upperbarTop}
-        left={upperbarLeft}
-        scale={upperbarScale}
-        editorState={editorState}
-        setEditorState={setEditorState}
-        setIsEditorReadOnly={setIsEditorReadOnly}
-      />
+      {!isPostMode && (
+        <>
+          <Sidebar
+            top={sidbarTop}
+            left={sidebarLeft}
+            scale={sidebarScale}
+            isEditorFocused={isEditorFocused}
+            setEditorState={setEditorState}
+            editorState={editorState}
+          />
+          <Upperbar
+            top={upperbarTop}
+            left={upperbarLeft}
+            scale={upperbarScale}
+            editorState={editorState}
+            setEditorState={setEditorState}
+            setIsEditorReadOnly={setIsEditorReadOnly}
+          />
+        </>
+      )}
     </div>
   );
 }

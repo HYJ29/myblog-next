@@ -19,7 +19,7 @@ export const createUser = /* GraphQL */ `
       Posts {
         items {
           id
-          editorState
+          rawContentState
           titlePhoto
           title
           subTitle
@@ -50,7 +50,7 @@ export const updateUser = /* GraphQL */ `
       Posts {
         items {
           id
-          editorState
+          rawContentState
           titlePhoto
           title
           subTitle
@@ -81,7 +81,7 @@ export const deleteUser = /* GraphQL */ `
       Posts {
         items {
           id
-          editorState
+          rawContentState
           titlePhoto
           title
           subTitle
@@ -102,7 +102,7 @@ export const createPost = /* GraphQL */ `
   ) {
     createPost(input: $input, condition: $condition) {
       id
-      editorState
+      rawContentState
       titlePhoto
       title
       subTitle
@@ -132,7 +132,7 @@ export const updatePost = /* GraphQL */ `
   ) {
     updatePost(input: $input, condition: $condition) {
       id
-      editorState
+      rawContentState
       titlePhoto
       title
       subTitle
@@ -162,7 +162,7 @@ export const deletePost = /* GraphQL */ `
   ) {
     deletePost(input: $input, condition: $condition) {
       id
-      editorState
+      rawContentState
       titlePhoto
       title
       subTitle
@@ -199,7 +199,7 @@ export const createPostTag = /* GraphQL */ `
       updatedAt
       post {
         id
-        editorState
+        rawContentState
         titlePhoto
         title
         subTitle
@@ -239,7 +239,7 @@ export const updatePostTag = /* GraphQL */ `
       updatedAt
       post {
         id
-        editorState
+        rawContentState
         titlePhoto
         title
         subTitle
@@ -279,7 +279,7 @@ export const deletePostTag = /* GraphQL */ `
       updatedAt
       post {
         id
-        editorState
+        rawContentState
         titlePhoto
         title
         subTitle

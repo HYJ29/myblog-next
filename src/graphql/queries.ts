@@ -16,7 +16,7 @@ export const getUser = /* GraphQL */ `
       Posts {
         items {
           id
-          editorState
+          rawContentState
           titlePhoto
           title
           subTitle
@@ -95,7 +95,7 @@ export const listPosts = /* GraphQL */ `
     listPosts(filter: $filter, limit: $limit, nextToken: $nextToken) {
       items {
         id
-        editorState
+        rawContentState
         titlePhoto
         title
         subTitle
@@ -115,7 +115,7 @@ export const getPost = /* GraphQL */ `
   query GetPost($id: ID!) {
     getPost(id: $id) {
       id
-      editorState
+      rawContentState
       titlePhoto
       title
       subTitle
@@ -149,7 +149,7 @@ export const getPostTag = /* GraphQL */ `
       updatedAt
       post {
         id
-        editorState
+        rawContentState
         titlePhoto
         title
         subTitle
@@ -191,7 +191,7 @@ export const listPostTags = /* GraphQL */ `
         updatedAt
         post {
           id
-          editorState
+          rawContentState
           titlePhoto
           title
           subTitle

@@ -16,7 +16,7 @@ export const onCreateUser = /* GraphQL */ `
       Posts {
         items {
           id
-          editorState
+          rawContentState
           titlePhoto
           title
           subTitle
@@ -44,7 +44,7 @@ export const onUpdateUser = /* GraphQL */ `
       Posts {
         items {
           id
-          editorState
+          rawContentState
           titlePhoto
           title
           subTitle
@@ -72,7 +72,7 @@ export const onDeleteUser = /* GraphQL */ `
       Posts {
         items {
           id
-          editorState
+          rawContentState
           titlePhoto
           title
           subTitle
@@ -90,7 +90,7 @@ export const onCreatePost = /* GraphQL */ `
   subscription OnCreatePost {
     onCreatePost {
       id
-      editorState
+      rawContentState
       titlePhoto
       title
       subTitle
@@ -117,7 +117,7 @@ export const onUpdatePost = /* GraphQL */ `
   subscription OnUpdatePost {
     onUpdatePost {
       id
-      editorState
+      rawContentState
       titlePhoto
       title
       subTitle
@@ -144,7 +144,7 @@ export const onDeletePost = /* GraphQL */ `
   subscription OnDeletePost {
     onDeletePost {
       id
-      editorState
+      rawContentState
       titlePhoto
       title
       subTitle
@@ -178,7 +178,7 @@ export const onCreatePostTag = /* GraphQL */ `
       updatedAt
       post {
         id
-        editorState
+        rawContentState
         titlePhoto
         title
         subTitle
@@ -215,7 +215,7 @@ export const onUpdatePostTag = /* GraphQL */ `
       updatedAt
       post {
         id
-        editorState
+        rawContentState
         titlePhoto
         title
         subTitle
@@ -252,7 +252,7 @@ export const onDeletePostTag = /* GraphQL */ `
       updatedAt
       post {
         id
-        editorState
+        rawContentState
         titlePhoto
         title
         subTitle

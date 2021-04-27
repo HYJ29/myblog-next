@@ -78,7 +78,6 @@ function MyApp({ Component, pageProps }: AppProps) {
 
     if (dbUser) {
       dispatch({ type: 'USER_SIGN_IN', payload: dbUser });
-      console.log(`dbUser`, dbUser);
     } else {
       router.push('/user/register');
     }
