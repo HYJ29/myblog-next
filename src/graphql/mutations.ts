@@ -24,6 +24,7 @@ export const createUser = /* GraphQL */ `
           title
           subTitle
           userId
+          baseType
           createdAt
           updatedAt
           owner
@@ -55,6 +56,7 @@ export const updateUser = /* GraphQL */ `
           title
           subTitle
           userId
+          baseType
           createdAt
           updatedAt
           owner
@@ -86,6 +88,7 @@ export const deleteUser = /* GraphQL */ `
           title
           subTitle
           userId
+          baseType
           createdAt
           updatedAt
           owner
@@ -107,6 +110,7 @@ export const createPost = /* GraphQL */ `
       title
       subTitle
       userId
+      baseType
       createdAt
       updatedAt
       owner
@@ -137,6 +141,7 @@ export const updatePost = /* GraphQL */ `
       title
       subTitle
       userId
+      baseType
       createdAt
       updatedAt
       owner
@@ -167,6 +172,7 @@ export const deletePost = /* GraphQL */ `
       title
       subTitle
       userId
+      baseType
       createdAt
       updatedAt
       owner
@@ -204,6 +210,7 @@ export const createPostTag = /* GraphQL */ `
         title
         subTitle
         userId
+        baseType
         createdAt
         updatedAt
         owner
@@ -244,6 +251,7 @@ export const updatePostTag = /* GraphQL */ `
         title
         subTitle
         userId
+        baseType
         createdAt
         updatedAt
         owner
@@ -284,6 +292,7 @@ export const deletePostTag = /* GraphQL */ `
         title
         subTitle
         userId
+        baseType
         createdAt
         updatedAt
         owner

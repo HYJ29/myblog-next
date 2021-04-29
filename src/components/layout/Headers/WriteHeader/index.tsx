@@ -45,6 +45,7 @@ export default function WriteHeader({ editorState }) {
           title,
           subTitle,
           userId: user.id,
+          baseType: 'Post',
         },
       },
     });

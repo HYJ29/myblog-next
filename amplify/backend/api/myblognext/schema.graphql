@@ -17,7 +17,7 @@ type User
   userNickname: String!
   photoUrl: AWSURL
   email: AWSEmail
-  Posts: [Post] @connection(fields: ["id"], keyName: "byUser")
+  Posts: [Post] @connection(fields: ["id"], keyName: "byUserAndCreatedAt")
 }
 
 type Post
@@ -29,13 +29,20 @@ type Post
       { allow: private, operations: [read] }
     ]
   )
-  @key(name: "byUser", fields: ["userId"]) {
+  @key(name: "byUserAndCreatedAt", fields: ["userId", "createdAt"])
+  @key(
+    name: "postByCreatedAt"
+    fields: ["baseType", "createdAt"]
+    queryField: "postByCreatedAt"
+  ) {
   id: ID!
   rawContentState: String!
   titlePhoto: String
   title: String!
   subTitle: String
   userId: ID!
+  baseType: String!
+  createdAt: AWSDateTime!
   tags: [PostTag] @connection(keyName: "byPostByUser", fields: ["id"])
 }
 

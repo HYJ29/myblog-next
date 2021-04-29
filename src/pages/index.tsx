@@ -5,7 +5,11 @@ import { withSSRContext } from 'aws-amplify';
 import { Card } from '@/components/ui';
 import { DefaultLayout } from '@/components/layout';
 import { getAllPosts } from '@/data';
-import { userByProviderKey, listPosts } from '@/graphql/queries';
+import {
+  userByProviderKey,
+  listPosts,
+  postByCreatedAt,
+} from '@/graphql/queries';
 
 import styles from './style.module.scss';
 import { ModelSortDirection } from '@/API';
@@ -56,11 +60,16 @@ export const getServerSideProps = async ({ req, res }) => {
 
       if (dbUser) {
         const res = await API.graphql({
-          query: listPosts,
-
-          sortDirection: ModelSortDirection.DESC,
+          query: postByCreatedAt,
+          variables: {
+            baseType: 'Post',
+            sortDirection: ModelSortDirection.DESC,
+          },
+          items:{
+            
+          }
         });
-        const posts = res.data.listPosts.items;
+        const posts = res.data.postByCreatedAt.items;
 
         return { props: { posts } };
       } else {

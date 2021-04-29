@@ -21,6 +21,7 @@ export const getUser = /* GraphQL */ `
           title
           subTitle
           userId
+          baseType
           createdAt
           updatedAt
           owner
@@ -100,6 +101,7 @@ export const listPosts = /* GraphQL */ `
         title
         subTitle
         userId
+        baseType
         createdAt
         updatedAt
         owner
@@ -120,6 +122,7 @@ export const getPost = /* GraphQL */ `
       title
       subTitle
       userId
+      baseType
       createdAt
       updatedAt
       owner
@@ -135,6 +138,42 @@ export const getPost = /* GraphQL */ `
         }
         nextToken
       }
+    }
+  }
+`;
+export const postByCreatedAt = /* GraphQL */ `
+  query PostByCreatedAt(
+    $baseType: String
+    $createdAt: ModelStringKeyConditionInput
+    $sortDirection: ModelSortDirection
+    $filter: ModelPostFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    postByCreatedAt(
+      baseType: $baseType
+      createdAt: $createdAt
+      sortDirection: $sortDirection
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+    ) {
+      items {
+        id
+        rawContentState
+        titlePhoto
+        title
+        subTitle
+        userId
+        baseType
+        createdAt
+        updatedAt
+        owner
+        tags {
+          nextToken
+        }
+      }
+      nextToken
     }
   }
 `;
@@ -154,6 +193,7 @@ export const getPostTag = /* GraphQL */ `
         title
         subTitle
         userId
+        baseType
         createdAt
         updatedAt
         owner
@@ -196,6 +236,7 @@ export const listPostTags = /* GraphQL */ `
           title
           subTitle
           userId
+          baseType
           createdAt
           updatedAt
           owner
