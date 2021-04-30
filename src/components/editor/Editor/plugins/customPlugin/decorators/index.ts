@@ -12,10 +12,8 @@ const findLinkEntity = (
   callback: (start: number, end: number) => void,
   contentState: ContentState
 ) => {
-  console.log('findLInk');
   contentBlock.findEntityRanges((character) => {
     const characterEntityKey = character.getEntity();
-    console.log(`charactreEntityKey`, characterEntityKey);
     return (
       characterEntityKey !== null &&
       contentState.getEntity(characterEntityKey).getType() === 'LINK'

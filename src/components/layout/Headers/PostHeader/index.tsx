@@ -28,16 +28,6 @@ export default function PostHeader({ editorState, owner, postId }) {
 
   const isUserOwnerOfPost = username === owner;
 
-  const rawJsonContentState = getRawJsonContentStateFrom({ editorState });
-  const titlePhoto = getTitlePhtoFromEditorState({ editorState });
-  const {
-    titleText: title,
-    subTitleText: subTitle,
-  } = getPostInfoFromEditorState({
-    editorState,
-  });
-  const tags = getTagsFromEditorState({ editorState });
-
   const onEditHandler = async () => {
     router.push(`/post/edit/${postId}`);
   };
@@ -92,8 +82,12 @@ export default function PostHeader({ editorState, owner, postId }) {
       </Link>
       {isUserOwnerOfPost && (
         <ul className={styles.navigationContainer}>
-          <ControllerItem text="Edit" onClick={onEditHandler} />
-          <ControllerItem text="Delete" onClick={onDeleteHandler} />
+          <ControllerItem key="edit" text="Edit" onClick={onEditHandler} />
+          <ControllerItem
+            key="delete"
+            text="Delete"
+            onClick={onDeleteHandler}
+          />
         </ul>
       )}
 

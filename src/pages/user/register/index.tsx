@@ -19,14 +19,13 @@ export default function RegisterPage({ username }) {
     const registerInfo = {
       providerKey: username,
       userNickname: nameInputRef.current?.value ?? '',
+      baseType: 'User',
     };
-    console.log(`registerInfo`, registerInfo);
 
     const newUser = await API.graphql({
       query: createUser,
       variables: { input: registerInfo },
     });
-    console.log(`newUser`, newUser);
   };
 
   return (

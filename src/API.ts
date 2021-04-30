@@ -106,6 +106,7 @@ export type PostTag = {
   userId?: string,
   postId?: string,
   tagId?: string,
+  baseType?: string,
   createdAt?: string,
   updatedAt?: string,
   post?: Post,
@@ -195,12 +196,14 @@ export type CreatePostTagInput = {
   userId: string,
   postId: string,
   tagId: string,
+  baseType: string,
 };
 
 export type ModelPostTagConditionInput = {
   userId?: ModelIDInput | null,
   postId?: ModelIDInput | null,
   tagId?: ModelIDInput | null,
+  baseType?: ModelStringInput | null,
   and?: Array< ModelPostTagConditionInput | null > | null,
   or?: Array< ModelPostTagConditionInput | null > | null,
   not?: ModelPostTagConditionInput | null,
@@ -211,6 +214,7 @@ export type UpdatePostTagInput = {
   userId?: string | null,
   postId?: string | null,
   tagId?: string | null,
+  baseType?: string | null,
 };
 
 export type DeletePostTagInput = {
@@ -290,9 +294,25 @@ export type ModelPostTagFilterInput = {
   userId?: ModelIDInput | null,
   postId?: ModelIDInput | null,
   tagId?: ModelIDInput | null,
+  baseType?: ModelStringInput | null,
   and?: Array< ModelPostTagFilterInput | null > | null,
   or?: Array< ModelPostTagFilterInput | null > | null,
   not?: ModelPostTagFilterInput | null,
+};
+
+export type ModelPostTagPostTagsByPostIdAndTagIdCompositeKeyConditionInput = {
+  eq?: ModelPostTagPostTagsByPostIdAndTagIdCompositeKeyInput | null,
+  le?: ModelPostTagPostTagsByPostIdAndTagIdCompositeKeyInput | null,
+  lt?: ModelPostTagPostTagsByPostIdAndTagIdCompositeKeyInput | null,
+  ge?: ModelPostTagPostTagsByPostIdAndTagIdCompositeKeyInput | null,
+  gt?: ModelPostTagPostTagsByPostIdAndTagIdCompositeKeyInput | null,
+  between?: Array< ModelPostTagPostTagsByPostIdAndTagIdCompositeKeyInput | null > | null,
+  beginsWith?: ModelPostTagPostTagsByPostIdAndTagIdCompositeKeyInput | null,
+};
+
+export type ModelPostTagPostTagsByPostIdAndTagIdCompositeKeyInput = {
+  postId?: string | null,
+  tagId?: string | null,
 };
 
 export type ModelTagFilterInput = {
@@ -443,6 +463,7 @@ export type CreatePostMutation = {
         userId: string,
         postId: string,
         tagId: string,
+        baseType: string,
         createdAt: string,
         updatedAt: string,
         owner?: string | null,
@@ -478,6 +499,7 @@ export type UpdatePostMutation = {
         userId: string,
         postId: string,
         tagId: string,
+        baseType: string,
         createdAt: string,
         updatedAt: string,
         owner?: string | null,
@@ -513,6 +535,7 @@ export type DeletePostMutation = {
         userId: string,
         postId: string,
         tagId: string,
+        baseType: string,
         createdAt: string,
         updatedAt: string,
         owner?: string | null,
@@ -534,6 +557,7 @@ export type CreatePostTagMutation = {
     userId: string,
     postId: string,
     tagId: string,
+    baseType: string,
     createdAt: string,
     updatedAt: string,
     post:  {
@@ -581,6 +605,7 @@ export type UpdatePostTagMutation = {
     userId: string,
     postId: string,
     tagId: string,
+    baseType: string,
     createdAt: string,
     updatedAt: string,
     post:  {
@@ -628,6 +653,7 @@ export type DeletePostTagMutation = {
     userId: string,
     postId: string,
     tagId: string,
+    baseType: string,
     createdAt: string,
     updatedAt: string,
     post:  {
@@ -683,6 +709,7 @@ export type CreateTagMutation = {
         userId: string,
         postId: string,
         tagId: string,
+        baseType: string,
         createdAt: string,
         updatedAt: string,
         owner?: string | null,
@@ -713,6 +740,7 @@ export type UpdateTagMutation = {
         userId: string,
         postId: string,
         tagId: string,
+        baseType: string,
         createdAt: string,
         updatedAt: string,
         owner?: string | null,
@@ -743,6 +771,7 @@ export type DeleteTagMutation = {
         userId: string,
         postId: string,
         tagId: string,
+        baseType: string,
         createdAt: string,
         updatedAt: string,
         owner?: string | null,
@@ -901,6 +930,7 @@ export type GetPostQuery = {
         userId: string,
         postId: string,
         tagId: string,
+        baseType: string,
         createdAt: string,
         updatedAt: string,
         owner?: string | null,
@@ -954,6 +984,7 @@ export type GetPostTagQuery = {
     userId: string,
     postId: string,
     tagId: string,
+    baseType: string,
     createdAt: string,
     updatedAt: string,
     post:  {
@@ -1004,6 +1035,55 @@ export type ListPostTagsQuery = {
       userId: string,
       postId: string,
       tagId: string,
+      baseType: string,
+      createdAt: string,
+      updatedAt: string,
+      post:  {
+        __typename: "Post",
+        id: string,
+        rawContentState: string,
+        titlePhoto?: string | null,
+        title: string,
+        subTitle?: string | null,
+        userId: string,
+        baseType: string,
+        createdAt: string,
+        updatedAt: string,
+        owner?: string | null,
+      },
+      owner?: string | null,
+      tag:  {
+        __typename: "Tag",
+        id: string,
+        tagName: string,
+        createdAt: string,
+        updatedAt: string,
+        owner?: string | null,
+      },
+    } | null > | null,
+    nextToken?: string | null,
+  } | null,
+};
+
+export type PostTagsByPostIdAndTagIdQueryVariables = {
+  baseType?: string | null,
+  postIdTagId?: ModelPostTagPostTagsByPostIdAndTagIdCompositeKeyConditionInput | null,
+  sortDirection?: ModelSortDirection | null,
+  filter?: ModelPostTagFilterInput | null,
+  limit?: number | null,
+  nextToken?: string | null,
+};
+
+export type PostTagsByPostIdAndTagIdQuery = {
+  postTagsByPostIdAndTagId?:  {
+    __typename: "ModelPostTagConnection",
+    items?:  Array< {
+      __typename: "PostTag",
+      id: string,
+      userId: string,
+      postId: string,
+      tagId: string,
+      baseType: string,
       createdAt: string,
       updatedAt: string,
       post:  {
@@ -1077,6 +1157,7 @@ export type GetTagQuery = {
         userId: string,
         postId: string,
         tagId: string,
+        baseType: string,
         createdAt: string,
         updatedAt: string,
         owner?: string | null,
@@ -1201,6 +1282,7 @@ export type OnCreatePostSubscription = {
         userId: string,
         postId: string,
         tagId: string,
+        baseType: string,
         createdAt: string,
         updatedAt: string,
         owner?: string | null,
@@ -1231,6 +1313,7 @@ export type OnUpdatePostSubscription = {
         userId: string,
         postId: string,
         tagId: string,
+        baseType: string,
         createdAt: string,
         updatedAt: string,
         owner?: string | null,
@@ -1261,6 +1344,7 @@ export type OnDeletePostSubscription = {
         userId: string,
         postId: string,
         tagId: string,
+        baseType: string,
         createdAt: string,
         updatedAt: string,
         owner?: string | null,
@@ -1277,6 +1361,7 @@ export type OnCreatePostTagSubscription = {
     userId: string,
     postId: string,
     tagId: string,
+    baseType: string,
     createdAt: string,
     updatedAt: string,
     post:  {
@@ -1319,6 +1404,7 @@ export type OnUpdatePostTagSubscription = {
     userId: string,
     postId: string,
     tagId: string,
+    baseType: string,
     createdAt: string,
     updatedAt: string,
     post:  {
@@ -1361,6 +1447,7 @@ export type OnDeletePostTagSubscription = {
     userId: string,
     postId: string,
     tagId: string,
+    baseType: string,
     createdAt: string,
     updatedAt: string,
     post:  {
@@ -1411,6 +1498,7 @@ export type OnCreateTagSubscription = {
         userId: string,
         postId: string,
         tagId: string,
+        baseType: string,
         createdAt: string,
         updatedAt: string,
         owner?: string | null,
@@ -1436,6 +1524,7 @@ export type OnUpdateTagSubscription = {
         userId: string,
         postId: string,
         tagId: string,
+        baseType: string,
         createdAt: string,
         updatedAt: string,
         owner?: string | null,
@@ -1461,6 +1550,7 @@ export type OnDeleteTagSubscription = {
         userId: string,
         postId: string,
         tagId: string,
+        baseType: string,
         createdAt: string,
         updatedAt: string,
         owner?: string | null,

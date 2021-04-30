@@ -132,6 +132,7 @@ export const getPost = /* GraphQL */ `
           userId
           postId
           tagId
+          baseType
           createdAt
           updatedAt
           owner
@@ -184,6 +185,7 @@ export const getPostTag = /* GraphQL */ `
       userId
       postId
       tagId
+      baseType
       createdAt
       updatedAt
       post {
@@ -227,6 +229,57 @@ export const listPostTags = /* GraphQL */ `
         userId
         postId
         tagId
+        baseType
+        createdAt
+        updatedAt
+        post {
+          id
+          rawContentState
+          titlePhoto
+          title
+          subTitle
+          userId
+          baseType
+          createdAt
+          updatedAt
+          owner
+        }
+        owner
+        tag {
+          id
+          tagName
+          createdAt
+          updatedAt
+          owner
+        }
+      }
+      nextToken
+    }
+  }
+`;
+export const postTagsByPostIdAndTagId = /* GraphQL */ `
+  query PostTagsByPostIdAndTagId(
+    $baseType: String
+    $postIdTagId: ModelPostTagPostTagsByPostIdAndTagIdCompositeKeyConditionInput
+    $sortDirection: ModelSortDirection
+    $filter: ModelPostTagFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    postTagsByPostIdAndTagId(
+      baseType: $baseType
+      postIdTagId: $postIdTagId
+      sortDirection: $sortDirection
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+    ) {
+      items {
+        id
+        userId
+        postId
+        tagId
+        baseType
         createdAt
         updatedAt
         post {
@@ -288,6 +341,7 @@ export const getTag = /* GraphQL */ `
           userId
           postId
           tagId
+          baseType
           createdAt
           updatedAt
           owner

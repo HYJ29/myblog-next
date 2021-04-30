@@ -15,6 +15,7 @@ type User
   id: ID!
   providerKey: String!
   userNickname: String!
+  baseType: String!
   photoUrl: AWSURL
   email: AWSEmail
   Posts: [Post] @connection(fields: ["id"], keyName: "byUserAndCreatedAt")
@@ -56,12 +57,18 @@ type PostTag
     ]
   )
   @key(name: "byPostByUser", fields: ["postId", "userId"])
-  @key(name: "byTagByUser", fields: ["tagId", "userId"]) {
+  @key(name: "byTagByUser", fields: ["tagId", "userId"])
+  @key(
+    name: "postTagsByPostIdAndTagId"
+    fields: ["baseType", "postId", "tagId"]
+    queryField: "postTagsByPostIdAndTagId"
+  ) {
   id: ID!
 
   userId: ID!
   postId: ID!
   tagId: ID!
+  baseType: String!
   post: Post! @connection(fields: ["postId"])
   tag: Tag! @connection(fields: ["tagId"])
 }
@@ -77,6 +84,7 @@ type Tag
   ) {
   id: ID!
   tagName: String!
+  baseType: String!
 
   posts: [PostTag] @connection(keyName: "byTagByUser", fields: ["id"])
 }

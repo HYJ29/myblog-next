@@ -108,6 +108,7 @@ export const onCreatePost = /* GraphQL */ `
           userId
           postId
           tagId
+          baseType
           createdAt
           updatedAt
           owner
@@ -136,6 +137,7 @@ export const onUpdatePost = /* GraphQL */ `
           userId
           postId
           tagId
+          baseType
           createdAt
           updatedAt
           owner
@@ -164,6 +166,7 @@ export const onDeletePost = /* GraphQL */ `
           userId
           postId
           tagId
+          baseType
           createdAt
           updatedAt
           owner
@@ -180,6 +183,7 @@ export const onCreatePostTag = /* GraphQL */ `
       userId
       postId
       tagId
+      baseType
       createdAt
       updatedAt
       post {
@@ -218,6 +222,7 @@ export const onUpdatePostTag = /* GraphQL */ `
       userId
       postId
       tagId
+      baseType
       createdAt
       updatedAt
       post {
@@ -256,6 +261,7 @@ export const onDeletePostTag = /* GraphQL */ `
       userId
       postId
       tagId
+      baseType
       createdAt
       updatedAt
       post {
@@ -300,6 +306,7 @@ export const onCreateTag = /* GraphQL */ `
           userId
           postId
           tagId
+          baseType
           createdAt
           updatedAt
           owner
@@ -323,6 +330,7 @@ export const onUpdateTag = /* GraphQL */ `
           userId
           postId
           tagId
+          baseType
           createdAt
           updatedAt
           owner
@@ -346,6 +354,7 @@ export const onDeleteTag = /* GraphQL */ `
           userId
           postId
           tagId
+          baseType
           createdAt
           updatedAt
           owner

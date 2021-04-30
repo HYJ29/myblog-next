@@ -12,7 +12,14 @@ import {
   getPostInfoFromEditorState,
   getTagsFromEditorState,
 } from '@/utils/draft/filter';
-import { updatePost } from '@/graphql/mutations';
+import {
+  updatePost,
+  createTag,
+  createPostTag,
+  deleteTag,
+  deletePostTag,
+} from '@/graphql/mutations';
+import { listTags, postTagsByPostIdAndTagId } from '@/graphql/queries';
 import { AuthContext } from '@/pages/_app';
 
 import styles from './style.module.scss';
@@ -24,6 +31,7 @@ export default function EditHeader({ editorState, postId }) {
   const { Modal, setShowModal } = useModal();
   const { authState } = useContext(AuthContext);
   const { user } = authState;
+  const { id: userId } = user;
 
   const rawJsonContentState = getRawJsonContentStateFrom({ editorState });
   const titlePhoto = getTitlePhtoFromEditorState({ editorState });
@@ -54,6 +62,67 @@ export default function EditHeader({ editorState, postId }) {
     const editedPost = res.data.updatePost;
 
     const editedPostId = editedPost.id;
+
+    // List Current Post's Tags
+    const tagsInDatabaseRes = await API.graphql({
+      query: listTags,
+      variables: { postId },
+    });
+
+    const tagsInDatabase = tagsInDatabaseRes.data.listTags.items ?? [];
+
+    const isAleardyInDB = (tag) =>
+      tagsInDatabase.find((tagInDB) => tagInDB.tagName === tag);
+    const isTagNeedDeleted = (tagDB) =>
+      !tags.find((tag) => tag === tagDB.tagName);
+
+    //Create Tag If not exists
+    for (const tag of tags) {
+      if (!isAleardyInDB(tag)) {
+        const createTagRes = await API.graphql({
+          query: createTag,
+          variables: { input: { tagName: tag, baseType: 'Tag' } },
+        });
+        const tagId = createTagRes.data.createTag.id;
+
+        const createdPostTagRes = await API.graphql({
+          query: createPostTag,
+          variables: { input: { postId, tagId, userId, baseType: 'PostTag' } },
+        });
+      }
+    }
+
+    //  Delete Tag not exist now but exist in DB
+    for (const tagDB of tagsInDatabase) {
+      if (isTagNeedDeleted(tagDB)) {
+        // Get connection
+        const postTagRes = await API.graphql({
+          query: postTagsByPostIdAndTagId,
+
+          variables: {
+            baseType: 'PostTag',
+            filter: { postId: { eq: postId }, tagId: { eq: tagDB.id } },
+          },
+        });
+
+        const postTagId =
+          postTagRes.data.postTagsByPostIdAndTagId.items[0].id ?? null;
+
+        // Delete connection
+        await API.graphql({
+          query: deletePostTag,
+          variables: {
+            input: { id: postTagId },
+          },
+        });
+
+        // Delete Tag
+        await API.graphql({
+          query: deleteTag,
+          variables: { input: { id: tagDB.id } },
+        });
+      }
+    }
     return editedPostId;
   };
 
@@ -80,7 +149,9 @@ export default function EditHeader({ editorState, postId }) {
           </div>
           <div className={styles.tagContainer}>
             {tags.map((tag) => (
-              <div className={styles.tag}>{tag}</div>
+              <div key={tag} className={styles.tag}>
+                {tag}
+              </div>
             ))}
           </div>
           <img className={styles.titlePhoto} src={titlePhoto} />
