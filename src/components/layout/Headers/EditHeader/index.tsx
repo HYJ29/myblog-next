@@ -19,7 +19,11 @@ import {
   deleteTag,
   deletePostTag,
 } from '@/graphql/mutations';
-import { listTags, postTagsByPostIdAndTagId } from '@/graphql/queries';
+import {
+  listTags,
+  postTagsByPostIdAndTagId,
+  listPostTags,
+} from '@/graphql/queries';
 import { AuthContext } from '@/pages/_app';
 
 import styles from './style.module.scss';
@@ -64,12 +68,16 @@ export default function EditHeader({ editorState, postId }) {
     const editedPostId = editedPost.id;
 
     // List Current Post's Tags
-    const tagsInDatabaseRes = await API.graphql({
-      query: listTags,
-      variables: { postId },
+    const tagPostsInDatabaseRes = await API.graphql({
+      query: listPostTags,
+      variables: { filter: { postId: { eq: postId } } },
     });
+    const tagsInDatabase =
+      tagPostsInDatabaseRes.data.listPostTags.items.map((item) => item.tag) ??
+      [];
 
-    const tagsInDatabase = tagsInDatabaseRes.data.listTags.items ?? [];
+    console.log(`tagsInDatabase`, tagsInDatabase);
+    console.log(`tags`, tags);
 
     const isAleardyInDB = (tag) =>
       tagsInDatabase.find((tagInDB) => tagInDB.tagName === tag);

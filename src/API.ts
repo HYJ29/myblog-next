@@ -6,6 +6,7 @@ export type CreateUserInput = {
   id?: string | null,
   providerKey: string,
   userNickname: string,
+  baseType: string,
   photoUrl?: string | null,
   email?: string | null,
 };
@@ -13,6 +14,7 @@ export type CreateUserInput = {
 export type ModelUserConditionInput = {
   providerKey?: ModelStringInput | null,
   userNickname?: ModelStringInput | null,
+  baseType?: ModelStringInput | null,
   photoUrl?: ModelStringInput | null,
   email?: ModelStringInput | null,
   and?: Array< ModelUserConditionInput | null > | null,
@@ -65,6 +67,7 @@ export type User = {
   id?: string,
   providerKey?: string,
   userNickname?: string,
+  baseType?: string,
   photoUrl?: string | null,
   email?: string | null,
   createdAt?: string,
@@ -118,6 +121,7 @@ export type Tag = {
   __typename: "Tag",
   id?: string,
   tagName?: string,
+  baseType?: string,
   createdAt?: string,
   updatedAt?: string,
   posts?: ModelPostTagConnection,
@@ -128,6 +132,7 @@ export type UpdateUserInput = {
   id: string,
   providerKey?: string | null,
   userNickname?: string | null,
+  baseType?: string | null,
   photoUrl?: string | null,
   email?: string | null,
 };
@@ -224,10 +229,12 @@ export type DeletePostTagInput = {
 export type CreateTagInput = {
   id?: string | null,
   tagName: string,
+  baseType: string,
 };
 
 export type ModelTagConditionInput = {
   tagName?: ModelStringInput | null,
+  baseType?: ModelStringInput | null,
   and?: Array< ModelTagConditionInput | null > | null,
   or?: Array< ModelTagConditionInput | null > | null,
   not?: ModelTagConditionInput | null,
@@ -236,6 +243,7 @@ export type ModelTagConditionInput = {
 export type UpdateTagInput = {
   id: string,
   tagName?: string | null,
+  baseType?: string | null,
 };
 
 export type DeleteTagInput = {
@@ -246,6 +254,7 @@ export type ModelUserFilterInput = {
   id?: ModelIDInput | null,
   providerKey?: ModelStringInput | null,
   userNickname?: ModelStringInput | null,
+  baseType?: ModelStringInput | null,
   photoUrl?: ModelStringInput | null,
   email?: ModelStringInput | null,
   and?: Array< ModelUserFilterInput | null > | null,
@@ -318,6 +327,7 @@ export type ModelPostTagPostTagsByPostIdAndTagIdCompositeKeyInput = {
 export type ModelTagFilterInput = {
   id?: ModelIDInput | null,
   tagName?: ModelStringInput | null,
+  baseType?: ModelStringInput | null,
   and?: Array< ModelTagFilterInput | null > | null,
   or?: Array< ModelTagFilterInput | null > | null,
   not?: ModelTagFilterInput | null,
@@ -340,6 +350,7 @@ export type CreateUserMutation = {
     id: string,
     providerKey: string,
     userNickname: string,
+    baseType: string,
     photoUrl?: string | null,
     email?: string | null,
     createdAt: string,
@@ -376,6 +387,7 @@ export type UpdateUserMutation = {
     id: string,
     providerKey: string,
     userNickname: string,
+    baseType: string,
     photoUrl?: string | null,
     email?: string | null,
     createdAt: string,
@@ -412,6 +424,7 @@ export type DeleteUserMutation = {
     id: string,
     providerKey: string,
     userNickname: string,
+    baseType: string,
     photoUrl?: string | null,
     email?: string | null,
     createdAt: string,
@@ -582,6 +595,7 @@ export type CreatePostTagMutation = {
       __typename: "Tag",
       id: string,
       tagName: string,
+      baseType: string,
       createdAt: string,
       updatedAt: string,
       posts?:  {
@@ -630,6 +644,7 @@ export type UpdatePostTagMutation = {
       __typename: "Tag",
       id: string,
       tagName: string,
+      baseType: string,
       createdAt: string,
       updatedAt: string,
       posts?:  {
@@ -678,6 +693,7 @@ export type DeletePostTagMutation = {
       __typename: "Tag",
       id: string,
       tagName: string,
+      baseType: string,
       createdAt: string,
       updatedAt: string,
       posts?:  {
@@ -699,6 +715,7 @@ export type CreateTagMutation = {
     __typename: "Tag",
     id: string,
     tagName: string,
+    baseType: string,
     createdAt: string,
     updatedAt: string,
     posts?:  {
@@ -730,6 +747,7 @@ export type UpdateTagMutation = {
     __typename: "Tag",
     id: string,
     tagName: string,
+    baseType: string,
     createdAt: string,
     updatedAt: string,
     posts?:  {
@@ -761,6 +779,7 @@ export type DeleteTagMutation = {
     __typename: "Tag",
     id: string,
     tagName: string,
+    baseType: string,
     createdAt: string,
     updatedAt: string,
     posts?:  {
@@ -792,6 +811,7 @@ export type GetUserQuery = {
     id: string,
     providerKey: string,
     userNickname: string,
+    baseType: string,
     photoUrl?: string | null,
     email?: string | null,
     createdAt: string,
@@ -831,6 +851,7 @@ export type ListUsersQuery = {
       id: string,
       providerKey: string,
       userNickname: string,
+      baseType: string,
       photoUrl?: string | null,
       email?: string | null,
       createdAt: string,
@@ -861,6 +882,7 @@ export type UserByProviderKeyQuery = {
       id: string,
       providerKey: string,
       userNickname: string,
+      baseType: string,
       photoUrl?: string | null,
       email?: string | null,
       createdAt: string,
@@ -1009,6 +1031,7 @@ export type GetPostTagQuery = {
       __typename: "Tag",
       id: string,
       tagName: string,
+      baseType: string,
       createdAt: string,
       updatedAt: string,
       posts?:  {
@@ -1056,6 +1079,7 @@ export type ListPostTagsQuery = {
         __typename: "Tag",
         id: string,
         tagName: string,
+        baseType: string,
         createdAt: string,
         updatedAt: string,
         owner?: string | null,
@@ -1104,6 +1128,7 @@ export type PostTagsByPostIdAndTagIdQuery = {
         __typename: "Tag",
         id: string,
         tagName: string,
+        baseType: string,
         createdAt: string,
         updatedAt: string,
         owner?: string | null,
@@ -1126,6 +1151,7 @@ export type ListTagsQuery = {
       __typename: "Tag",
       id: string,
       tagName: string,
+      baseType: string,
       createdAt: string,
       updatedAt: string,
       posts?:  {
@@ -1147,6 +1173,7 @@ export type GetTagQuery = {
     __typename: "Tag",
     id: string,
     tagName: string,
+    baseType: string,
     createdAt: string,
     updatedAt: string,
     posts?:  {
@@ -1168,12 +1195,42 @@ export type GetTagQuery = {
   } | null,
 };
 
+export type TagByTagNameQueryVariables = {
+  baseType?: string | null,
+  tagName?: ModelStringKeyConditionInput | null,
+  sortDirection?: ModelSortDirection | null,
+  filter?: ModelTagFilterInput | null,
+  limit?: number | null,
+  nextToken?: string | null,
+};
+
+export type TagByTagNameQuery = {
+  tagByTagName?:  {
+    __typename: "ModelTagConnection",
+    items?:  Array< {
+      __typename: "Tag",
+      id: string,
+      tagName: string,
+      baseType: string,
+      createdAt: string,
+      updatedAt: string,
+      posts?:  {
+        __typename: "ModelPostTagConnection",
+        nextToken?: string | null,
+      } | null,
+      owner?: string | null,
+    } | null > | null,
+    nextToken?: string | null,
+  } | null,
+};
+
 export type OnCreateUserSubscription = {
   onCreateUser?:  {
     __typename: "User",
     id: string,
     providerKey: string,
     userNickname: string,
+    baseType: string,
     photoUrl?: string | null,
     email?: string | null,
     createdAt: string,
@@ -1205,6 +1262,7 @@ export type OnUpdateUserSubscription = {
     id: string,
     providerKey: string,
     userNickname: string,
+    baseType: string,
     photoUrl?: string | null,
     email?: string | null,
     createdAt: string,
@@ -1236,6 +1294,7 @@ export type OnDeleteUserSubscription = {
     id: string,
     providerKey: string,
     userNickname: string,
+    baseType: string,
     photoUrl?: string | null,
     email?: string | null,
     createdAt: string,
@@ -1386,6 +1445,7 @@ export type OnCreatePostTagSubscription = {
       __typename: "Tag",
       id: string,
       tagName: string,
+      baseType: string,
       createdAt: string,
       updatedAt: string,
       posts?:  {
@@ -1429,6 +1489,7 @@ export type OnUpdatePostTagSubscription = {
       __typename: "Tag",
       id: string,
       tagName: string,
+      baseType: string,
       createdAt: string,
       updatedAt: string,
       posts?:  {
@@ -1472,6 +1533,7 @@ export type OnDeletePostTagSubscription = {
       __typename: "Tag",
       id: string,
       tagName: string,
+      baseType: string,
       createdAt: string,
       updatedAt: string,
       posts?:  {
@@ -1488,6 +1550,7 @@ export type OnCreateTagSubscription = {
     __typename: "Tag",
     id: string,
     tagName: string,
+    baseType: string,
     createdAt: string,
     updatedAt: string,
     posts?:  {
@@ -1514,6 +1577,7 @@ export type OnUpdateTagSubscription = {
     __typename: "Tag",
     id: string,
     tagName: string,
+    baseType: string,
     createdAt: string,
     updatedAt: string,
     posts?:  {
@@ -1540,6 +1604,7 @@ export type OnDeleteTagSubscription = {
     __typename: "Tag",
     id: string,
     tagName: string,
+    baseType: string,
     createdAt: string,
     updatedAt: string,
     posts?:  {

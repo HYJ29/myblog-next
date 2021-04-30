@@ -35,7 +35,8 @@ type Post
     name: "postByCreatedAt"
     fields: ["baseType", "createdAt"]
     queryField: "postByCreatedAt"
-  ) {
+  )
+  {
   id: ID!
   rawContentState: String!
   titlePhoto: String
@@ -81,10 +82,14 @@ type Tag
       { allow: public, operations: [read] }
       { allow: private, operations: [read] }
     ]
+  )
+  @key(
+    name: "tagByTagName"
+    fields: ["baseType", "tagName"]
+    queryField: "tagByTagName"
   ) {
   id: ID!
   tagName: String!
   baseType: String!
-
   posts: [PostTag] @connection(keyName: "byTagByUser", fields: ["id"])
 }

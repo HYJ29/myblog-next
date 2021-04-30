@@ -11,6 +11,7 @@ export const createUser = /* GraphQL */ `
       id
       providerKey
       userNickname
+      baseType
       photoUrl
       email
       createdAt
@@ -43,6 +44,7 @@ export const updateUser = /* GraphQL */ `
       id
       providerKey
       userNickname
+      baseType
       photoUrl
       email
       createdAt
@@ -75,6 +77,7 @@ export const deleteUser = /* GraphQL */ `
       id
       providerKey
       userNickname
+      baseType
       photoUrl
       email
       createdAt
@@ -226,6 +229,7 @@ export const createPostTag = /* GraphQL */ `
       tag {
         id
         tagName
+        baseType
         createdAt
         updatedAt
         posts {
@@ -268,6 +272,7 @@ export const updatePostTag = /* GraphQL */ `
       tag {
         id
         tagName
+        baseType
         createdAt
         updatedAt
         posts {
@@ -310,6 +315,7 @@ export const deletePostTag = /* GraphQL */ `
       tag {
         id
         tagName
+        baseType
         createdAt
         updatedAt
         posts {
@@ -328,6 +334,7 @@ export const createTag = /* GraphQL */ `
     createTag(input: $input, condition: $condition) {
       id
       tagName
+      baseType
       createdAt
       updatedAt
       posts {
@@ -355,6 +362,7 @@ export const updateTag = /* GraphQL */ `
     updateTag(input: $input, condition: $condition) {
       id
       tagName
+      baseType
       createdAt
       updatedAt
       posts {
@@ -382,6 +390,7 @@ export const deleteTag = /* GraphQL */ `
     deleteTag(input: $input, condition: $condition) {
       id
       tagName
+      baseType
       createdAt
       updatedAt
       posts {

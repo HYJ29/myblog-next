@@ -8,6 +8,7 @@ export const getUser = /* GraphQL */ `
       id
       providerKey
       userNickname
+      baseType
       photoUrl
       email
       createdAt
@@ -42,6 +43,7 @@ export const listUsers = /* GraphQL */ `
         id
         providerKey
         userNickname
+        baseType
         photoUrl
         email
         createdAt
@@ -74,6 +76,7 @@ export const userByProviderKey = /* GraphQL */ `
         id
         providerKey
         userNickname
+        baseType
         photoUrl
         email
         createdAt
@@ -207,6 +210,7 @@ export const getPostTag = /* GraphQL */ `
       tag {
         id
         tagName
+        baseType
         createdAt
         updatedAt
         posts {
@@ -248,6 +252,7 @@ export const listPostTags = /* GraphQL */ `
         tag {
           id
           tagName
+          baseType
           createdAt
           updatedAt
           owner
@@ -298,6 +303,7 @@ export const postTagsByPostIdAndTagId = /* GraphQL */ `
         tag {
           id
           tagName
+          baseType
           createdAt
           updatedAt
           owner
@@ -317,6 +323,7 @@ export const listTags = /* GraphQL */ `
       items {
         id
         tagName
+        baseType
         createdAt
         updatedAt
         posts {
@@ -333,6 +340,7 @@ export const getTag = /* GraphQL */ `
     getTag(id: $id) {
       id
       tagName
+      baseType
       createdAt
       updatedAt
       posts {
@@ -349,6 +357,38 @@ export const getTag = /* GraphQL */ `
         nextToken
       }
       owner
+    }
+  }
+`;
+export const tagByTagName = /* GraphQL */ `
+  query TagByTagName(
+    $baseType: String
+    $tagName: ModelStringKeyConditionInput
+    $sortDirection: ModelSortDirection
+    $filter: ModelTagFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    tagByTagName(
+      baseType: $baseType
+      tagName: $tagName
+      sortDirection: $sortDirection
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+    ) {
+      items {
+        id
+        tagName
+        baseType
+        createdAt
+        updatedAt
+        posts {
+          nextToken
+        }
+        owner
+      }
+      nextToken
     }
   }
 `;

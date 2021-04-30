@@ -448,6 +448,71 @@
           },
           "isDeprecated" : false,
           "deprecationReason" : null
+        }, {
+          "name" : "tagByTagName",
+          "description" : null,
+          "args" : [ {
+            "name" : "baseType",
+            "description" : null,
+            "type" : {
+              "kind" : "SCALAR",
+              "name" : "String",
+              "ofType" : null
+            },
+            "defaultValue" : null
+          }, {
+            "name" : "tagName",
+            "description" : null,
+            "type" : {
+              "kind" : "INPUT_OBJECT",
+              "name" : "ModelStringKeyConditionInput",
+              "ofType" : null
+            },
+            "defaultValue" : null
+          }, {
+            "name" : "sortDirection",
+            "description" : null,
+            "type" : {
+              "kind" : "ENUM",
+              "name" : "ModelSortDirection",
+              "ofType" : null
+            },
+            "defaultValue" : null
+          }, {
+            "name" : "filter",
+            "description" : null,
+            "type" : {
+              "kind" : "INPUT_OBJECT",
+              "name" : "ModelTagFilterInput",
+              "ofType" : null
+            },
+            "defaultValue" : null
+          }, {
+            "name" : "limit",
+            "description" : null,
+            "type" : {
+              "kind" : "SCALAR",
+              "name" : "Int",
+              "ofType" : null
+            },
+            "defaultValue" : null
+          }, {
+            "name" : "nextToken",
+            "description" : null,
+            "type" : {
+              "kind" : "SCALAR",
+              "name" : "String",
+              "ofType" : null
+            },
+            "defaultValue" : null
+          } ],
+          "type" : {
+            "kind" : "OBJECT",
+            "name" : "ModelTagConnection",
+            "ofType" : null
+          },
+          "isDeprecated" : false,
+          "deprecationReason" : null
         } ],
         "inputFields" : null,
         "interfaces" : [ ],
@@ -489,6 +554,21 @@
           "deprecationReason" : null
         }, {
           "name" : "userNickname",
+          "description" : null,
+          "args" : [ ],
+          "type" : {
+            "kind" : "NON_NULL",
+            "name" : null,
+            "ofType" : {
+              "kind" : "SCALAR",
+              "name" : "String",
+              "ofType" : null
+            }
+          },
+          "isDeprecated" : false,
+          "deprecationReason" : null
+        }, {
+          "name" : "baseType",
           "description" : null,
           "args" : [ ],
           "type" : {
@@ -1120,6 +1200,21 @@
           "deprecationReason" : null
         }, {
           "name" : "tagName",
+          "description" : null,
+          "args" : [ ],
+          "type" : {
+            "kind" : "NON_NULL",
+            "name" : null,
+            "ofType" : {
+              "kind" : "SCALAR",
+              "name" : "String",
+              "ofType" : null
+            }
+          },
+          "isDeprecated" : false,
+          "deprecationReason" : null
+        }, {
+          "name" : "baseType",
           "description" : null,
           "args" : [ ],
           "type" : {
@@ -2092,6 +2187,15 @@
           },
           "defaultValue" : null
         }, {
+          "name" : "baseType",
+          "description" : null,
+          "type" : {
+            "kind" : "INPUT_OBJECT",
+            "name" : "ModelStringInput",
+            "ofType" : null
+          },
+          "defaultValue" : null
+        }, {
           "name" : "photoUrl",
           "description" : null,
           "type" : {
@@ -2302,6 +2406,15 @@
           "defaultValue" : null
         }, {
           "name" : "tagName",
+          "description" : null,
+          "type" : {
+            "kind" : "INPUT_OBJECT",
+            "name" : "ModelStringInput",
+            "ofType" : null
+          },
+          "defaultValue" : null
+        }, {
+          "name" : "baseType",
           "description" : null,
           "type" : {
             "kind" : "INPUT_OBJECT",
@@ -2794,6 +2907,19 @@
           },
           "defaultValue" : null
         }, {
+          "name" : "baseType",
+          "description" : null,
+          "type" : {
+            "kind" : "NON_NULL",
+            "name" : null,
+            "ofType" : {
+              "kind" : "SCALAR",
+              "name" : "String",
+              "ofType" : null
+            }
+          },
+          "defaultValue" : null
+        }, {
           "name" : "photoUrl",
           "description" : null,
           "type" : {
@@ -2831,6 +2957,15 @@
           "defaultValue" : null
         }, {
           "name" : "userNickname",
+          "description" : null,
+          "type" : {
+            "kind" : "INPUT_OBJECT",
+            "name" : "ModelStringInput",
+            "ofType" : null
+          },
+          "defaultValue" : null
+        }, {
+          "name" : "baseType",
           "description" : null,
           "type" : {
             "kind" : "INPUT_OBJECT",
@@ -2924,6 +3059,15 @@
           "defaultValue" : null
         }, {
           "name" : "userNickname",
+          "description" : null,
+          "type" : {
+            "kind" : "SCALAR",
+            "name" : "String",
+            "ofType" : null
+          },
+          "defaultValue" : null
+        }, {
+          "name" : "baseType",
           "description" : null,
           "type" : {
             "kind" : "SCALAR",
@@ -3531,6 +3675,19 @@
             }
           },
           "defaultValue" : null
+        }, {
+          "name" : "baseType",
+          "description" : null,
+          "type" : {
+            "kind" : "NON_NULL",
+            "name" : null,
+            "ofType" : {
+              "kind" : "SCALAR",
+              "name" : "String",
+              "ofType" : null
+            }
+          },
+          "defaultValue" : null
         } ],
         "interfaces" : null,
         "enumValues" : null,
@@ -3542,6 +3699,15 @@
         "fields" : null,
         "inputFields" : [ {
           "name" : "tagName",
+          "description" : null,
+          "type" : {
+            "kind" : "INPUT_OBJECT",
+            "name" : "ModelStringInput",
+            "ofType" : null
+          },
+          "defaultValue" : null
+        }, {
+          "name" : "baseType",
           "description" : null,
           "type" : {
             "kind" : "INPUT_OBJECT",
@@ -3608,6 +3774,15 @@
           "defaultValue" : null
         }, {
           "name" : "tagName",
+          "description" : null,
+          "type" : {
+            "kind" : "SCALAR",
+            "name" : "String",
+            "ofType" : null
+          },
+          "defaultValue" : null
+        }, {
+          "name" : "baseType",
           "description" : null,
           "type" : {
             "kind" : "SCALAR",
