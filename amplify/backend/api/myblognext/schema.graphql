@@ -35,8 +35,7 @@ type Post
     name: "postByCreatedAt"
     fields: ["baseType", "createdAt"]
     queryField: "postByCreatedAt"
-  )
-  {
+  ) {
   id: ID!
   rawContentState: String!
   titlePhoto: String
@@ -45,7 +44,8 @@ type Post
   userId: ID!
   baseType: String!
   createdAt: AWSDateTime!
-  tags: [PostTag] @connection(keyName: "byPostByUser", fields: ["id"])
+  postTags: [PostTag] @connection(keyName: "byPostByUser", fields: ["id"])
+  postImages: [PostImage] @connection(keyName: "byPostByUser", fields: ["id"])
 }
 
 type PostTag
@@ -65,13 +65,12 @@ type PostTag
     queryField: "postTagsByPostIdAndTagId"
   ) {
   id: ID!
-
   userId: ID!
   postId: ID!
   tagId: ID!
   baseType: String!
-  post: Post! @connection(fields: ["postId"])
-  tag: Tag! @connection(fields: ["tagId"])
+  post: Post @connection(fields: ["postId"])
+  tag: Tag @connection(fields: ["tagId"])
 }
 
 type Tag
@@ -91,5 +90,53 @@ type Tag
   id: ID!
   tagName: String!
   baseType: String!
-  posts: [PostTag] @connection(keyName: "byTagByUser", fields: ["id"])
+  postTags: [PostTag] @connection(keyName: "byTagByUser", fields: ["id"])
+}
+
+type PostImage
+  @model
+  @auth(
+    rules: [
+      { allow: owner }
+      { allow: public, operations: [read] }
+      { allow: private, operations: [read] }
+    ]
+  )
+  @key(name: "byPostByUser", fields: ["postId", "userId"])
+  @key(name: "byImageByUser", fields: ["imageId", "userId"])
+  @key(
+    name: "postImageByPostIdAndImageId"
+    fields: ["postId", "imageId"]
+    queryField: "postImageByPostIdAndImageId"
+  ) {
+  id: ID!
+  userId: ID!
+  postId: ID!
+  imageId: ID!
+  baseType: String!
+  post: Post @connection(fields: ["postId"])
+  image: Image @connection(fields: ["imageId"])
+}
+
+type Image
+  @model
+  @auth(
+    rules: [
+      { allow: owner }
+      { allow: public, operations: [read] }
+      { allow: private, operations: [read] }
+    ]
+  )
+  @key(
+    name: "imageByCreatedAt"
+    fields: ["baseType", "createdAt"]
+    queryField: "imageByCreatedAt"
+  ) {
+  id: ID!
+  url: String!
+  imageKey: String!
+  baseType: String!
+  isPublished: Boolean
+  createdAt: AWSDateTime!
+  postImages: [PostImage] @connection(keyName: "byImageByUser", fields: ["id"])
 }

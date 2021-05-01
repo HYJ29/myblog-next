@@ -88,7 +88,6 @@ export default function EditorComponent({
             onBlur={() => setIsEditorFocused(false)}
             ref={editorrRef}
             plugins={[customPlugin]}
-            // decorators={[compositeDecorator]}
             readOnly={isPostMode ? true : isEditorReadOnly}
           />
         </div>

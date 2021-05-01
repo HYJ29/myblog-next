@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
-import { API } from 'aws-amplify';
+import { API, Storage } from 'aws-amplify';
 
 import { useModal } from '@/hooks/useModal';
 import { XCircle } from '@/components/icons';
@@ -11,6 +11,7 @@ import {
   getTitlePhtoFromEditorState,
   getPostInfoFromEditorState,
   getTagsFromEditorState,
+  getImagesFromEditorState,
 } from '@/utils/draft/filter';
 import {
   updatePost,
@@ -18,11 +19,17 @@ import {
   createPostTag,
   deleteTag,
   deletePostTag,
+  deletePostImage,
+  deleteImage,
+  createPostImage,
 } from '@/graphql/mutations';
 import {
   listTags,
   postTagsByPostIdAndTagId,
   listPostTags,
+  listImages,
+  listPostImages,
+  postImageByPostIdAndImageId,
 } from '@/graphql/queries';
 import { AuthContext } from '@/pages/_app';
 
@@ -46,6 +53,9 @@ export default function EditHeader({ editorState, postId }) {
     editorState,
   });
   const tags = getTagsFromEditorState({ editorState });
+
+  const images = getImagesFromEditorState({ editorState });
+  const imageKeys = images.map((image) => image.data.imageKey);
 
   const onEditHandler = async () => {
     const res = await API.graphql({
@@ -131,6 +141,75 @@ export default function EditHeader({ editorState, postId }) {
         });
       }
     }
+
+    // Get DB images
+    const listImagesRes = await API.graphql({
+      query: listImages,
+      variables: {
+        filter: { isPublished: { eq: false } },
+      },
+    });
+    const draftImagesDB = listImagesRes.data.listImages.items;
+    const imagesToDelete = draftImagesDB.filter(
+      (imageDB) => !imageKeys.find((imageKey) => imageKey === imageDB.imageKey)
+    );
+
+    //  Delete Image on S3 and DB if not exist now
+    for (const imageToDelete of imagesToDelete) {
+      const delRes = await Storage.remove(imageToDelete.imageKey);
+      console.log(`delRes`, delRes);
+
+      // Delete connection
+      const postImageRes = await API.graphql({
+        query: postImageByPostIdAndImageId,
+        variables: { postId, imageId: { eq: imageToDelete.id } },
+      });
+      const postImageId =
+        postImageRes?.data?.postImageByPostIdAndImageId?.items[0].id ?? null;
+      if (postImageId) {
+        await API.graphql({
+          query: deletePostImage,
+          variables: { input: { id: postImageId } },
+        });
+      }
+
+      const deletedRes = await API.graphql({
+        query: deleteImage,
+        variables: { input: { id: imageToDelete.id } },
+      });
+      console.log(`deletedDBRes`, deletedRes);
+    }
+
+    // Get PostImages on this Post
+
+    const postImagesDBRes = await API.graphql({
+      query: listPostImages,
+      variables: { filter: { postId: { eq: postId } } },
+    });
+    const postImageDB = postImagesDBRes?.data?.listPostTags?.items ?? [];
+
+    // Create Image Mapping if not mapped already
+    for (const image of images) {
+      const isMapedDBAlready = !!postImageDB.find(
+        (imageDB) => imageDB.id === image.data.imageDbId
+      );
+      if (!isMapedDBAlready) {
+        const createPostImageRes = await API.graphql({
+          query: createPostImage,
+          variables: {
+            input: {
+              postId,
+              userId,
+              imageId: image.data.imageDbId,
+              baseType: 'PostImage',
+            },
+          },
+        });
+
+        console.log(`createPostImageRes`, createPostImageRes);
+      }
+    }
+
     return editedPostId;
   };
 

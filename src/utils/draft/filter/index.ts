@@ -19,11 +19,28 @@ export const getTitlePhtoFromEditorState = ({
   if (titlePhotoEntity.type === 'UNSPLASH') {
     return titlePhotoEntity?.data?.unsplashImageInfo?.regularImageSrc || null;
   } else if (titlePhotoEntity.type === 'GENERAL_IMAGE') {
-    // titlePhotoEntity.data.selectedFile.
-    return null;
+    return titlePhotoEntity?.data?.imageUrl || null;
   } else {
     return null;
   }
+};
+
+export const getImagesFromEditorState = ({
+  editorState,
+}: {
+  editorState: EditorState;
+}) => {
+  const contentState = editorState.getCurrentContent();
+  const rawContentState = convertToRaw(contentState);
+  const { entityMap } = rawContentState;
+  const generalImages = [];
+  for (const key in entityMap) {
+    const currentEntity = entityMap[key];
+    if (currentEntity.type === 'GENERAL_IMAGE') {
+      generalImages.push(currentEntity);
+    }
+  }
+  return generalImages;
 };
 
 export const getPostInfoFromEditorState = ({
@@ -36,7 +53,7 @@ export const getPostInfoFromEditorState = ({
   const { blocks } = rawContentState;
 
   const firstTitleBlock = blocks.find((block) => block.type === 'header-three');
-  const titleText = firstTitleBlock ? firstTitleBlock.text : '';
+  const titleText = firstTitleBlock ? firstTitleBlock.text : '제목없음';
   const firstSubTitleBlock = blocks.find(
     (block) => block.type === 'header-four'
   );

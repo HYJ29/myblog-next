@@ -1,7 +1,8 @@
 import React, { useContext } from 'react';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
-import { API } from 'aws-amplify';
+import { API, Storage } from 'aws-amplify';
+import { difference } from 'lodash';
 
 import { useModal } from '@/hooks/useModal';
 import { XCircle } from '@/components/icons';
@@ -11,6 +12,7 @@ import {
   getTitlePhtoFromEditorState,
   getPostInfoFromEditorState,
   getTagsFromEditorState,
+  getImagesFromEditorState,
 } from '@/utils/draft/filter';
 import {
   createPost,
@@ -18,8 +20,18 @@ import {
   createPostTag,
   deleteTag,
   deletePostTag,
+  deleteImage,
+  createPostImage,
+  deletePostImage,
 } from '@/graphql/mutations';
-import { listTags, postTagsByPostIdAndTagId } from '@/graphql/queries';
+import {
+  listTags,
+  postTagsByPostIdAndTagId,
+  listPostTags,
+  listImages,
+  listPostImages,
+  postImageByPostIdAndImageId,
+} from '@/graphql/queries';
 import { AuthContext } from '@/pages/_app';
 
 import styles from './style.module.scss';
@@ -42,6 +54,9 @@ export default function WriteHeader({ editorState }) {
     editorState,
   });
   const tags = getTagsFromEditorState({ editorState });
+  const images = getImagesFromEditorState({ editorState });
+  console.log(`images`, images);
+  const imageKeys = images.map((image) => image.data.imageKey);
 
   const onPublishHandler = async () => {
     const res = await API.graphql({
@@ -63,12 +78,13 @@ export default function WriteHeader({ editorState }) {
     const postId = post.id;
 
     // List Current Post's Tags
-    const tagsInDatabaseRes = await API.graphql({
-      query: listTags,
-      variables: { postId },
+    const tagPostsInDatabaseRes = await API.graphql({
+      query: listPostTags,
+      variables: { filter: { postId: { eq: postId } } },
     });
-    const tagsInDatabase = tagsInDatabaseRes.data.listTags.items ?? [];
-
+    const tagsInDatabase =
+      tagPostsInDatabaseRes.data.listPostTags.items.map((item) => item.tag) ??
+      [];
     const isAleardyInDB = (tag) =>
       tagsInDatabase.find((tagInDB) => tagInDB.tagName === tag);
     const isTagNeedDeleted = (tagDB) =>
@@ -94,6 +110,7 @@ export default function WriteHeader({ editorState }) {
     for (const tagDB of tagsInDatabase) {
       if (isTagNeedDeleted(tagDB)) {
         // Get connection
+        console.log(`tagDB`, tagDB);
         const postTagRes = await API.graphql({
           query: postTagsByPostIdAndTagId,
 
@@ -119,6 +136,73 @@ export default function WriteHeader({ editorState }) {
           query: deleteTag,
           variables: { input: { id: tagDB.id } },
         });
+      }
+    }
+    // Get DB images
+    const listImagesRes = await API.graphql({
+      query: listImages,
+      variables: {
+        filter: { isPublished: { eq: false } },
+      },
+    });
+    const draftImagesDB = listImagesRes.data.listImages.items;
+    const imagesToDelete = draftImagesDB.filter(
+      (imageDB) => !imageKeys.find((imageKey) => imageKey === imageDB.imageKey)
+    );
+
+    //  Delete Image on S3 and DB if not exist now
+    for (const imageToDelete of imagesToDelete) {
+      const delRes = await Storage.remove(imageToDelete.imageKey);
+      console.log(`delRes`, delRes);
+
+      // Delete connection
+      const postImageRes = await API.graphql({
+        query: postImageByPostIdAndImageId,
+        variables: { postId, imageId: { eq: imageToDelete.id } },
+      });
+      const postImageId =
+        postImageRes?.data?.postImageByPostIdAndImageId?.items[0]?.id ?? null;
+      if (postImageId) {
+        await API.graphql({
+          query: deletePostImage,
+          variables: { input: { id: postImageId } },
+        });
+      }
+
+      const deletedRes = await API.graphql({
+        query: deleteImage,
+        variables: { input: { id: imageToDelete.id } },
+      });
+      console.log(`deletedDBRes`, deletedRes);
+    }
+
+    // Get PostImages on this Post
+
+    const postImagesDBRes = await API.graphql({
+      query: listPostImages,
+      variables: { filter: { postId: { eq: postId } } },
+    });
+    const postImageDB = postImagesDBRes?.data?.listPostTags?.items ?? [];
+
+    // Create Image Mapping if not mapped already
+    for (const image of images) {
+      const isMapedDBAlready = !!postImageDB.find(
+        (imageDB) => imageDB.id === image.data.imageDbId
+      );
+      if (!isMapedDBAlready) {
+        const createPostImageRes = await API.graphql({
+          query: createPostImage,
+          variables: {
+            input: {
+              postId,
+              userId,
+              imageId: image.data.imageDbId,
+              baseType: 'PostImage',
+            },
+          },
+        });
+
+        console.log(`createPostImageRes`, createPostImageRes);
       }
     }
 
@@ -157,6 +241,7 @@ export default function WriteHeader({ editorState }) {
           style={{ width: 100, alignSelf: 'center', marginTop: '1rem' }}
           onClick={async () => {
             setShowModal(false);
+
             const postId = await onPublishHandler();
             router.push(`/post/${postId}`);
           }}
@@ -182,7 +267,7 @@ export default function WriteHeader({ editorState }) {
         <ControllerItem text="Save" onClick={() => {}} />
         <ControllerItem
           text="Publish"
-          onClick={() => {
+          onClick={async () => {
             setShowModal(true);
           }}
         />

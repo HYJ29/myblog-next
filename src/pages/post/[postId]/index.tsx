@@ -4,7 +4,7 @@ import { GetServerSideProps } from 'next';
 import { withSSRContext } from 'aws-amplify';
 
 import { getPostById } from '@/data';
-import { EditorReadOnly, Editor } from '@/components/editor';
+import { Editor } from '@/components/editor';
 import { PostLayout } from '@/components/layout';
 import { getPost } from '@/graphql/queries';
 
@@ -21,7 +21,7 @@ export default function PostDetailPage({ post }) {
       title={title}
       subTitle={subTitle}
       owner={owner}
-      postId={id}
+      post={post}
     />
   );
 }

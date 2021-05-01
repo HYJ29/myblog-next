@@ -1,5 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { EditorState } from 'draft-js';
+import { Storage, API } from 'aws-amplify';
+import { v4 as uuidV4 } from 'uuid';
 
 import {
   PlusCircle,
@@ -12,6 +14,7 @@ import {
 import { addAtomicBlock } from '@/utils';
 
 import styles from './style.module.scss';
+import { createImage, createPostImage } from '@/graphql/mutations';
 
 type Props = {
   top: number;
@@ -38,14 +41,51 @@ export default function SideBar({
     setIsOpen((prev) => !prev);
   };
 
-  const onFileUploadHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const onFileUploadHandler = async (
+    e: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const editorStateWithLoading = addAtomicBlock({
+      editorState,
+      entityType: 'LOADING',
+    });
+    setEditorState(editorStateWithLoading);
+
     const files = e.target.files ?? [];
     const selectedFile = files[0];
+
+    const imageUniqueKey = uuidV4();
+    // Upload Iamge to S3
+    const s3Object = await Storage.put(imageUniqueKey, selectedFile, {
+      contentType: 'image/jpeg',
+      acl: 'public-read',
+    });
+    const imageKey = s3Object.key;
+    const signedUrl = await Storage.get(imageKey);
+
+    // Create Image
+    const createImageRes = await API.graphql({
+      query: createImage,
+      variables: {
+        input: {
+          baseType: 'Image',
+          url: signedUrl,
+          imageKey,
+          isPublished: false,
+        },
+      },
+    });
+
+    const imageDbId = createImageRes.data.createImage.id;
+
+    // Create PostImage map -> 나중에
+
+    console.log(`createImageRes`, createImageRes);
+    console.log(`imageDbId`, imageDbId);
 
     const newEditorState = addAtomicBlock({
       editorState,
       entityType: 'GENERAL_IMAGE',
-      data: { selectedFile },
+      data: { imageUrl: signedUrl, imageDbId, imageKey },
     });
     setEditorState(newEditorState);
     setIsOpen(false);

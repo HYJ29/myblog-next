@@ -8,10 +8,8 @@ import { DefaultLayout } from '@/components/layout';
 import { getAllPosts } from '@/data';
 import {
   userByProviderKey,
-  listPosts,
   postByCreatedAt,
   tagByTagName,
-  getTag,
   listPostTags,
 } from '@/graphql/queries';
 
@@ -30,7 +28,6 @@ export default function HomePage({
   const [selectedTag, setSelectedTag] = useState('all');
   const [posts, setPosts] = useState(allPosts);
 
-  console.log(`tags`, tags);
   const onSelectTag = async (tag) => {
     setSelectedTag(tag.tagName);
     if (tag.tagName === 'all') {
@@ -42,7 +39,6 @@ export default function HomePage({
       });
       const posts = postTagRes.data.listPostTags.items.map((item) => item.post);
 
-      console.log(`posts`, posts);
       setPosts(posts);
     }
   };
@@ -118,7 +114,7 @@ export const getServerSideProps = async ({ req, res }) => {
           items: {},
         });
         const posts = postRes.data.postByCreatedAt.items;
-
+        // Get Tags
         const tagRes = await API.graphql({
           query: tagByTagName,
           variables: { baseType: 'Tag', sortDirection: 'ASC' },

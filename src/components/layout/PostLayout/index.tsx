@@ -14,7 +14,7 @@ type Props = {
   title: string;
   subTitle: string;
   owner: string;
-  postId: string;
+  post: any;
 };
 
 export default function PostLayout({
@@ -24,14 +24,14 @@ export default function PostLayout({
   title,
   subTitle,
   owner,
-  postId,
+  post,
 }: Props): JSX.Element {
   const parsedEditorState = parseEditorState(rawContentState);
   const [editorState, setEditorState] = useState(parsedEditorState);
   return (
     <div className={styles.container}>
       <div className={styles.headerContainer}>
-        <PostHeader editorState={editorState} owner={owner} postId={postId} />
+        <PostHeader editorState={editorState} owner={owner} post={post} />
       </div>
       <div className={styles.headerPlaceholder} />
       <div className={styles.editorContainer}>

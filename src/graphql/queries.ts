@@ -108,7 +108,10 @@ export const listPosts = /* GraphQL */ `
         createdAt
         updatedAt
         owner
-        tags {
+        postTags {
+          nextToken
+        }
+        postImages {
           nextToken
         }
       }
@@ -129,12 +132,25 @@ export const getPost = /* GraphQL */ `
       createdAt
       updatedAt
       owner
-      tags {
+      postTags {
         items {
           id
           userId
           postId
           tagId
+          baseType
+          createdAt
+          updatedAt
+          owner
+        }
+        nextToken
+      }
+      postImages {
+        items {
+          id
+          userId
+          postId
+          imageId
           baseType
           createdAt
           updatedAt
@@ -173,7 +189,10 @@ export const postByCreatedAt = /* GraphQL */ `
         createdAt
         updatedAt
         owner
-        tags {
+        postTags {
+          nextToken
+        }
+        postImages {
           nextToken
         }
       }
@@ -202,7 +221,10 @@ export const getPostTag = /* GraphQL */ `
         createdAt
         updatedAt
         owner
-        tags {
+        postTags {
+          nextToken
+        }
+        postImages {
           nextToken
         }
       }
@@ -213,7 +235,7 @@ export const getPostTag = /* GraphQL */ `
         baseType
         createdAt
         updatedAt
-        posts {
+        postTags {
           nextToken
         }
         owner
@@ -326,7 +348,7 @@ export const listTags = /* GraphQL */ `
         baseType
         createdAt
         updatedAt
-        posts {
+        postTags {
           nextToken
         }
         owner
@@ -343,7 +365,7 @@ export const getTag = /* GraphQL */ `
       baseType
       createdAt
       updatedAt
-      posts {
+      postTags {
         items {
           id
           userId
@@ -383,7 +405,233 @@ export const tagByTagName = /* GraphQL */ `
         baseType
         createdAt
         updatedAt
-        posts {
+        postTags {
+          nextToken
+        }
+        owner
+      }
+      nextToken
+    }
+  }
+`;
+export const getPostImage = /* GraphQL */ `
+  query GetPostImage($id: ID!) {
+    getPostImage(id: $id) {
+      id
+      userId
+      postId
+      imageId
+      baseType
+      createdAt
+      updatedAt
+      post {
+        id
+        rawContentState
+        titlePhoto
+        title
+        subTitle
+        userId
+        baseType
+        createdAt
+        updatedAt
+        owner
+        postTags {
+          nextToken
+        }
+        postImages {
+          nextToken
+        }
+      }
+      owner
+      image {
+        id
+        url
+        imageKey
+        baseType
+        isPublished
+        createdAt
+        updatedAt
+        postImages {
+          nextToken
+        }
+        owner
+      }
+    }
+  }
+`;
+export const listPostImages = /* GraphQL */ `
+  query ListPostImages(
+    $filter: ModelPostImageFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listPostImages(filter: $filter, limit: $limit, nextToken: $nextToken) {
+      items {
+        id
+        userId
+        postId
+        imageId
+        baseType
+        createdAt
+        updatedAt
+        post {
+          id
+          rawContentState
+          titlePhoto
+          title
+          subTitle
+          userId
+          baseType
+          createdAt
+          updatedAt
+          owner
+        }
+        owner
+        image {
+          id
+          url
+          imageKey
+          baseType
+          isPublished
+          createdAt
+          updatedAt
+          owner
+        }
+      }
+      nextToken
+    }
+  }
+`;
+export const postImageByPostIdAndImageId = /* GraphQL */ `
+  query PostImageByPostIdAndImageId(
+    $postId: ID
+    $imageId: ModelIDKeyConditionInput
+    $sortDirection: ModelSortDirection
+    $filter: ModelPostImageFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    postImageByPostIdAndImageId(
+      postId: $postId
+      imageId: $imageId
+      sortDirection: $sortDirection
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+    ) {
+      items {
+        id
+        userId
+        postId
+        imageId
+        baseType
+        createdAt
+        updatedAt
+        post {
+          id
+          rawContentState
+          titlePhoto
+          title
+          subTitle
+          userId
+          baseType
+          createdAt
+          updatedAt
+          owner
+        }
+        owner
+        image {
+          id
+          url
+          imageKey
+          baseType
+          isPublished
+          createdAt
+          updatedAt
+          owner
+        }
+      }
+      nextToken
+    }
+  }
+`;
+export const listImages = /* GraphQL */ `
+  query ListImages(
+    $filter: ModelImageFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listImages(filter: $filter, limit: $limit, nextToken: $nextToken) {
+      items {
+        id
+        url
+        imageKey
+        baseType
+        isPublished
+        createdAt
+        updatedAt
+        postImages {
+          nextToken
+        }
+        owner
+      }
+      nextToken
+    }
+  }
+`;
+export const getImage = /* GraphQL */ `
+  query GetImage($id: ID!) {
+    getImage(id: $id) {
+      id
+      url
+      imageKey
+      baseType
+      isPublished
+      createdAt
+      updatedAt
+      postImages {
+        items {
+          id
+          userId
+          postId
+          imageId
+          baseType
+          createdAt
+          updatedAt
+          owner
+        }
+        nextToken
+      }
+      owner
+    }
+  }
+`;
+export const imageByCreatedAt = /* GraphQL */ `
+  query ImageByCreatedAt(
+    $baseType: String
+    $createdAt: ModelStringKeyConditionInput
+    $sortDirection: ModelSortDirection
+    $filter: ModelImageFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    imageByCreatedAt(
+      baseType: $baseType
+      createdAt: $createdAt
+      sortDirection: $sortDirection
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+    ) {
+      items {
+        id
+        url
+        imageKey
+        baseType
+        isPublished
+        createdAt
+        updatedAt
+        postImages {
           nextToken
         }
         owner

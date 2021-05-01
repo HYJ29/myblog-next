@@ -6,6 +6,7 @@ import GeneralImage from './GeneralImage';
 import Video from './Video';
 import Dash from './Dash';
 import CodeBlock from './CodeBlock';
+import Loading from './Loading';
 
 type Props = {
   contentState: ContentState;
@@ -42,8 +43,8 @@ export default function AtomicBlockComponent({
   }
 
   if (type === 'GENERAL_IMAGE') {
-    const { selectedFile } = data;
-    return <GeneralImage selectedFile={selectedFile} />;
+    const { imageUrl, imageDbId } = data;
+    return <GeneralImage imageUrl={imageUrl} />;
   }
 
   if (type === 'IMAGE') {
@@ -79,6 +80,10 @@ export default function AtomicBlockComponent({
         codeBlockText={codeBlockText}
       />
     );
+  }
+
+  if (type === 'LOADING') {
+    return <Loading />;
   }
 
   return <div>AtomicBlockComponent</div>;
