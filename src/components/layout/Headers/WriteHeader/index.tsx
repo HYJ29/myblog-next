@@ -24,17 +24,9 @@ import {
   createPostImage,
   deletePostImage,
 } from '@/graphql/mutations';
-import {
-  listTags,
-  postTagsByPostIdAndTagId,
-  listPostTags,
-  listImages,
-  listPostImages,
-  postImageByPostIdAndImageId,
-  tagByTagName,
-} from '@/graphql/queries';
+
 import { AuthContext } from '@/pages/_app';
-import { tag } from '@/apiHelper';
+import { tag, image } from '@/apiHelper';
 
 import styles from './style.module.scss';
 
@@ -58,7 +50,7 @@ export default function WriteHeader({ editorState }) {
   const tags = getTagsFromEditorState({ editorState });
   const images = getImagesFromEditorState({ editorState });
   console.log(`images`, images);
-  const imageKeys = images.map((image) => image.data.imageKey);
+  
 
   const onPublishHandler = async () => {
     const res = await API.graphql({
@@ -85,73 +77,9 @@ export default function WriteHeader({ editorState }) {
 
     await tag.deleteAndUnLinkLegacyTag({ tags, postTagsInDB, postId });
 
-    // Get DB images
-    const listImagesRes = await API.graphql({
-      query: listImages,
-      variables: {
-        filter: { isPublished: { eq: false } },
-      },
-    });
-    const draftImagesDB = listImagesRes.data.listImages.items;
-    const imagesToDelete = draftImagesDB.filter(
-      (imageDB) => !imageKeys.find((imageKey) => imageKey === imageDB.imageKey)
-    );
+    await image.trimImageS3AndDB({ postId ,images});
 
-    //  Delete Image on S3 and DB if not exist now
-    for (const imageToDelete of imagesToDelete) {
-      const delRes = await Storage.remove(imageToDelete.imageKey);
-      console.log(`delRes`, delRes);
-
-      // Delete connection
-      const postImageRes = await API.graphql({
-        query: postImageByPostIdAndImageId,
-        variables: { postId, imageId: { eq: imageToDelete.id } },
-      });
-      const postImageId =
-        postImageRes?.data?.postImageByPostIdAndImageId?.items[0]?.id ?? null;
-      if (postImageId) {
-        await API.graphql({
-          query: deletePostImage,
-          variables: { input: { id: postImageId } },
-        });
-      }
-
-      const deletedRes = await API.graphql({
-        query: deleteImage,
-        variables: { input: { id: imageToDelete.id } },
-      });
-      console.log(`deletedDBRes`, deletedRes);
-    }
-
-    // Get PostImages on this Post
-
-    const postImagesDBRes = await API.graphql({
-      query: listPostImages,
-      variables: { filter: { postId: { eq: postId } } },
-    });
-    const postImageDB = postImagesDBRes?.data?.listPostTags?.items ?? [];
-
-    // Create Image Mapping if not mapped already
-    for (const image of images) {
-      const isMapedDBAlready = !!postImageDB.find(
-        (imageDB) => imageDB.id === image.data.imageDbId
-      );
-      if (!isMapedDBAlready) {
-        const createPostImageRes = await API.graphql({
-          query: createPostImage,
-          variables: {
-            input: {
-              postId,
-              userId,
-              imageId: image.data.imageDbId,
-              baseType: 'PostImage',
-            },
-          },
-        });
-
-        console.log(`createPostImageRes`, createPostImageRes);
-      }
-    }
+    await image.mapPostAndIamges({ postId, userId, images });
 
     return postId;
   };
@@ -190,7 +118,6 @@ export default function WriteHeader({ editorState }) {
           style={{ width: 100, alignSelf: 'center', marginTop: '1rem' }}
           onClick={async () => {
             setShowModal(false);
-
             const postId = await onPublishHandler();
             router.push(`/post/${postId}`);
           }}

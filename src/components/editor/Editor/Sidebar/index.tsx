@@ -12,9 +12,10 @@ import {
   Minus,
 } from '@/components/icons';
 import { addAtomicBlock } from '@/utils';
+import { uploadIamgeS3AndDB } from '@/apiHelper/image';
+import { createImage, createPostImage } from '@/graphql/mutations';
 
 import styles from './style.module.scss';
-import { createImage, createPostImage } from '@/graphql/mutations';
 
 type Props = {
   top: number;
@@ -53,39 +54,14 @@ export default function SideBar({
     const files = e.target.files ?? [];
     const selectedFile = files[0];
 
-    const imageUniqueKey = uuidV4();
-    // Upload Iamge to S3
-    const s3Object = await Storage.put(imageUniqueKey, selectedFile, {
-      contentType: 'image/jpeg',
-      acl: 'public-read',
+    const { imageDbId, imageS3Key, signedUrl } = await uploadIamgeS3AndDB({
+      file: selectedFile,
     });
-    const imageKey = s3Object.key;
-    const signedUrl = await Storage.get(imageKey);
-
-    // Create Image
-    const createImageRes = await API.graphql({
-      query: createImage,
-      variables: {
-        input: {
-          baseType: 'Image',
-          url: signedUrl,
-          imageKey,
-          isPublished: false,
-        },
-      },
-    });
-
-    const imageDbId = createImageRes.data.createImage.id;
-
-    // Create PostImage map -> 나중에
-
-    console.log(`createImageRes`, createImageRes);
-    console.log(`imageDbId`, imageDbId);
 
     const newEditorState = addAtomicBlock({
       editorState,
       entityType: 'GENERAL_IMAGE',
-      data: { imageUrl: signedUrl, imageDbId, imageKey },
+      data: { imageUrl: signedUrl, imageDbId, imageKey: imageS3Key },
     });
     setEditorState(newEditorState);
     setIsOpen(false);
