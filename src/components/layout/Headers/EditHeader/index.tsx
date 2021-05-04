@@ -30,8 +30,11 @@ import {
   listImages,
   listPostImages,
   postImageByPostIdAndImageId,
+  tagByTagName,
+  getTag,
 } from '@/graphql/queries';
 import { AuthContext } from '@/pages/_app';
+import { tag } from '@/apiHelper';
 
 import styles from './style.module.scss';
 
@@ -77,70 +80,11 @@ export default function EditHeader({ editorState, postId }) {
 
     const editedPostId = editedPost.id;
 
-    // List Current Post's Tags
-    const tagPostsInDatabaseRes = await API.graphql({
-      query: listPostTags,
-      variables: { filter: { postId: { eq: postId } } },
-    });
-    const tagsInDatabase =
-      tagPostsInDatabaseRes.data.listPostTags.items.map((item) => item.tag) ??
-      [];
+    const postTagsInDB = await tag.getTagsByPostId({ postId });
 
-    console.log(`tagsInDatabase`, tagsInDatabase);
-    console.log(`tags`, tags);
+    await tag.createAndLinkNewTag({ tags, postTagsInDB, userId, postId });
 
-    const isAleardyInDB = (tag) =>
-      tagsInDatabase.find((tagInDB) => tagInDB.tagName === tag);
-    const isTagNeedDeleted = (tagDB) =>
-      !tags.find((tag) => tag === tagDB.tagName);
-
-    //Create Tag If not exists
-    for (const tag of tags) {
-      if (!isAleardyInDB(tag)) {
-        const createTagRes = await API.graphql({
-          query: createTag,
-          variables: { input: { tagName: tag, baseType: 'Tag' } },
-        });
-        const tagId = createTagRes.data.createTag.id;
-
-        const createdPostTagRes = await API.graphql({
-          query: createPostTag,
-          variables: { input: { postId, tagId, userId, baseType: 'PostTag' } },
-        });
-      }
-    }
-
-    //  Delete Tag not exist now but exist in DB
-    for (const tagDB of tagsInDatabase) {
-      if (isTagNeedDeleted(tagDB)) {
-        // Get connection
-        const postTagRes = await API.graphql({
-          query: postTagsByPostIdAndTagId,
-
-          variables: {
-            baseType: 'PostTag',
-            filter: { postId: { eq: postId }, tagId: { eq: tagDB.id } },
-          },
-        });
-
-        const postTagId =
-          postTagRes.data.postTagsByPostIdAndTagId.items[0].id ?? null;
-
-        // Delete connection
-        await API.graphql({
-          query: deletePostTag,
-          variables: {
-            input: { id: postTagId },
-          },
-        });
-
-        // Delete Tag
-        await API.graphql({
-          query: deleteTag,
-          variables: { input: { id: tagDB.id } },
-        });
-      }
-    }
+    await tag.deleteAndUnLinkLegacyTag({ tags, postTagsInDB, postId });
 
     // Get DB images
     const listImagesRes = await API.graphql({

@@ -1,11 +1,11 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 
-import apiHelper from '@/apiHelper';
+import { unsplash } from '@/apiHelper';
 import { UnsplashImageInfo } from '@/types';
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
   const { keyword, currentPage } = req.query;
-  const response = await apiHelper.unsplash.getPhotos({
+  const response = await unsplash.getPhotos({
     keyword,
     currentPage: +currentPage ?? 1,
   });

@@ -20,6 +20,7 @@ import {
   deleteImage,
 } from '@/graphql/mutations';
 import { AuthContext } from '@/pages/_app';
+import { tag } from '@/apiHelper';
 
 import styles from './style.module.scss';
 
@@ -65,32 +66,40 @@ export default function PostHeader({ editorState, owner, post }) {
           style={{ width: 100, alignSelf: 'center', marginTop: '1rem' }}
           onClick={async () => {
             setShowModal(false);
+            const postTagsInDB = await tag.getTagsByPostId({ postId });
+            console.log(`postTagsInDB`, postTagsInDB);
+            await tag.deleteAndUnLinkLegacyTag({
+              tags: [],
+              postTagsInDB,
+              postId,
+            });
+
             // Delete Post
             await API.graphql({
               query: deletePost,
               variables: { input: { id: postId } },
             });
 
-            // Delete Post Tags
-            const postTags = post.postTags.items;
-            for (const postTag of postTags) {
-              const deletePostTagRes = await API.graphql({
-                query: deletePostTag,
-                variables: { input: { id: postTag.id } },
-              });
-              console.log(`deletePostTagRes`, deletePostTagRes);
-              const deletedLinkTag = deletePostTagRes.data.deletePostTag.tag;
+            // // Delete Post Tags
+            // const postTags = post.postTags.items;
+            // for (const postTag of postTags) {
+            //   const deletePostTagRes = await API.graphql({
+            //     query: deletePostTag,
+            //     variables: { input: { id: postTag.id } },
+            //   });
+            //   console.log(`deletePostTagRes`, deletePostTagRes);
+            //   const deletedLinkTag = deletePostTagRes.data.deletePostTag.tag;
 
-              //  If there is no more linked post delete tag
-              console.log(`deletedLinkTag`, deletedLinkTag);
-              if (deletedLinkTag.postTags.nextToken === null) {
-                const deletedTagRes = await API.graphql({
-                  query: deleteTag,
-                  variables: { input: { id: deletedLinkTag.id } },
-                });
-                console.log(`deletedTagRes`, deletedTagRes);
-              }
-            }
+            //   //  If there is no more linked post delete tag
+            //   console.log(`deletedLinkTag`, deletedLinkTag);
+            //   if (deletedLinkTag.postTags.nextToken === null) {
+            //     const deletedTagRes = await API.graphql({
+            //       query: deleteTag,
+            //       variables: { input: { id: deletedLinkTag.id } },
+            //     });
+            //     console.log(`deletedTagRes`, deletedTagRes);
+            //   }
+            // }
 
             // Delete Post Images
             const postImages = post.postImages.items;

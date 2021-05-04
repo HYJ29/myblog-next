@@ -37,7 +37,15 @@ export default function HomePage({
         query: listPostTags,
         variables: { filter: { tagId: { eq: tag.id } } },
       });
-      const posts = postTagRes.data.listPostTags.items.map((item) => item.post);
+      // TODO : sort post with grapqhql index key
+      const posts = postTagRes.data.listPostTags.items
+        .map((item) => item.post)
+        .sort((a, b) => {
+          console.log(`a`, a);
+          return (
+            new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+          );
+        });
 
       setPosts(posts);
     }
