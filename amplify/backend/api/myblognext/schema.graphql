@@ -18,7 +18,9 @@ type User
   baseType: String!
   photoUrl: AWSURL
   email: AWSEmail
-  Posts: [Post] @connection(fields: ["id"], keyName: "byUserAndCreatedAt")
+  Posts: [Post] @connection(keyName: "byUserAndCreatedAt", fields: ["id"])
+  Drafts: [Draft] @connection(keyName: "byUserAndCreatedAt", fields: ["id"])
+  Images: [Image] @connection(keyName: "byUserAndCreatedAt", fields: ["id"])
 }
 
 type Post
@@ -46,6 +48,22 @@ type Post
   createdAt: AWSDateTime!
   postTags: [PostTag] @connection(keyName: "byPostByUser", fields: ["id"])
   postImages: [PostImage] @connection(keyName: "byPostByUser", fields: ["id"])
+}
+
+type Draft
+  @model
+  @auth(rules: [{ allow: owner }])
+  @key(name: "byUserAndCreatedAt", fields: ["userId", "createdAt"]) {
+  id: ID!
+  rawContentState: String!
+  titlePhoto: String
+  title: String!
+  subTitle: String
+  userId: ID!
+  baseType: String!
+  createdAt: AWSDateTime!
+  draftImages: [DraftImage]
+    @connection(keyName: "byDraftByUser", fields: ["id"])
 }
 
 type PostTag
@@ -118,6 +136,25 @@ type PostImage
   image: Image @connection(fields: ["imageId"])
 }
 
+type DraftImage
+  @model
+  @auth(rules: [{ allow: owner }])
+  @key(name: "byDraftByUser", fields: ["draftId", "userId"])
+  @key(name: "byImageByUser", fields: ["imageId", "userId"])
+  @key(
+    name: "draftImageByDraftIdAndImageId"
+    fields: ["draftId", "imageId"]
+    queryField: "draftImageByDraftIdAndImageId"
+  ) {
+  id: ID!
+  userId: ID!
+  draftId: ID!
+  imageId: ID!
+  baseType: String!
+  draft: Draft @connection(fields: ["draftId"])
+  image: Image @connection(fields: ["imageId"])
+}
+
 type Image
   @model
   @auth(
@@ -131,12 +168,17 @@ type Image
     name: "imageByCreatedAt"
     fields: ["baseType", "createdAt"]
     queryField: "imageByCreatedAt"
-  ) {
+  )
+  @key(name: "byUserAndCreatedAt", fields: ["userId", "createdAt"]) {
   id: ID!
+  userId: ID!
   url: String!
   imageKey: String!
   baseType: String!
-  isPublished: Boolean
+  isPublished: Boolean!
+  isSaved: Boolean!
   createdAt: AWSDateTime!
   postImages: [PostImage] @connection(keyName: "byImageByUser", fields: ["id"])
+  draftImages: [DraftImage]
+    @connection(keyName: "byImageByUser", fields: ["id"])
 }

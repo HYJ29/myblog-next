@@ -26,12 +26,10 @@ import styles from './style.module.scss';
 
 import ControllerItem from '../Items/ControllerItem';
 
-export default function PostHeader({ editorState, owner, post }) {
+export default function PostHeader({ editorState, owner, post, username }) {
   const router = useRouter();
   const { Modal, setShowModal } = useModal();
-  const { authState } = useContext(AuthContext);
-  const { auth } = authState;
-  const username = auth.username;
+
   const postId = post.id;
 
   console.log(`post`, post);

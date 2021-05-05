@@ -6,14 +6,21 @@ import {
   deletePostImage,
   deleteImage,
   createPostImage,
+  updateImage,
+  createDraftImage,
 } from '@/graphql/mutations';
 import {
   listImages,
   postImageByPostIdAndImageId,
   listPostImages,
+  listDraftImages,
+  draftImageByDraftIdAndImageId,
 } from '@/graphql/queries';
 
-export const uploadIamgeS3AndDB = async ({ file }) => {
+import awsConfig from '@/aws-exports';
+const { aws_user_files_s3_bucket, aws_user_files_s3_bucket_region } = awsConfig;
+
+export const uploadIamgeS3AndDB = async ({ file, userId }) => {
   const imageUniqueKey = uuidV4();
   // Upload Iamge to S3
   const s3Object = await Storage.put(imageUniqueKey, file, {
@@ -22,6 +29,7 @@ export const uploadIamgeS3AndDB = async ({ file }) => {
   });
   const imageS3Key = s3Object.key;
   const signedUrl = await Storage.get(imageS3Key);
+  const accessUrl = `https://${aws_user_files_s3_bucket}.${aws_user_files_s3_bucket_region}.amazonaws.com/public/${imageS3Key}`;
 
   // Create Image
   const createImageRes = await API.graphql({
@@ -29,9 +37,11 @@ export const uploadIamgeS3AndDB = async ({ file }) => {
     variables: {
       input: {
         baseType: 'Image',
-        url: signedUrl,
+        url: accessUrl,
         imageKey: imageS3Key,
         isPublished: false,
+        isSaved: false,
+        userId: userId,
       },
     },
   });
@@ -41,18 +51,36 @@ export const uploadIamgeS3AndDB = async ({ file }) => {
   return { imageDbId, imageS3Key, signedUrl };
 };
 
-export const trimImageS3AndDB = async ({ postId, images }) => {
+export const trimImageS3AndDB = async ({ postId, images, userId }) => {
   const imageKeys = images.map((image) => image.data.imageKey);
 
-  // Get DB images
-  const listImagesRes = await API.graphql({
-    query: listImages,
-    variables: {
-      filter: { isPublished: { eq: false } },
-    },
+  let imagesOfThisPostOnDB = [];
+
+  // Get PostImages on this Post
+  const postImagesDBRes = await API.graphql({
+    query: listPostImages,
+    variables: { filter: { postId: { eq: postId } } },
   });
-  const draftImagesDB = listImagesRes.data.listImages.items;
-  const imagesToDelete = draftImagesDB.filter(
+  const postImageDB = postImagesDBRes?.data?.listPostImages?.items ?? [];
+
+  if (postImageDB.length === 0) {
+    // Get DB images not published, not saved
+    const listImagesRes = await API.graphql({
+      query: listImages,
+      variables: {
+        filter: {
+          isPublished: { eq: false },
+          isSaved: { eq: false },
+          userId: { eq: userId },
+        },
+      },
+    });
+    imagesOfThisPostOnDB = listImagesRes.data.listImages.items;
+  } else {
+    imagesOfThisPostOnDB = postImageDB;
+  }
+
+  const imagesToDelete = imagesOfThisPostOnDB.filter(
     (imageDB) => !imageKeys.find((imageKey) => imageKey === imageDB.imageKey)
   );
 
@@ -82,13 +110,72 @@ export const trimImageS3AndDB = async ({ postId, images }) => {
   }
 };
 
+export const trimImageS3AndDBDraft = async ({ draftId, images, userId }) => {
+  const imageKeys = images.map((image) => image.data.imageKey);
+
+  let imagesOfThisDraftOnDB = [];
+
+  // Get DraftImages on this Post
+  const draftImagesDBRes = await API.graphql({
+    query: listDraftImages,
+    variables: { filter: { draftId: { eq: draftId } } },
+  });
+  const draftImageDB = draftImagesDBRes?.data?.listPostImages?.items ?? [];
+
+  if (draftImageDB.length === 0) {
+    // Get DB images not published, not saved
+    const listImagesRes = await API.graphql({
+      query: listImages,
+      variables: {
+        filter: {
+          isPublished: { eq: false },
+          isSaved: { eq: false },
+          userId: { eq: userId },
+        },
+      },
+    });
+    imagesOfThisDraftOnDB = listImagesRes.data.listImages.items;
+  } else {
+    imagesOfThisDraftOnDB = draftImageDB;
+  }
+
+  const imagesToDelete = imagesOfThisDraftOnDB.filter(
+    (imageDB) => !imageKeys.find((imageKey) => imageKey === imageDB.imageKey)
+  );
+
+  //  Delete Image on S3 and DB if not exist now
+  for (const imageToDelete of imagesToDelete) {
+    // Delete connection
+    const draftImageRes = await API.graphql({
+      query: draftImageByDraftIdAndImageId,
+      variables: { draftId, imageId: { eq: imageToDelete.id } },
+    });
+    const darftImageId =
+      draftImageRes?.data?.draftImageByDraftIdAndImageId?.items[0]?.id ?? null;
+    if (darftImageId) {
+      await API.graphql({
+        query: deletePostImage,
+        variables: { input: { id: darftImageId } },
+      });
+    }
+    // Delete image on DB
+    const deletedRes = await API.graphql({
+      query: deleteImage,
+      variables: { input: { id: imageToDelete.id } },
+    });
+
+    // Delete Image on S3
+    const delRes = await Storage.remove(imageToDelete.imageKey);
+  }
+};
+
 export const mapPostAndIamges = async ({ postId, userId, images }) => {
   // Get PostImages on this Post
   const postImagesDBRes = await API.graphql({
     query: listPostImages,
     variables: { filter: { postId: { eq: postId } } },
   });
-  const postImageDB = postImagesDBRes?.data?.listPostTags?.items ?? [];
+  const postImageDB = postImagesDBRes?.data?.listPostImages?.items ?? [];
 
   // Create Image Mapping if not mapped already
   for (const image of images) {
@@ -108,7 +195,62 @@ export const mapPostAndIamges = async ({ postId, userId, images }) => {
         },
       });
 
+      // Update image isPublished, isDraft
+      const updateImageRes = await API.graphql({
+        query: updateImage,
+        variables: {
+          input: {
+            id: image.data.imageDbId,
+            isPublished: true,
+            isSaved: false,
+          },
+        },
+      });
+      console.log(`updateImageRes`, updateImageRes);
       console.log(`createPostImageRes`, createPostImageRes);
+    }
+  }
+};
+
+export const mapDraftAndIamges = async ({ draftId, userId, images }) => {
+  // Get PostImages on this Post
+  const draftImagesDBRes = await API.graphql({
+    query: listDraftImages,
+    variables: { filter: { draftId: { eq: draftId } } },
+  });
+  const draftImageDB = draftImagesDBRes?.data?.listPostImages?.items ?? [];
+
+  // Create Image Mapping if not mapped already
+  for (const image of images) {
+    const isMapedDBAlready = !!draftImageDB.find(
+      (imageDB) => imageDB.id === image.data.imageDbId
+    );
+    if (!isMapedDBAlready) {
+      const createDraftImageRes = await API.graphql({
+        query: createDraftImage,
+        variables: {
+          input: {
+            draftId,
+            userId,
+            imageId: image.data.imageDbId,
+            baseType: 'DraftImage',
+          },
+        },
+      });
+
+      // Update image isPublished, isSaved
+      const updateImageRes = await API.graphql({
+        query: updateImage,
+        variables: {
+          input: {
+            id: image.data.imageDbId,
+            isPublished: false,
+            isSaved: true,
+          },
+        },
+      });
+      console.log(`updateImageRes`, updateImageRes);
+      console.log(`createDraftImageRes`, createDraftImageRes);
     }
   }
 };

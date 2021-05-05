@@ -5,19 +5,19 @@ import Link from 'next/link';
 import styles from './style.module.scss';
 
 type Props = {
-  postId: number;
   titlePhoto: string;
   title: string;
   subTitle: string;
   createdAt: string;
+  linkTo: string;
 };
 
 export default function Card({
-  postId,
   titlePhoto,
   title,
   subTitle,
   createdAt,
+  linkTo,
 }: Props): JSX.Element {
   const createdDate = new Date(createdAt);
   const formatString = isThisYear(createdDate) ? 'MMM d' : 'MMM d, yyyy';
@@ -25,7 +25,7 @@ export default function Card({
   const formatedDate = format(createdDate, formatString);
 
   return (
-    <Link href={`/post/${postId}`}>
+    <Link href={linkTo}>
       <div className={styles.container}>
         <div className={styles.imageContainer}>
           <img

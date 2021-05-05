@@ -2,6 +2,208 @@
 /* eslint-disable */
 // this is an auto generated file. This will be overwritten
 
+export const getDraft = /* GraphQL */ `
+  query GetDraft($id: ID!) {
+    getDraft(id: $id) {
+      id
+      rawContentState
+      titlePhoto
+      title
+      subTitle
+      userId
+      baseType
+      createdAt
+      draftImages {
+        items {
+          id
+          userId
+          draftId
+          imageId
+          baseType
+          createdAt
+          updatedAt
+          owner
+        }
+        nextToken
+      }
+      updatedAt
+      owner
+    }
+  }
+`;
+export const listDrafts = /* GraphQL */ `
+  query ListDrafts(
+    $filter: ModelDraftFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listDrafts(filter: $filter, limit: $limit, nextToken: $nextToken) {
+      items {
+        id
+        rawContentState
+        titlePhoto
+        title
+        subTitle
+        userId
+        baseType
+        createdAt
+        draftImages {
+          nextToken
+        }
+        updatedAt
+        owner
+      }
+      nextToken
+    }
+  }
+`;
+export const getDraftImage = /* GraphQL */ `
+  query GetDraftImage($id: ID!) {
+    getDraftImage(id: $id) {
+      id
+      userId
+      draftId
+      imageId
+      baseType
+      draft {
+        id
+        rawContentState
+        titlePhoto
+        title
+        subTitle
+        userId
+        baseType
+        createdAt
+        draftImages {
+          nextToken
+        }
+        updatedAt
+        owner
+      }
+      createdAt
+      updatedAt
+      owner
+      image {
+        id
+        userId
+        url
+        imageKey
+        baseType
+        isPublished
+        isSaved
+        createdAt
+        draftImages {
+          nextToken
+        }
+        updatedAt
+        postImages {
+          nextToken
+        }
+        owner
+      }
+    }
+  }
+`;
+export const listDraftImages = /* GraphQL */ `
+  query ListDraftImages(
+    $filter: ModelDraftImageFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listDraftImages(filter: $filter, limit: $limit, nextToken: $nextToken) {
+      items {
+        id
+        userId
+        draftId
+        imageId
+        baseType
+        draft {
+          id
+          rawContentState
+          titlePhoto
+          title
+          subTitle
+          userId
+          baseType
+          createdAt
+          updatedAt
+          owner
+        }
+        createdAt
+        updatedAt
+        owner
+        image {
+          id
+          userId
+          url
+          imageKey
+          baseType
+          isPublished
+          isSaved
+          createdAt
+          updatedAt
+          owner
+        }
+      }
+      nextToken
+    }
+  }
+`;
+export const draftImageByDraftIdAndImageId = /* GraphQL */ `
+  query DraftImageByDraftIdAndImageId(
+    $draftId: ID
+    $imageId: ModelIDKeyConditionInput
+    $sortDirection: ModelSortDirection
+    $filter: ModelDraftImageFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    draftImageByDraftIdAndImageId(
+      draftId: $draftId
+      imageId: $imageId
+      sortDirection: $sortDirection
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+    ) {
+      items {
+        id
+        userId
+        draftId
+        imageId
+        baseType
+        draft {
+          id
+          rawContentState
+          titlePhoto
+          title
+          subTitle
+          userId
+          baseType
+          createdAt
+          updatedAt
+          owner
+        }
+        createdAt
+        updatedAt
+        owner
+        image {
+          id
+          userId
+          url
+          imageKey
+          baseType
+          isPublished
+          isSaved
+          createdAt
+          updatedAt
+          owner
+        }
+      }
+      nextToken
+    }
+  }
+`;
 export const getUser = /* GraphQL */ `
   query GetUser($id: ID!) {
     getUser(id: $id) {
@@ -11,6 +213,21 @@ export const getUser = /* GraphQL */ `
       baseType
       photoUrl
       email
+      Drafts {
+        items {
+          id
+          rawContentState
+          titlePhoto
+          title
+          subTitle
+          userId
+          baseType
+          createdAt
+          updatedAt
+          owner
+        }
+        nextToken
+      }
       createdAt
       updatedAt
       owner
@@ -23,6 +240,21 @@ export const getUser = /* GraphQL */ `
           subTitle
           userId
           baseType
+          createdAt
+          updatedAt
+          owner
+        }
+        nextToken
+      }
+      Images {
+        items {
+          id
+          userId
+          url
+          imageKey
+          baseType
+          isPublished
+          isSaved
           createdAt
           updatedAt
           owner
@@ -46,10 +278,16 @@ export const listUsers = /* GraphQL */ `
         baseType
         photoUrl
         email
+        Drafts {
+          nextToken
+        }
         createdAt
         updatedAt
         owner
         Posts {
+          nextToken
+        }
+        Images {
           nextToken
         }
       }
@@ -79,10 +317,16 @@ export const userByProviderKey = /* GraphQL */ `
         baseType
         photoUrl
         email
+        Drafts {
+          nextToken
+        }
         createdAt
         updatedAt
         owner
         Posts {
+          nextToken
+        }
+        Images {
           nextToken
         }
       }
@@ -445,11 +689,16 @@ export const getPostImage = /* GraphQL */ `
       owner
       image {
         id
+        userId
         url
         imageKey
         baseType
         isPublished
+        isSaved
         createdAt
+        draftImages {
+          nextToken
+        }
         updatedAt
         postImages {
           nextToken
@@ -489,10 +738,12 @@ export const listPostImages = /* GraphQL */ `
         owner
         image {
           id
+          userId
           url
           imageKey
           baseType
           isPublished
+          isSaved
           createdAt
           updatedAt
           owner
@@ -542,10 +793,12 @@ export const postImageByPostIdAndImageId = /* GraphQL */ `
         owner
         image {
           id
+          userId
           url
           imageKey
           baseType
           isPublished
+          isSaved
           createdAt
           updatedAt
           owner
@@ -564,11 +817,16 @@ export const listImages = /* GraphQL */ `
     listImages(filter: $filter, limit: $limit, nextToken: $nextToken) {
       items {
         id
+        userId
         url
         imageKey
         baseType
         isPublished
+        isSaved
         createdAt
+        draftImages {
+          nextToken
+        }
         updatedAt
         postImages {
           nextToken
@@ -583,11 +841,26 @@ export const getImage = /* GraphQL */ `
   query GetImage($id: ID!) {
     getImage(id: $id) {
       id
+      userId
       url
       imageKey
       baseType
       isPublished
+      isSaved
       createdAt
+      draftImages {
+        items {
+          id
+          userId
+          draftId
+          imageId
+          baseType
+          createdAt
+          updatedAt
+          owner
+        }
+        nextToken
+      }
       updatedAt
       postImages {
         items {
@@ -625,11 +898,16 @@ export const imageByCreatedAt = /* GraphQL */ `
     ) {
       items {
         id
+        userId
         url
         imageKey
         baseType
         isPublished
+        isSaved
         createdAt
+        draftImages {
+          nextToken
+        }
         updatedAt
         postImages {
           nextToken

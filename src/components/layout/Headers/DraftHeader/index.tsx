@@ -24,6 +24,7 @@ import {
   createPostImage,
   deletePostImage,
   createDraft,
+  updateDraft,
 } from '@/graphql/mutations';
 
 import { AuthContext } from '@/pages/_app';
@@ -33,10 +34,9 @@ import styles from './style.module.scss';
 
 import ControllerItem from '../Items/ControllerItem';
 
-export default function WriteHeader({ editorState, userId }) {
+export default function DraftHeader({ editorState, draftId, userId }) {
   const router = useRouter();
   const { Modal, setShowModal } = useModal();
-  console.log(`userId`, userId);
 
   const rawJsonContentState = getRawJsonContentStateFrom({ editorState });
   const titlePhoto = getTitlePhtoFromEditorState({ editorState });
@@ -83,10 +83,11 @@ export default function WriteHeader({ editorState, userId }) {
   };
 
   const onSaveHandler = async () => {
-    const createDraftRes = await API.graphql({
-      query: createDraft,
+    const updateDraftRes = await API.graphql({
+      query: updateDraft,
       variables: {
         input: {
+          id: draftId,
           rawContentState: rawJsonContentState,
           titlePhoto,
           title,
@@ -96,8 +97,6 @@ export default function WriteHeader({ editorState, userId }) {
         },
       },
     });
-
-    const draftId = createDraftRes.data.createDraft.id;
 
     await image.trimImageS3AndDBDraft({ draftId, images, userId });
     await image.mapDraftAndIamges({ draftId, userId, images });

@@ -61,7 +61,7 @@ function MyApp({ Component, pageProps }: AppProps) {
           const cognitoUser = await Auth.currentAuthenticatedUser();
           await userSignIn(cognitoUser);
         } catch (e) {
-          console.log(`e`, e);
+          console.log(`listenAuth Handler error`, e);
         }
         break;
     }

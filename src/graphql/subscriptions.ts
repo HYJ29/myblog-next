@@ -2,6 +2,234 @@
 /* eslint-disable */
 // this is an auto generated file. This will be overwritten
 
+export const onCreateDraft = /* GraphQL */ `
+  subscription OnCreateDraft($owner: String!) {
+    onCreateDraft(owner: $owner) {
+      id
+      rawContentState
+      titlePhoto
+      title
+      subTitle
+      userId
+      baseType
+      createdAt
+      draftImages {
+        items {
+          id
+          userId
+          draftId
+          imageId
+          baseType
+          createdAt
+          updatedAt
+          owner
+        }
+        nextToken
+      }
+      updatedAt
+      owner
+    }
+  }
+`;
+export const onUpdateDraft = /* GraphQL */ `
+  subscription OnUpdateDraft($owner: String!) {
+    onUpdateDraft(owner: $owner) {
+      id
+      rawContentState
+      titlePhoto
+      title
+      subTitle
+      userId
+      baseType
+      createdAt
+      draftImages {
+        items {
+          id
+          userId
+          draftId
+          imageId
+          baseType
+          createdAt
+          updatedAt
+          owner
+        }
+        nextToken
+      }
+      updatedAt
+      owner
+    }
+  }
+`;
+export const onDeleteDraft = /* GraphQL */ `
+  subscription OnDeleteDraft($owner: String!) {
+    onDeleteDraft(owner: $owner) {
+      id
+      rawContentState
+      titlePhoto
+      title
+      subTitle
+      userId
+      baseType
+      createdAt
+      draftImages {
+        items {
+          id
+          userId
+          draftId
+          imageId
+          baseType
+          createdAt
+          updatedAt
+          owner
+        }
+        nextToken
+      }
+      updatedAt
+      owner
+    }
+  }
+`;
+export const onCreateDraftImage = /* GraphQL */ `
+  subscription OnCreateDraftImage($owner: String!) {
+    onCreateDraftImage(owner: $owner) {
+      id
+      userId
+      draftId
+      imageId
+      baseType
+      draft {
+        id
+        rawContentState
+        titlePhoto
+        title
+        subTitle
+        userId
+        baseType
+        createdAt
+        draftImages {
+          nextToken
+        }
+        updatedAt
+        owner
+      }
+      createdAt
+      updatedAt
+      owner
+      image {
+        id
+        userId
+        url
+        imageKey
+        baseType
+        isPublished
+        isSaved
+        createdAt
+        draftImages {
+          nextToken
+        }
+        updatedAt
+        postImages {
+          nextToken
+        }
+        owner
+      }
+    }
+  }
+`;
+export const onUpdateDraftImage = /* GraphQL */ `
+  subscription OnUpdateDraftImage($owner: String!) {
+    onUpdateDraftImage(owner: $owner) {
+      id
+      userId
+      draftId
+      imageId
+      baseType
+      draft {
+        id
+        rawContentState
+        titlePhoto
+        title
+        subTitle
+        userId
+        baseType
+        createdAt
+        draftImages {
+          nextToken
+        }
+        updatedAt
+        owner
+      }
+      createdAt
+      updatedAt
+      owner
+      image {
+        id
+        userId
+        url
+        imageKey
+        baseType
+        isPublished
+        isSaved
+        createdAt
+        draftImages {
+          nextToken
+        }
+        updatedAt
+        postImages {
+          nextToken
+        }
+        owner
+      }
+    }
+  }
+`;
+export const onDeleteDraftImage = /* GraphQL */ `
+  subscription OnDeleteDraftImage($owner: String!) {
+    onDeleteDraftImage(owner: $owner) {
+      id
+      userId
+      draftId
+      imageId
+      baseType
+      draft {
+        id
+        rawContentState
+        titlePhoto
+        title
+        subTitle
+        userId
+        baseType
+        createdAt
+        draftImages {
+          nextToken
+        }
+        updatedAt
+        owner
+      }
+      createdAt
+      updatedAt
+      owner
+      image {
+        id
+        userId
+        url
+        imageKey
+        baseType
+        isPublished
+        isSaved
+        createdAt
+        draftImages {
+          nextToken
+        }
+        updatedAt
+        postImages {
+          nextToken
+        }
+        owner
+      }
+    }
+  }
+`;
 export const onCreateUser = /* GraphQL */ `
   subscription OnCreateUser {
     onCreateUser {
@@ -11,6 +239,21 @@ export const onCreateUser = /* GraphQL */ `
       baseType
       photoUrl
       email
+      Drafts {
+        items {
+          id
+          rawContentState
+          titlePhoto
+          title
+          subTitle
+          userId
+          baseType
+          createdAt
+          updatedAt
+          owner
+        }
+        nextToken
+      }
       createdAt
       updatedAt
       owner
@@ -23,6 +266,21 @@ export const onCreateUser = /* GraphQL */ `
           subTitle
           userId
           baseType
+          createdAt
+          updatedAt
+          owner
+        }
+        nextToken
+      }
+      Images {
+        items {
+          id
+          userId
+          url
+          imageKey
+          baseType
+          isPublished
+          isSaved
           createdAt
           updatedAt
           owner
@@ -41,6 +299,21 @@ export const onUpdateUser = /* GraphQL */ `
       baseType
       photoUrl
       email
+      Drafts {
+        items {
+          id
+          rawContentState
+          titlePhoto
+          title
+          subTitle
+          userId
+          baseType
+          createdAt
+          updatedAt
+          owner
+        }
+        nextToken
+      }
       createdAt
       updatedAt
       owner
@@ -59,6 +332,21 @@ export const onUpdateUser = /* GraphQL */ `
         }
         nextToken
       }
+      Images {
+        items {
+          id
+          userId
+          url
+          imageKey
+          baseType
+          isPublished
+          isSaved
+          createdAt
+          updatedAt
+          owner
+        }
+        nextToken
+      }
     }
   }
 `;
@@ -71,6 +359,21 @@ export const onDeleteUser = /* GraphQL */ `
       baseType
       photoUrl
       email
+      Drafts {
+        items {
+          id
+          rawContentState
+          titlePhoto
+          title
+          subTitle
+          userId
+          baseType
+          createdAt
+          updatedAt
+          owner
+        }
+        nextToken
+      }
       createdAt
       updatedAt
       owner
@@ -83,6 +386,21 @@ export const onDeleteUser = /* GraphQL */ `
           subTitle
           userId
           baseType
+          createdAt
+          updatedAt
+          owner
+        }
+        nextToken
+      }
+      Images {
+        items {
+          id
+          userId
+          url
+          imageKey
+          baseType
+          isPublished
+          isSaved
           createdAt
           updatedAt
           owner
@@ -453,11 +771,16 @@ export const onCreatePostImage = /* GraphQL */ `
       owner
       image {
         id
+        userId
         url
         imageKey
         baseType
         isPublished
+        isSaved
         createdAt
+        draftImages {
+          nextToken
+        }
         updatedAt
         postImages {
           nextToken
@@ -498,11 +821,16 @@ export const onUpdatePostImage = /* GraphQL */ `
       owner
       image {
         id
+        userId
         url
         imageKey
         baseType
         isPublished
+        isSaved
         createdAt
+        draftImages {
+          nextToken
+        }
         updatedAt
         postImages {
           nextToken
@@ -543,11 +871,16 @@ export const onDeletePostImage = /* GraphQL */ `
       owner
       image {
         id
+        userId
         url
         imageKey
         baseType
         isPublished
+        isSaved
         createdAt
+        draftImages {
+          nextToken
+        }
         updatedAt
         postImages {
           nextToken
@@ -561,11 +894,26 @@ export const onCreateImage = /* GraphQL */ `
   subscription OnCreateImage {
     onCreateImage {
       id
+      userId
       url
       imageKey
       baseType
       isPublished
+      isSaved
       createdAt
+      draftImages {
+        items {
+          id
+          userId
+          draftId
+          imageId
+          baseType
+          createdAt
+          updatedAt
+          owner
+        }
+        nextToken
+      }
       updatedAt
       postImages {
         items {
@@ -588,11 +936,26 @@ export const onUpdateImage = /* GraphQL */ `
   subscription OnUpdateImage {
     onUpdateImage {
       id
+      userId
       url
       imageKey
       baseType
       isPublished
+      isSaved
       createdAt
+      draftImages {
+        items {
+          id
+          userId
+          draftId
+          imageId
+          baseType
+          createdAt
+          updatedAt
+          owner
+        }
+        nextToken
+      }
       updatedAt
       postImages {
         items {
@@ -615,11 +978,26 @@ export const onDeleteImage = /* GraphQL */ `
   subscription OnDeleteImage {
     onDeleteImage {
       id
+      userId
       url
       imageKey
       baseType
       isPublished
+      isSaved
       createdAt
+      draftImages {
+        items {
+          id
+          userId
+          draftId
+          imageId
+          baseType
+          createdAt
+          updatedAt
+          owner
+        }
+        nextToken
+      }
       updatedAt
       postImages {
         items {

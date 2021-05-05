@@ -1,4 +1,4 @@
-import React, { useEffect, useContext } from 'react';
+import React, { useEffect } from 'react';
 
 import { AmplifySignOut } from '@aws-amplify/ui-react';
 import { useRouter } from 'next/router';
@@ -6,15 +6,16 @@ import { withSSRContext } from 'aws-amplify';
 import { AuthState } from '@aws-amplify/ui-components';
 
 import { DefaultLayout } from '@/components/layout';
-import { AuthContext } from '@/pages/_app';
+import { Card } from '@/components/ui';
 
 import styles from './style.module.scss';
+import { userByProviderKey, getUser } from '@/graphql/queries';
 
-export default function Profile() {
+export default function Profile({ authenticated, user }) {
   const router = useRouter();
 
-  const { authState } = useContext(AuthContext);
-  const { user, isAuthenticated } = authState;
+  console.log(`user`, user);
+  const drafts = user.Drafts.items;
 
   return (
     <DefaultLayout>
@@ -27,23 +28,55 @@ export default function Profile() {
             }
           }}
         />
+
+        <ul className={styles.postsContainer}>
+          {drafts.map((draft) => (
+            <Card
+              key={draft.id}
+              linkTo={`/draft/${draft.id}`}
+              titlePhoto={draft.titlePhoto}
+              title={draft.title}
+              subTitle={draft.subTitle}
+              createdAt={draft.createdAt}
+            />
+          ))}
+        </ul>
       </div>
     </DefaultLayout>
   );
 }
 
 export async function getServerSideProps({ req, res }) {
-  const { Auth } = withSSRContext({ req });
+  const { Auth, API } = withSSRContext({ req });
+  let dbUser = {};
   try {
-    const user = await Auth.currentAuthenticatedUser();
+    const cognitoUser = await Auth.currentAuthenticatedUser();
+    if (cognitoUser) {
+      const providerKey = cognitoUser.username;
+      const userOfProviderKey = await API.graphql({
+        query: userByProviderKey,
+        variables: {
+          providerKey,
+        },
+      });
+      const dbUserId =
+        userOfProviderKey.data.userByProviderKey?.items[0].id ?? null;
+
+      const getUserRes = await API.graphql({
+        query: getUser,
+        variables: { id: dbUserId },
+      });
+
+      dbUser = getUserRes.data.getUser;
+    }
 
     return {
       props: {
-        authenticated: true,
-        user: user.username,
+        user: dbUser,
       },
     };
   } catch (e) {
+    console.log(`Error on Profile serverSide `, e);
     res.writeHead(302, { Location: '/auth' });
     res.end();
   }

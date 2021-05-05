@@ -82,7 +82,7 @@ export default function HomePage({
             {posts.map((post) => (
               <Card
                 key={post.id}
-                postId={post.id}
+                linkTo={`/post/${post.id}`}
                 titlePhoto={post.titlePhoto}
                 title={post.title}
                 subTitle={post.subTitle}
@@ -138,7 +138,7 @@ export const getServerSideProps = async ({ req, res }) => {
       }
     }
   } catch (e) {
-    console.log(`e`, e);
+    console.log(`hompage serverside error`, e);
     // const posts = await API.graphql({ query: listPosts });
     return { props: { posts: [], tags: [] } };
   }

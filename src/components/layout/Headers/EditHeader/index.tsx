@@ -1,7 +1,7 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
-import { API, Storage } from 'aws-amplify';
+import { API } from 'aws-amplify';
 
 import { useModal } from '@/hooks/useModal';
 import { XCircle } from '@/components/icons';
@@ -13,39 +13,16 @@ import {
   getTagsFromEditorState,
   getImagesFromEditorState,
 } from '@/utils/draft/filter';
-import {
-  updatePost,
-  createTag,
-  createPostTag,
-  deleteTag,
-  deletePostTag,
-  deletePostImage,
-  deleteImage,
-  createPostImage,
-} from '@/graphql/mutations';
-import {
-  listTags,
-  postTagsByPostIdAndTagId,
-  listPostTags,
-  listImages,
-  listPostImages,
-  postImageByPostIdAndImageId,
-  tagByTagName,
-  getTag,
-} from '@/graphql/queries';
-import { AuthContext } from '@/pages/_app';
+import { updatePost } from '@/graphql/mutations';
 import { tag, image } from '@/apiHelper';
 
 import styles from './style.module.scss';
 
 import ControllerItem from '../Items/ControllerItem';
 
-export default function EditHeader({ editorState, postId }) {
+export default function EditHeader({ editorState, postId, userId }) {
   const router = useRouter();
   const { Modal, setShowModal } = useModal();
-  const { authState } = useContext(AuthContext);
-  const { user } = authState;
-  const { id: userId } = user;
 
   const rawJsonContentState = getRawJsonContentStateFrom({ editorState });
   const titlePhoto = getTitlePhtoFromEditorState({ editorState });
@@ -58,7 +35,6 @@ export default function EditHeader({ editorState, postId }) {
   const tags = getTagsFromEditorState({ editorState });
 
   const images = getImagesFromEditorState({ editorState });
-  const imageKeys = images.map((image) => image.data.imageKey);
 
   const onEditHandler = async () => {
     const res = await API.graphql({
@@ -70,7 +46,7 @@ export default function EditHeader({ editorState, postId }) {
           titlePhoto,
           title,
           subTitle,
-          userId: user.id,
+          userId,
           baseType: 'Post',
         },
       },
@@ -86,7 +62,7 @@ export default function EditHeader({ editorState, postId }) {
 
     await tag.deleteAndUnLinkLegacyTag({ tags, postTagsInDB, postId });
 
-    await image.trimImageS3AndDB({ postId, images });
+    await image.trimImageS3AndDB({ postId, images, userId });
 
     await image.mapPostAndIamges({ postId, userId, images });
 

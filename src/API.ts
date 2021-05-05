@@ -70,16 +70,89 @@ export type User = {
   baseType?: string,
   photoUrl?: string | null,
   email?: string | null,
+  Drafts?: ModelDraftConnection,
   createdAt?: string,
   updatedAt?: string,
   owner?: string | null,
   Posts?: ModelPostConnection,
+  Images?: ModelImageConnection,
 };
 
-export type ModelPostConnection = {
-  __typename: "ModelPostConnection",
-  items?:  Array<Post | null > | null,
+export type ModelDraftConnection = {
+  __typename: "ModelDraftConnection",
+  items?:  Array<Draft | null > | null,
   nextToken?: string | null,
+};
+
+export type Draft = {
+  __typename: "Draft",
+  id?: string,
+  rawContentState?: string,
+  titlePhoto?: string | null,
+  title?: string,
+  subTitle?: string | null,
+  userId?: string,
+  baseType?: string,
+  createdAt?: string,
+  draftImages?: ModelDraftImageConnection,
+  updatedAt?: string,
+  owner?: string | null,
+};
+
+export type ModelDraftImageConnection = {
+  __typename: "ModelDraftImageConnection",
+  items?:  Array<DraftImage | null > | null,
+  nextToken?: string | null,
+};
+
+export type DraftImage = {
+  __typename: "DraftImage",
+  id?: string,
+  userId?: string,
+  draftId?: string,
+  imageId?: string,
+  baseType?: string,
+  draft?: Draft,
+  createdAt?: string,
+  updatedAt?: string,
+  owner?: string | null,
+  image?: Image,
+};
+
+export type Image = {
+  __typename: "Image",
+  id?: string,
+  userId?: string,
+  url?: string,
+  imageKey?: string,
+  baseType?: string,
+  isPublished?: boolean,
+  isSaved?: boolean,
+  createdAt?: string,
+  draftImages?: ModelDraftImageConnection,
+  updatedAt?: string,
+  postImages?: ModelPostImageConnection,
+  owner?: string | null,
+};
+
+export type ModelPostImageConnection = {
+  __typename: "ModelPostImageConnection",
+  items?:  Array<PostImage | null > | null,
+  nextToken?: string | null,
+};
+
+export type PostImage = {
+  __typename: "PostImage",
+  id?: string,
+  userId?: string,
+  postId?: string,
+  imageId?: string,
+  baseType?: string,
+  createdAt?: string,
+  updatedAt?: string,
+  post?: Post,
+  owner?: string | null,
+  image?: Image,
 };
 
 export type Post = {
@@ -129,37 +202,16 @@ export type Tag = {
   owner?: string | null,
 };
 
-export type ModelPostImageConnection = {
-  __typename: "ModelPostImageConnection",
-  items?:  Array<PostImage | null > | null,
+export type ModelPostConnection = {
+  __typename: "ModelPostConnection",
+  items?:  Array<Post | null > | null,
   nextToken?: string | null,
 };
 
-export type PostImage = {
-  __typename: "PostImage",
-  id?: string,
-  userId?: string,
-  postId?: string,
-  imageId?: string,
-  baseType?: string,
-  createdAt?: string,
-  updatedAt?: string,
-  post?: Post,
-  owner?: string | null,
-  image?: Image,
-};
-
-export type Image = {
-  __typename: "Image",
-  id?: string,
-  url?: string,
-  imageKey?: string,
-  baseType?: string,
-  isPublished?: boolean | null,
-  createdAt?: string,
-  updatedAt?: string,
-  postImages?: ModelPostImageConnection,
-  owner?: string | null,
+export type ModelImageConnection = {
+  __typename: "ModelImageConnection",
+  items?:  Array<Image | null > | null,
+  nextToken?: string | null,
 };
 
 export type UpdateUserInput = {
@@ -227,6 +279,45 @@ export type UpdatePostInput = {
 };
 
 export type DeletePostInput = {
+  id?: string | null,
+};
+
+export type CreateDraftInput = {
+  id?: string | null,
+  rawContentState: string,
+  titlePhoto?: string | null,
+  title: string,
+  subTitle?: string | null,
+  userId: string,
+  baseType: string,
+  createdAt?: string | null,
+};
+
+export type ModelDraftConditionInput = {
+  rawContentState?: ModelStringInput | null,
+  titlePhoto?: ModelStringInput | null,
+  title?: ModelStringInput | null,
+  subTitle?: ModelStringInput | null,
+  userId?: ModelIDInput | null,
+  baseType?: ModelStringInput | null,
+  createdAt?: ModelStringInput | null,
+  and?: Array< ModelDraftConditionInput | null > | null,
+  or?: Array< ModelDraftConditionInput | null > | null,
+  not?: ModelDraftConditionInput | null,
+};
+
+export type UpdateDraftInput = {
+  id: string,
+  rawContentState?: string | null,
+  titlePhoto?: string | null,
+  title?: string | null,
+  subTitle?: string | null,
+  userId?: string | null,
+  baseType?: string | null,
+  createdAt?: string | null,
+};
+
+export type DeleteDraftInput = {
   id?: string | null,
 };
 
@@ -314,20 +405,54 @@ export type DeletePostImageInput = {
   id?: string | null,
 };
 
+export type CreateDraftImageInput = {
+  id?: string | null,
+  userId: string,
+  draftId: string,
+  imageId: string,
+  baseType: string,
+};
+
+export type ModelDraftImageConditionInput = {
+  userId?: ModelIDInput | null,
+  draftId?: ModelIDInput | null,
+  imageId?: ModelIDInput | null,
+  baseType?: ModelStringInput | null,
+  and?: Array< ModelDraftImageConditionInput | null > | null,
+  or?: Array< ModelDraftImageConditionInput | null > | null,
+  not?: ModelDraftImageConditionInput | null,
+};
+
+export type UpdateDraftImageInput = {
+  id: string,
+  userId?: string | null,
+  draftId?: string | null,
+  imageId?: string | null,
+  baseType?: string | null,
+};
+
+export type DeleteDraftImageInput = {
+  id?: string | null,
+};
+
 export type CreateImageInput = {
   id?: string | null,
+  userId: string,
   url: string,
   imageKey: string,
   baseType: string,
-  isPublished?: boolean | null,
+  isPublished: boolean,
+  isSaved: boolean,
   createdAt?: string | null,
 };
 
 export type ModelImageConditionInput = {
+  userId?: ModelIDInput | null,
   url?: ModelStringInput | null,
   imageKey?: ModelStringInput | null,
   baseType?: ModelStringInput | null,
   isPublished?: ModelBooleanInput | null,
+  isSaved?: ModelBooleanInput | null,
   createdAt?: ModelStringInput | null,
   and?: Array< ModelImageConditionInput | null > | null,
   or?: Array< ModelImageConditionInput | null > | null,
@@ -343,16 +468,59 @@ export type ModelBooleanInput = {
 
 export type UpdateImageInput = {
   id: string,
+  userId?: string | null,
   url?: string | null,
   imageKey?: string | null,
   baseType?: string | null,
   isPublished?: boolean | null,
+  isSaved?: boolean | null,
   createdAt?: string | null,
 };
 
 export type DeleteImageInput = {
   id?: string | null,
 };
+
+export type ModelDraftFilterInput = {
+  id?: ModelIDInput | null,
+  rawContentState?: ModelStringInput | null,
+  titlePhoto?: ModelStringInput | null,
+  title?: ModelStringInput | null,
+  subTitle?: ModelStringInput | null,
+  userId?: ModelIDInput | null,
+  baseType?: ModelStringInput | null,
+  createdAt?: ModelStringInput | null,
+  and?: Array< ModelDraftFilterInput | null > | null,
+  or?: Array< ModelDraftFilterInput | null > | null,
+  not?: ModelDraftFilterInput | null,
+};
+
+export type ModelDraftImageFilterInput = {
+  id?: ModelIDInput | null,
+  userId?: ModelIDInput | null,
+  draftId?: ModelIDInput | null,
+  imageId?: ModelIDInput | null,
+  baseType?: ModelStringInput | null,
+  and?: Array< ModelDraftImageFilterInput | null > | null,
+  or?: Array< ModelDraftImageFilterInput | null > | null,
+  not?: ModelDraftImageFilterInput | null,
+};
+
+export type ModelIDKeyConditionInput = {
+  eq?: string | null,
+  le?: string | null,
+  lt?: string | null,
+  ge?: string | null,
+  gt?: string | null,
+  between?: Array< string | null > | null,
+  beginsWith?: string | null,
+};
+
+export enum ModelSortDirection {
+  ASC = "ASC",
+  DESC = "DESC",
+}
+
 
 export type ModelUserFilterInput = {
   id?: ModelIDInput | null,
@@ -371,12 +539,6 @@ export type ModelUserConnection = {
   items?:  Array<User | null > | null,
   nextToken?: string | null,
 };
-
-export enum ModelSortDirection {
-  ASC = "ASC",
-  DESC = "DESC",
-}
-
 
 export type ModelPostFilterInput = {
   id?: ModelIDInput | null,
@@ -454,32 +616,18 @@ export type ModelPostImageFilterInput = {
   not?: ModelPostImageFilterInput | null,
 };
 
-export type ModelIDKeyConditionInput = {
-  eq?: string | null,
-  le?: string | null,
-  lt?: string | null,
-  ge?: string | null,
-  gt?: string | null,
-  between?: Array< string | null > | null,
-  beginsWith?: string | null,
-};
-
 export type ModelImageFilterInput = {
   id?: ModelIDInput | null,
+  userId?: ModelIDInput | null,
   url?: ModelStringInput | null,
   imageKey?: ModelStringInput | null,
   baseType?: ModelStringInput | null,
   isPublished?: ModelBooleanInput | null,
+  isSaved?: ModelBooleanInput | null,
   createdAt?: ModelStringInput | null,
   and?: Array< ModelImageFilterInput | null > | null,
   or?: Array< ModelImageFilterInput | null > | null,
   not?: ModelImageFilterInput | null,
-};
-
-export type ModelImageConnection = {
-  __typename: "ModelImageConnection",
-  items?:  Array<Image | null > | null,
-  nextToken?: string | null,
 };
 
 export type CreateUserMutationVariables = {
@@ -496,6 +644,23 @@ export type CreateUserMutation = {
     baseType: string,
     photoUrl?: string | null,
     email?: string | null,
+    Drafts?:  {
+      __typename: "ModelDraftConnection",
+      items?:  Array< {
+        __typename: "Draft",
+        id: string,
+        rawContentState: string,
+        titlePhoto?: string | null,
+        title: string,
+        subTitle?: string | null,
+        userId: string,
+        baseType: string,
+        createdAt: string,
+        updatedAt: string,
+        owner?: string | null,
+      } | null > | null,
+      nextToken?: string | null,
+    } | null,
     createdAt: string,
     updatedAt: string,
     owner?: string | null,
@@ -510,6 +675,23 @@ export type CreateUserMutation = {
         subTitle?: string | null,
         userId: string,
         baseType: string,
+        createdAt: string,
+        updatedAt: string,
+        owner?: string | null,
+      } | null > | null,
+      nextToken?: string | null,
+    } | null,
+    Images?:  {
+      __typename: "ModelImageConnection",
+      items?:  Array< {
+        __typename: "Image",
+        id: string,
+        userId: string,
+        url: string,
+        imageKey: string,
+        baseType: string,
+        isPublished: boolean,
+        isSaved: boolean,
         createdAt: string,
         updatedAt: string,
         owner?: string | null,
@@ -533,6 +715,23 @@ export type UpdateUserMutation = {
     baseType: string,
     photoUrl?: string | null,
     email?: string | null,
+    Drafts?:  {
+      __typename: "ModelDraftConnection",
+      items?:  Array< {
+        __typename: "Draft",
+        id: string,
+        rawContentState: string,
+        titlePhoto?: string | null,
+        title: string,
+        subTitle?: string | null,
+        userId: string,
+        baseType: string,
+        createdAt: string,
+        updatedAt: string,
+        owner?: string | null,
+      } | null > | null,
+      nextToken?: string | null,
+    } | null,
     createdAt: string,
     updatedAt: string,
     owner?: string | null,
@@ -547,6 +746,23 @@ export type UpdateUserMutation = {
         subTitle?: string | null,
         userId: string,
         baseType: string,
+        createdAt: string,
+        updatedAt: string,
+        owner?: string | null,
+      } | null > | null,
+      nextToken?: string | null,
+    } | null,
+    Images?:  {
+      __typename: "ModelImageConnection",
+      items?:  Array< {
+        __typename: "Image",
+        id: string,
+        userId: string,
+        url: string,
+        imageKey: string,
+        baseType: string,
+        isPublished: boolean,
+        isSaved: boolean,
         createdAt: string,
         updatedAt: string,
         owner?: string | null,
@@ -570,6 +786,23 @@ export type DeleteUserMutation = {
     baseType: string,
     photoUrl?: string | null,
     email?: string | null,
+    Drafts?:  {
+      __typename: "ModelDraftConnection",
+      items?:  Array< {
+        __typename: "Draft",
+        id: string,
+        rawContentState: string,
+        titlePhoto?: string | null,
+        title: string,
+        subTitle?: string | null,
+        userId: string,
+        baseType: string,
+        createdAt: string,
+        updatedAt: string,
+        owner?: string | null,
+      } | null > | null,
+      nextToken?: string | null,
+    } | null,
     createdAt: string,
     updatedAt: string,
     owner?: string | null,
@@ -584,6 +817,23 @@ export type DeleteUserMutation = {
         subTitle?: string | null,
         userId: string,
         baseType: string,
+        createdAt: string,
+        updatedAt: string,
+        owner?: string | null,
+      } | null > | null,
+      nextToken?: string | null,
+    } | null,
+    Images?:  {
+      __typename: "ModelImageConnection",
+      items?:  Array< {
+        __typename: "Image",
+        id: string,
+        userId: string,
+        url: string,
+        imageKey: string,
+        baseType: string,
+        isPublished: boolean,
+        isSaved: boolean,
         createdAt: string,
         updatedAt: string,
         owner?: string | null,
@@ -743,6 +993,114 @@ export type DeletePostMutation = {
       } | null > | null,
       nextToken?: string | null,
     } | null,
+  } | null,
+};
+
+export type CreateDraftMutationVariables = {
+  input?: CreateDraftInput,
+  condition?: ModelDraftConditionInput | null,
+};
+
+export type CreateDraftMutation = {
+  createDraft?:  {
+    __typename: "Draft",
+    id: string,
+    rawContentState: string,
+    titlePhoto?: string | null,
+    title: string,
+    subTitle?: string | null,
+    userId: string,
+    baseType: string,
+    createdAt: string,
+    draftImages?:  {
+      __typename: "ModelDraftImageConnection",
+      items?:  Array< {
+        __typename: "DraftImage",
+        id: string,
+        userId: string,
+        draftId: string,
+        imageId: string,
+        baseType: string,
+        createdAt: string,
+        updatedAt: string,
+        owner?: string | null,
+      } | null > | null,
+      nextToken?: string | null,
+    } | null,
+    updatedAt: string,
+    owner?: string | null,
+  } | null,
+};
+
+export type UpdateDraftMutationVariables = {
+  input?: UpdateDraftInput,
+  condition?: ModelDraftConditionInput | null,
+};
+
+export type UpdateDraftMutation = {
+  updateDraft?:  {
+    __typename: "Draft",
+    id: string,
+    rawContentState: string,
+    titlePhoto?: string | null,
+    title: string,
+    subTitle?: string | null,
+    userId: string,
+    baseType: string,
+    createdAt: string,
+    draftImages?:  {
+      __typename: "ModelDraftImageConnection",
+      items?:  Array< {
+        __typename: "DraftImage",
+        id: string,
+        userId: string,
+        draftId: string,
+        imageId: string,
+        baseType: string,
+        createdAt: string,
+        updatedAt: string,
+        owner?: string | null,
+      } | null > | null,
+      nextToken?: string | null,
+    } | null,
+    updatedAt: string,
+    owner?: string | null,
+  } | null,
+};
+
+export type DeleteDraftMutationVariables = {
+  input?: DeleteDraftInput,
+  condition?: ModelDraftConditionInput | null,
+};
+
+export type DeleteDraftMutation = {
+  deleteDraft?:  {
+    __typename: "Draft",
+    id: string,
+    rawContentState: string,
+    titlePhoto?: string | null,
+    title: string,
+    subTitle?: string | null,
+    userId: string,
+    baseType: string,
+    createdAt: string,
+    draftImages?:  {
+      __typename: "ModelDraftImageConnection",
+      items?:  Array< {
+        __typename: "DraftImage",
+        id: string,
+        userId: string,
+        draftId: string,
+        imageId: string,
+        baseType: string,
+        createdAt: string,
+        updatedAt: string,
+        owner?: string | null,
+      } | null > | null,
+      nextToken?: string | null,
+    } | null,
+    updatedAt: string,
+    owner?: string | null,
   } | null,
 };
 
@@ -1041,11 +1399,17 @@ export type CreatePostImageMutation = {
     image?:  {
       __typename: "Image",
       id: string,
+      userId: string,
       url: string,
       imageKey: string,
       baseType: string,
-      isPublished?: boolean | null,
+      isPublished: boolean,
+      isSaved: boolean,
       createdAt: string,
+      draftImages?:  {
+        __typename: "ModelDraftImageConnection",
+        nextToken?: string | null,
+      } | null,
       updatedAt: string,
       postImages?:  {
         __typename: "ModelPostImageConnection",
@@ -1096,11 +1460,17 @@ export type UpdatePostImageMutation = {
     image?:  {
       __typename: "Image",
       id: string,
+      userId: string,
       url: string,
       imageKey: string,
       baseType: string,
-      isPublished?: boolean | null,
+      isPublished: boolean,
+      isSaved: boolean,
       createdAt: string,
+      draftImages?:  {
+        __typename: "ModelDraftImageConnection",
+        nextToken?: string | null,
+      } | null,
       updatedAt: string,
       postImages?:  {
         __typename: "ModelPostImageConnection",
@@ -1151,11 +1521,188 @@ export type DeletePostImageMutation = {
     image?:  {
       __typename: "Image",
       id: string,
+      userId: string,
       url: string,
       imageKey: string,
       baseType: string,
-      isPublished?: boolean | null,
+      isPublished: boolean,
+      isSaved: boolean,
       createdAt: string,
+      draftImages?:  {
+        __typename: "ModelDraftImageConnection",
+        nextToken?: string | null,
+      } | null,
+      updatedAt: string,
+      postImages?:  {
+        __typename: "ModelPostImageConnection",
+        nextToken?: string | null,
+      } | null,
+      owner?: string | null,
+    } | null,
+  } | null,
+};
+
+export type CreateDraftImageMutationVariables = {
+  input?: CreateDraftImageInput,
+  condition?: ModelDraftImageConditionInput | null,
+};
+
+export type CreateDraftImageMutation = {
+  createDraftImage?:  {
+    __typename: "DraftImage",
+    id: string,
+    userId: string,
+    draftId: string,
+    imageId: string,
+    baseType: string,
+    draft?:  {
+      __typename: "Draft",
+      id: string,
+      rawContentState: string,
+      titlePhoto?: string | null,
+      title: string,
+      subTitle?: string | null,
+      userId: string,
+      baseType: string,
+      createdAt: string,
+      draftImages?:  {
+        __typename: "ModelDraftImageConnection",
+        nextToken?: string | null,
+      } | null,
+      updatedAt: string,
+      owner?: string | null,
+    } | null,
+    createdAt: string,
+    updatedAt: string,
+    owner?: string | null,
+    image?:  {
+      __typename: "Image",
+      id: string,
+      userId: string,
+      url: string,
+      imageKey: string,
+      baseType: string,
+      isPublished: boolean,
+      isSaved: boolean,
+      createdAt: string,
+      draftImages?:  {
+        __typename: "ModelDraftImageConnection",
+        nextToken?: string | null,
+      } | null,
+      updatedAt: string,
+      postImages?:  {
+        __typename: "ModelPostImageConnection",
+        nextToken?: string | null,
+      } | null,
+      owner?: string | null,
+    } | null,
+  } | null,
+};
+
+export type UpdateDraftImageMutationVariables = {
+  input?: UpdateDraftImageInput,
+  condition?: ModelDraftImageConditionInput | null,
+};
+
+export type UpdateDraftImageMutation = {
+  updateDraftImage?:  {
+    __typename: "DraftImage",
+    id: string,
+    userId: string,
+    draftId: string,
+    imageId: string,
+    baseType: string,
+    draft?:  {
+      __typename: "Draft",
+      id: string,
+      rawContentState: string,
+      titlePhoto?: string | null,
+      title: string,
+      subTitle?: string | null,
+      userId: string,
+      baseType: string,
+      createdAt: string,
+      draftImages?:  {
+        __typename: "ModelDraftImageConnection",
+        nextToken?: string | null,
+      } | null,
+      updatedAt: string,
+      owner?: string | null,
+    } | null,
+    createdAt: string,
+    updatedAt: string,
+    owner?: string | null,
+    image?:  {
+      __typename: "Image",
+      id: string,
+      userId: string,
+      url: string,
+      imageKey: string,
+      baseType: string,
+      isPublished: boolean,
+      isSaved: boolean,
+      createdAt: string,
+      draftImages?:  {
+        __typename: "ModelDraftImageConnection",
+        nextToken?: string | null,
+      } | null,
+      updatedAt: string,
+      postImages?:  {
+        __typename: "ModelPostImageConnection",
+        nextToken?: string | null,
+      } | null,
+      owner?: string | null,
+    } | null,
+  } | null,
+};
+
+export type DeleteDraftImageMutationVariables = {
+  input?: DeleteDraftImageInput,
+  condition?: ModelDraftImageConditionInput | null,
+};
+
+export type DeleteDraftImageMutation = {
+  deleteDraftImage?:  {
+    __typename: "DraftImage",
+    id: string,
+    userId: string,
+    draftId: string,
+    imageId: string,
+    baseType: string,
+    draft?:  {
+      __typename: "Draft",
+      id: string,
+      rawContentState: string,
+      titlePhoto?: string | null,
+      title: string,
+      subTitle?: string | null,
+      userId: string,
+      baseType: string,
+      createdAt: string,
+      draftImages?:  {
+        __typename: "ModelDraftImageConnection",
+        nextToken?: string | null,
+      } | null,
+      updatedAt: string,
+      owner?: string | null,
+    } | null,
+    createdAt: string,
+    updatedAt: string,
+    owner?: string | null,
+    image?:  {
+      __typename: "Image",
+      id: string,
+      userId: string,
+      url: string,
+      imageKey: string,
+      baseType: string,
+      isPublished: boolean,
+      isSaved: boolean,
+      createdAt: string,
+      draftImages?:  {
+        __typename: "ModelDraftImageConnection",
+        nextToken?: string | null,
+      } | null,
       updatedAt: string,
       postImages?:  {
         __typename: "ModelPostImageConnection",
@@ -1175,11 +1722,28 @@ export type CreateImageMutation = {
   createImage?:  {
     __typename: "Image",
     id: string,
+    userId: string,
     url: string,
     imageKey: string,
     baseType: string,
-    isPublished?: boolean | null,
+    isPublished: boolean,
+    isSaved: boolean,
     createdAt: string,
+    draftImages?:  {
+      __typename: "ModelDraftImageConnection",
+      items?:  Array< {
+        __typename: "DraftImage",
+        id: string,
+        userId: string,
+        draftId: string,
+        imageId: string,
+        baseType: string,
+        createdAt: string,
+        updatedAt: string,
+        owner?: string | null,
+      } | null > | null,
+      nextToken?: string | null,
+    } | null,
     updatedAt: string,
     postImages?:  {
       __typename: "ModelPostImageConnection",
@@ -1209,11 +1773,28 @@ export type UpdateImageMutation = {
   updateImage?:  {
     __typename: "Image",
     id: string,
+    userId: string,
     url: string,
     imageKey: string,
     baseType: string,
-    isPublished?: boolean | null,
+    isPublished: boolean,
+    isSaved: boolean,
     createdAt: string,
+    draftImages?:  {
+      __typename: "ModelDraftImageConnection",
+      items?:  Array< {
+        __typename: "DraftImage",
+        id: string,
+        userId: string,
+        draftId: string,
+        imageId: string,
+        baseType: string,
+        createdAt: string,
+        updatedAt: string,
+        owner?: string | null,
+      } | null > | null,
+      nextToken?: string | null,
+    } | null,
     updatedAt: string,
     postImages?:  {
       __typename: "ModelPostImageConnection",
@@ -1243,11 +1824,28 @@ export type DeleteImageMutation = {
   deleteImage?:  {
     __typename: "Image",
     id: string,
+    userId: string,
     url: string,
     imageKey: string,
     baseType: string,
-    isPublished?: boolean | null,
+    isPublished: boolean,
+    isSaved: boolean,
     createdAt: string,
+    draftImages?:  {
+      __typename: "ModelDraftImageConnection",
+      items?:  Array< {
+        __typename: "DraftImage",
+        id: string,
+        userId: string,
+        draftId: string,
+        imageId: string,
+        baseType: string,
+        createdAt: string,
+        updatedAt: string,
+        owner?: string | null,
+      } | null > | null,
+      nextToken?: string | null,
+    } | null,
     updatedAt: string,
     postImages?:  {
       __typename: "ModelPostImageConnection",
@@ -1268,6 +1866,230 @@ export type DeleteImageMutation = {
   } | null,
 };
 
+export type GetDraftQueryVariables = {
+  id?: string,
+};
+
+export type GetDraftQuery = {
+  getDraft?:  {
+    __typename: "Draft",
+    id: string,
+    rawContentState: string,
+    titlePhoto?: string | null,
+    title: string,
+    subTitle?: string | null,
+    userId: string,
+    baseType: string,
+    createdAt: string,
+    draftImages?:  {
+      __typename: "ModelDraftImageConnection",
+      items?:  Array< {
+        __typename: "DraftImage",
+        id: string,
+        userId: string,
+        draftId: string,
+        imageId: string,
+        baseType: string,
+        createdAt: string,
+        updatedAt: string,
+        owner?: string | null,
+      } | null > | null,
+      nextToken?: string | null,
+    } | null,
+    updatedAt: string,
+    owner?: string | null,
+  } | null,
+};
+
+export type ListDraftsQueryVariables = {
+  filter?: ModelDraftFilterInput | null,
+  limit?: number | null,
+  nextToken?: string | null,
+};
+
+export type ListDraftsQuery = {
+  listDrafts?:  {
+    __typename: "ModelDraftConnection",
+    items?:  Array< {
+      __typename: "Draft",
+      id: string,
+      rawContentState: string,
+      titlePhoto?: string | null,
+      title: string,
+      subTitle?: string | null,
+      userId: string,
+      baseType: string,
+      createdAt: string,
+      draftImages?:  {
+        __typename: "ModelDraftImageConnection",
+        nextToken?: string | null,
+      } | null,
+      updatedAt: string,
+      owner?: string | null,
+    } | null > | null,
+    nextToken?: string | null,
+  } | null,
+};
+
+export type GetDraftImageQueryVariables = {
+  id?: string,
+};
+
+export type GetDraftImageQuery = {
+  getDraftImage?:  {
+    __typename: "DraftImage",
+    id: string,
+    userId: string,
+    draftId: string,
+    imageId: string,
+    baseType: string,
+    draft?:  {
+      __typename: "Draft",
+      id: string,
+      rawContentState: string,
+      titlePhoto?: string | null,
+      title: string,
+      subTitle?: string | null,
+      userId: string,
+      baseType: string,
+      createdAt: string,
+      draftImages?:  {
+        __typename: "ModelDraftImageConnection",
+        nextToken?: string | null,
+      } | null,
+      updatedAt: string,
+      owner?: string | null,
+    } | null,
+    createdAt: string,
+    updatedAt: string,
+    owner?: string | null,
+    image?:  {
+      __typename: "Image",
+      id: string,
+      userId: string,
+      url: string,
+      imageKey: string,
+      baseType: string,
+      isPublished: boolean,
+      isSaved: boolean,
+      createdAt: string,
+      draftImages?:  {
+        __typename: "ModelDraftImageConnection",
+        nextToken?: string | null,
+      } | null,
+      updatedAt: string,
+      postImages?:  {
+        __typename: "ModelPostImageConnection",
+        nextToken?: string | null,
+      } | null,
+      owner?: string | null,
+    } | null,
+  } | null,
+};
+
+export type ListDraftImagesQueryVariables = {
+  filter?: ModelDraftImageFilterInput | null,
+  limit?: number | null,
+  nextToken?: string | null,
+};
+
+export type ListDraftImagesQuery = {
+  listDraftImages?:  {
+    __typename: "ModelDraftImageConnection",
+    items?:  Array< {
+      __typename: "DraftImage",
+      id: string,
+      userId: string,
+      draftId: string,
+      imageId: string,
+      baseType: string,
+      draft?:  {
+        __typename: "Draft",
+        id: string,
+        rawContentState: string,
+        titlePhoto?: string | null,
+        title: string,
+        subTitle?: string | null,
+        userId: string,
+        baseType: string,
+        createdAt: string,
+        updatedAt: string,
+        owner?: string | null,
+      } | null,
+      createdAt: string,
+      updatedAt: string,
+      owner?: string | null,
+      image?:  {
+        __typename: "Image",
+        id: string,
+        userId: string,
+        url: string,
+        imageKey: string,
+        baseType: string,
+        isPublished: boolean,
+        isSaved: boolean,
+        createdAt: string,
+        updatedAt: string,
+        owner?: string | null,
+      } | null,
+    } | null > | null,
+    nextToken?: string | null,
+  } | null,
+};
+
+export type DraftImageByDraftIdAndImageIdQueryVariables = {
+  draftId?: string | null,
+  imageId?: ModelIDKeyConditionInput | null,
+  sortDirection?: ModelSortDirection | null,
+  filter?: ModelDraftImageFilterInput | null,
+  limit?: number | null,
+  nextToken?: string | null,
+};
+
+export type DraftImageByDraftIdAndImageIdQuery = {
+  draftImageByDraftIdAndImageId?:  {
+    __typename: "ModelDraftImageConnection",
+    items?:  Array< {
+      __typename: "DraftImage",
+      id: string,
+      userId: string,
+      draftId: string,
+      imageId: string,
+      baseType: string,
+      draft?:  {
+        __typename: "Draft",
+        id: string,
+        rawContentState: string,
+        titlePhoto?: string | null,
+        title: string,
+        subTitle?: string | null,
+        userId: string,
+        baseType: string,
+        createdAt: string,
+        updatedAt: string,
+        owner?: string | null,
+      } | null,
+      createdAt: string,
+      updatedAt: string,
+      owner?: string | null,
+      image?:  {
+        __typename: "Image",
+        id: string,
+        userId: string,
+        url: string,
+        imageKey: string,
+        baseType: string,
+        isPublished: boolean,
+        isSaved: boolean,
+        createdAt: string,
+        updatedAt: string,
+        owner?: string | null,
+      } | null,
+    } | null > | null,
+    nextToken?: string | null,
+  } | null,
+};
+
 export type GetUserQueryVariables = {
   id?: string,
 };
@@ -1281,6 +2103,23 @@ export type GetUserQuery = {
     baseType: string,
     photoUrl?: string | null,
     email?: string | null,
+    Drafts?:  {
+      __typename: "ModelDraftConnection",
+      items?:  Array< {
+        __typename: "Draft",
+        id: string,
+        rawContentState: string,
+        titlePhoto?: string | null,
+        title: string,
+        subTitle?: string | null,
+        userId: string,
+        baseType: string,
+        createdAt: string,
+        updatedAt: string,
+        owner?: string | null,
+      } | null > | null,
+      nextToken?: string | null,
+    } | null,
     createdAt: string,
     updatedAt: string,
     owner?: string | null,
@@ -1295,6 +2134,23 @@ export type GetUserQuery = {
         subTitle?: string | null,
         userId: string,
         baseType: string,
+        createdAt: string,
+        updatedAt: string,
+        owner?: string | null,
+      } | null > | null,
+      nextToken?: string | null,
+    } | null,
+    Images?:  {
+      __typename: "ModelImageConnection",
+      items?:  Array< {
+        __typename: "Image",
+        id: string,
+        userId: string,
+        url: string,
+        imageKey: string,
+        baseType: string,
+        isPublished: boolean,
+        isSaved: boolean,
         createdAt: string,
         updatedAt: string,
         owner?: string | null,
@@ -1321,11 +2177,19 @@ export type ListUsersQuery = {
       baseType: string,
       photoUrl?: string | null,
       email?: string | null,
+      Drafts?:  {
+        __typename: "ModelDraftConnection",
+        nextToken?: string | null,
+      } | null,
       createdAt: string,
       updatedAt: string,
       owner?: string | null,
       Posts?:  {
         __typename: "ModelPostConnection",
+        nextToken?: string | null,
+      } | null,
+      Images?:  {
+        __typename: "ModelImageConnection",
         nextToken?: string | null,
       } | null,
     } | null > | null,
@@ -1352,11 +2216,19 @@ export type UserByProviderKeyQuery = {
       baseType: string,
       photoUrl?: string | null,
       email?: string | null,
+      Drafts?:  {
+        __typename: "ModelDraftConnection",
+        nextToken?: string | null,
+      } | null,
       createdAt: string,
       updatedAt: string,
       owner?: string | null,
       Posts?:  {
         __typename: "ModelPostConnection",
+        nextToken?: string | null,
+      } | null,
+      Images?:  {
+        __typename: "ModelImageConnection",
         nextToken?: string | null,
       } | null,
     } | null > | null,
@@ -1757,11 +2629,17 @@ export type GetPostImageQuery = {
     image?:  {
       __typename: "Image",
       id: string,
+      userId: string,
       url: string,
       imageKey: string,
       baseType: string,
-      isPublished?: boolean | null,
+      isPublished: boolean,
+      isSaved: boolean,
       createdAt: string,
+      draftImages?:  {
+        __typename: "ModelDraftImageConnection",
+        nextToken?: string | null,
+      } | null,
       updatedAt: string,
       postImages?:  {
         __typename: "ModelPostImageConnection",
@@ -1807,10 +2685,12 @@ export type ListPostImagesQuery = {
       image?:  {
         __typename: "Image",
         id: string,
+        userId: string,
         url: string,
         imageKey: string,
         baseType: string,
-        isPublished?: boolean | null,
+        isPublished: boolean,
+        isSaved: boolean,
         createdAt: string,
         updatedAt: string,
         owner?: string | null,
@@ -1858,10 +2738,12 @@ export type PostImageByPostIdAndImageIdQuery = {
       image?:  {
         __typename: "Image",
         id: string,
+        userId: string,
         url: string,
         imageKey: string,
         baseType: string,
-        isPublished?: boolean | null,
+        isPublished: boolean,
+        isSaved: boolean,
         createdAt: string,
         updatedAt: string,
         owner?: string | null,
@@ -1883,11 +2765,17 @@ export type ListImagesQuery = {
     items?:  Array< {
       __typename: "Image",
       id: string,
+      userId: string,
       url: string,
       imageKey: string,
       baseType: string,
-      isPublished?: boolean | null,
+      isPublished: boolean,
+      isSaved: boolean,
       createdAt: string,
+      draftImages?:  {
+        __typename: "ModelDraftImageConnection",
+        nextToken?: string | null,
+      } | null,
       updatedAt: string,
       postImages?:  {
         __typename: "ModelPostImageConnection",
@@ -1907,11 +2795,28 @@ export type GetImageQuery = {
   getImage?:  {
     __typename: "Image",
     id: string,
+    userId: string,
     url: string,
     imageKey: string,
     baseType: string,
-    isPublished?: boolean | null,
+    isPublished: boolean,
+    isSaved: boolean,
     createdAt: string,
+    draftImages?:  {
+      __typename: "ModelDraftImageConnection",
+      items?:  Array< {
+        __typename: "DraftImage",
+        id: string,
+        userId: string,
+        draftId: string,
+        imageId: string,
+        baseType: string,
+        createdAt: string,
+        updatedAt: string,
+        owner?: string | null,
+      } | null > | null,
+      nextToken?: string | null,
+    } | null,
     updatedAt: string,
     postImages?:  {
       __typename: "ModelPostImageConnection",
@@ -1947,11 +2852,17 @@ export type ImageByCreatedAtQuery = {
     items?:  Array< {
       __typename: "Image",
       id: string,
+      userId: string,
       url: string,
       imageKey: string,
       baseType: string,
-      isPublished?: boolean | null,
+      isPublished: boolean,
+      isSaved: boolean,
       createdAt: string,
+      draftImages?:  {
+        __typename: "ModelDraftImageConnection",
+        nextToken?: string | null,
+      } | null,
       updatedAt: string,
       postImages?:  {
         __typename: "ModelPostImageConnection",
@@ -1960,6 +2871,279 @@ export type ImageByCreatedAtQuery = {
       owner?: string | null,
     } | null > | null,
     nextToken?: string | null,
+  } | null,
+};
+
+export type OnCreateDraftSubscriptionVariables = {
+  owner?: string,
+};
+
+export type OnCreateDraftSubscription = {
+  onCreateDraft?:  {
+    __typename: "Draft",
+    id: string,
+    rawContentState: string,
+    titlePhoto?: string | null,
+    title: string,
+    subTitle?: string | null,
+    userId: string,
+    baseType: string,
+    createdAt: string,
+    draftImages?:  {
+      __typename: "ModelDraftImageConnection",
+      items?:  Array< {
+        __typename: "DraftImage",
+        id: string,
+        userId: string,
+        draftId: string,
+        imageId: string,
+        baseType: string,
+        createdAt: string,
+        updatedAt: string,
+        owner?: string | null,
+      } | null > | null,
+      nextToken?: string | null,
+    } | null,
+    updatedAt: string,
+    owner?: string | null,
+  } | null,
+};
+
+export type OnUpdateDraftSubscriptionVariables = {
+  owner?: string,
+};
+
+export type OnUpdateDraftSubscription = {
+  onUpdateDraft?:  {
+    __typename: "Draft",
+    id: string,
+    rawContentState: string,
+    titlePhoto?: string | null,
+    title: string,
+    subTitle?: string | null,
+    userId: string,
+    baseType: string,
+    createdAt: string,
+    draftImages?:  {
+      __typename: "ModelDraftImageConnection",
+      items?:  Array< {
+        __typename: "DraftImage",
+        id: string,
+        userId: string,
+        draftId: string,
+        imageId: string,
+        baseType: string,
+        createdAt: string,
+        updatedAt: string,
+        owner?: string | null,
+      } | null > | null,
+      nextToken?: string | null,
+    } | null,
+    updatedAt: string,
+    owner?: string | null,
+  } | null,
+};
+
+export type OnDeleteDraftSubscriptionVariables = {
+  owner?: string,
+};
+
+export type OnDeleteDraftSubscription = {
+  onDeleteDraft?:  {
+    __typename: "Draft",
+    id: string,
+    rawContentState: string,
+    titlePhoto?: string | null,
+    title: string,
+    subTitle?: string | null,
+    userId: string,
+    baseType: string,
+    createdAt: string,
+    draftImages?:  {
+      __typename: "ModelDraftImageConnection",
+      items?:  Array< {
+        __typename: "DraftImage",
+        id: string,
+        userId: string,
+        draftId: string,
+        imageId: string,
+        baseType: string,
+        createdAt: string,
+        updatedAt: string,
+        owner?: string | null,
+      } | null > | null,
+      nextToken?: string | null,
+    } | null,
+    updatedAt: string,
+    owner?: string | null,
+  } | null,
+};
+
+export type OnCreateDraftImageSubscriptionVariables = {
+  owner?: string,
+};
+
+export type OnCreateDraftImageSubscription = {
+  onCreateDraftImage?:  {
+    __typename: "DraftImage",
+    id: string,
+    userId: string,
+    draftId: string,
+    imageId: string,
+    baseType: string,
+    draft?:  {
+      __typename: "Draft",
+      id: string,
+      rawContentState: string,
+      titlePhoto?: string | null,
+      title: string,
+      subTitle?: string | null,
+      userId: string,
+      baseType: string,
+      createdAt: string,
+      draftImages?:  {
+        __typename: "ModelDraftImageConnection",
+        nextToken?: string | null,
+      } | null,
+      updatedAt: string,
+      owner?: string | null,
+    } | null,
+    createdAt: string,
+    updatedAt: string,
+    owner?: string | null,
+    image?:  {
+      __typename: "Image",
+      id: string,
+      userId: string,
+      url: string,
+      imageKey: string,
+      baseType: string,
+      isPublished: boolean,
+      isSaved: boolean,
+      createdAt: string,
+      draftImages?:  {
+        __typename: "ModelDraftImageConnection",
+        nextToken?: string | null,
+      } | null,
+      updatedAt: string,
+      postImages?:  {
+        __typename: "ModelPostImageConnection",
+        nextToken?: string | null,
+      } | null,
+      owner?: string | null,
+    } | null,
+  } | null,
+};
+
+export type OnUpdateDraftImageSubscriptionVariables = {
+  owner?: string,
+};
+
+export type OnUpdateDraftImageSubscription = {
+  onUpdateDraftImage?:  {
+    __typename: "DraftImage",
+    id: string,
+    userId: string,
+    draftId: string,
+    imageId: string,
+    baseType: string,
+    draft?:  {
+      __typename: "Draft",
+      id: string,
+      rawContentState: string,
+      titlePhoto?: string | null,
+      title: string,
+      subTitle?: string | null,
+      userId: string,
+      baseType: string,
+      createdAt: string,
+      draftImages?:  {
+        __typename: "ModelDraftImageConnection",
+        nextToken?: string | null,
+      } | null,
+      updatedAt: string,
+      owner?: string | null,
+    } | null,
+    createdAt: string,
+    updatedAt: string,
+    owner?: string | null,
+    image?:  {
+      __typename: "Image",
+      id: string,
+      userId: string,
+      url: string,
+      imageKey: string,
+      baseType: string,
+      isPublished: boolean,
+      isSaved: boolean,
+      createdAt: string,
+      draftImages?:  {
+        __typename: "ModelDraftImageConnection",
+        nextToken?: string | null,
+      } | null,
+      updatedAt: string,
+      postImages?:  {
+        __typename: "ModelPostImageConnection",
+        nextToken?: string | null,
+      } | null,
+      owner?: string | null,
+    } | null,
+  } | null,
+};
+
+export type OnDeleteDraftImageSubscriptionVariables = {
+  owner?: string,
+};
+
+export type OnDeleteDraftImageSubscription = {
+  onDeleteDraftImage?:  {
+    __typename: "DraftImage",
+    id: string,
+    userId: string,
+    draftId: string,
+    imageId: string,
+    baseType: string,
+    draft?:  {
+      __typename: "Draft",
+      id: string,
+      rawContentState: string,
+      titlePhoto?: string | null,
+      title: string,
+      subTitle?: string | null,
+      userId: string,
+      baseType: string,
+      createdAt: string,
+      draftImages?:  {
+        __typename: "ModelDraftImageConnection",
+        nextToken?: string | null,
+      } | null,
+      updatedAt: string,
+      owner?: string | null,
+    } | null,
+    createdAt: string,
+    updatedAt: string,
+    owner?: string | null,
+    image?:  {
+      __typename: "Image",
+      id: string,
+      userId: string,
+      url: string,
+      imageKey: string,
+      baseType: string,
+      isPublished: boolean,
+      isSaved: boolean,
+      createdAt: string,
+      draftImages?:  {
+        __typename: "ModelDraftImageConnection",
+        nextToken?: string | null,
+      } | null,
+      updatedAt: string,
+      postImages?:  {
+        __typename: "ModelPostImageConnection",
+        nextToken?: string | null,
+      } | null,
+      owner?: string | null,
+    } | null,
   } | null,
 };
 
@@ -1972,6 +3156,23 @@ export type OnCreateUserSubscription = {
     baseType: string,
     photoUrl?: string | null,
     email?: string | null,
+    Drafts?:  {
+      __typename: "ModelDraftConnection",
+      items?:  Array< {
+        __typename: "Draft",
+        id: string,
+        rawContentState: string,
+        titlePhoto?: string | null,
+        title: string,
+        subTitle?: string | null,
+        userId: string,
+        baseType: string,
+        createdAt: string,
+        updatedAt: string,
+        owner?: string | null,
+      } | null > | null,
+      nextToken?: string | null,
+    } | null,
     createdAt: string,
     updatedAt: string,
     owner?: string | null,
@@ -1986,6 +3187,23 @@ export type OnCreateUserSubscription = {
         subTitle?: string | null,
         userId: string,
         baseType: string,
+        createdAt: string,
+        updatedAt: string,
+        owner?: string | null,
+      } | null > | null,
+      nextToken?: string | null,
+    } | null,
+    Images?:  {
+      __typename: "ModelImageConnection",
+      items?:  Array< {
+        __typename: "Image",
+        id: string,
+        userId: string,
+        url: string,
+        imageKey: string,
+        baseType: string,
+        isPublished: boolean,
+        isSaved: boolean,
         createdAt: string,
         updatedAt: string,
         owner?: string | null,
@@ -2004,6 +3222,23 @@ export type OnUpdateUserSubscription = {
     baseType: string,
     photoUrl?: string | null,
     email?: string | null,
+    Drafts?:  {
+      __typename: "ModelDraftConnection",
+      items?:  Array< {
+        __typename: "Draft",
+        id: string,
+        rawContentState: string,
+        titlePhoto?: string | null,
+        title: string,
+        subTitle?: string | null,
+        userId: string,
+        baseType: string,
+        createdAt: string,
+        updatedAt: string,
+        owner?: string | null,
+      } | null > | null,
+      nextToken?: string | null,
+    } | null,
     createdAt: string,
     updatedAt: string,
     owner?: string | null,
@@ -2024,6 +3259,23 @@ export type OnUpdateUserSubscription = {
       } | null > | null,
       nextToken?: string | null,
     } | null,
+    Images?:  {
+      __typename: "ModelImageConnection",
+      items?:  Array< {
+        __typename: "Image",
+        id: string,
+        userId: string,
+        url: string,
+        imageKey: string,
+        baseType: string,
+        isPublished: boolean,
+        isSaved: boolean,
+        createdAt: string,
+        updatedAt: string,
+        owner?: string | null,
+      } | null > | null,
+      nextToken?: string | null,
+    } | null,
   } | null,
 };
 
@@ -2036,6 +3288,23 @@ export type OnDeleteUserSubscription = {
     baseType: string,
     photoUrl?: string | null,
     email?: string | null,
+    Drafts?:  {
+      __typename: "ModelDraftConnection",
+      items?:  Array< {
+        __typename: "Draft",
+        id: string,
+        rawContentState: string,
+        titlePhoto?: string | null,
+        title: string,
+        subTitle?: string | null,
+        userId: string,
+        baseType: string,
+        createdAt: string,
+        updatedAt: string,
+        owner?: string | null,
+      } | null > | null,
+      nextToken?: string | null,
+    } | null,
     createdAt: string,
     updatedAt: string,
     owner?: string | null,
@@ -2050,6 +3319,23 @@ export type OnDeleteUserSubscription = {
         subTitle?: string | null,
         userId: string,
         baseType: string,
+        createdAt: string,
+        updatedAt: string,
+        owner?: string | null,
+      } | null > | null,
+      nextToken?: string | null,
+    } | null,
+    Images?:  {
+      __typename: "ModelImageConnection",
+      items?:  Array< {
+        __typename: "Image",
+        id: string,
+        userId: string,
+        url: string,
+        imageKey: string,
+        baseType: string,
+        isPublished: boolean,
+        isSaved: boolean,
         createdAt: string,
         updatedAt: string,
         owner?: string | null,
@@ -2457,11 +3743,17 @@ export type OnCreatePostImageSubscription = {
     image?:  {
       __typename: "Image",
       id: string,
+      userId: string,
       url: string,
       imageKey: string,
       baseType: string,
-      isPublished?: boolean | null,
+      isPublished: boolean,
+      isSaved: boolean,
       createdAt: string,
+      draftImages?:  {
+        __typename: "ModelDraftImageConnection",
+        nextToken?: string | null,
+      } | null,
       updatedAt: string,
       postImages?:  {
         __typename: "ModelPostImageConnection",
@@ -2507,11 +3799,17 @@ export type OnUpdatePostImageSubscription = {
     image?:  {
       __typename: "Image",
       id: string,
+      userId: string,
       url: string,
       imageKey: string,
       baseType: string,
-      isPublished?: boolean | null,
+      isPublished: boolean,
+      isSaved: boolean,
       createdAt: string,
+      draftImages?:  {
+        __typename: "ModelDraftImageConnection",
+        nextToken?: string | null,
+      } | null,
       updatedAt: string,
       postImages?:  {
         __typename: "ModelPostImageConnection",
@@ -2557,11 +3855,17 @@ export type OnDeletePostImageSubscription = {
     image?:  {
       __typename: "Image",
       id: string,
+      userId: string,
       url: string,
       imageKey: string,
       baseType: string,
-      isPublished?: boolean | null,
+      isPublished: boolean,
+      isSaved: boolean,
       createdAt: string,
+      draftImages?:  {
+        __typename: "ModelDraftImageConnection",
+        nextToken?: string | null,
+      } | null,
       updatedAt: string,
       postImages?:  {
         __typename: "ModelPostImageConnection",
@@ -2576,11 +3880,28 @@ export type OnCreateImageSubscription = {
   onCreateImage?:  {
     __typename: "Image",
     id: string,
+    userId: string,
     url: string,
     imageKey: string,
     baseType: string,
-    isPublished?: boolean | null,
+    isPublished: boolean,
+    isSaved: boolean,
     createdAt: string,
+    draftImages?:  {
+      __typename: "ModelDraftImageConnection",
+      items?:  Array< {
+        __typename: "DraftImage",
+        id: string,
+        userId: string,
+        draftId: string,
+        imageId: string,
+        baseType: string,
+        createdAt: string,
+        updatedAt: string,
+        owner?: string | null,
+      } | null > | null,
+      nextToken?: string | null,
+    } | null,
     updatedAt: string,
     postImages?:  {
       __typename: "ModelPostImageConnection",
@@ -2605,11 +3926,28 @@ export type OnUpdateImageSubscription = {
   onUpdateImage?:  {
     __typename: "Image",
     id: string,
+    userId: string,
     url: string,
     imageKey: string,
     baseType: string,
-    isPublished?: boolean | null,
+    isPublished: boolean,
+    isSaved: boolean,
     createdAt: string,
+    draftImages?:  {
+      __typename: "ModelDraftImageConnection",
+      items?:  Array< {
+        __typename: "DraftImage",
+        id: string,
+        userId: string,
+        draftId: string,
+        imageId: string,
+        baseType: string,
+        createdAt: string,
+        updatedAt: string,
+        owner?: string | null,
+      } | null > | null,
+      nextToken?: string | null,
+    } | null,
     updatedAt: string,
     postImages?:  {
       __typename: "ModelPostImageConnection",
@@ -2634,11 +3972,28 @@ export type OnDeleteImageSubscription = {
   onDeleteImage?:  {
     __typename: "Image",
     id: string,
+    userId: string,
     url: string,
     imageKey: string,
     baseType: string,
-    isPublished?: boolean | null,
+    isPublished: boolean,
+    isSaved: boolean,
     createdAt: string,
+    draftImages?:  {
+      __typename: "ModelDraftImageConnection",
+      items?:  Array< {
+        __typename: "DraftImage",
+        id: string,
+        userId: string,
+        draftId: string,
+        imageId: string,
+        baseType: string,
+        createdAt: string,
+        updatedAt: string,
+        owner?: string | null,
+      } | null > | null,
+      nextToken?: string | null,
+    } | null,
     updatedAt: string,
     postImages?:  {
       __typename: "ModelPostImageConnection",

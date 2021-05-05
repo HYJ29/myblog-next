@@ -22,10 +22,12 @@ export default function EditorComponent({
   editorState,
   setEditorState,
   isPostMode,
+  userId,
 }: {
   editorState: EditorState;
   setEditorState: (arg: EditorState) => void;
   isPostMode?: boolean;
+  userId: string;
 }): React.ReactNode {
   const [isEditorFocused, setIsEditorFocused] = useState(false);
   const [isEditorReadOnly, setIsEditorReadOnly] = useState(false);
@@ -105,6 +107,7 @@ export default function EditorComponent({
             isEditorFocused={isEditorFocused}
             setEditorState={setEditorState}
             editorState={editorState}
+            userId={userId}
           />
           <Upperbar
             top={upperbarTop}

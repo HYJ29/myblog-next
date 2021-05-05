@@ -24,6 +24,7 @@ type Props = {
   isEditorFocused: boolean;
   setEditorState: (arg0: EditorState) => void;
   editorState: EditorState;
+  userId: string;
 };
 export default function SideBar({
   top,
@@ -32,6 +33,7 @@ export default function SideBar({
   isEditorFocused,
   setEditorState,
   editorState,
+  userId,
 }: Props) {
   const [isOpen, setIsOpen] = useState<boolean>(false);
 
@@ -56,6 +58,7 @@ export default function SideBar({
 
     const { imageDbId, imageS3Key, signedUrl } = await uploadIamgeS3AndDB({
       file: selectedFile,
+      userId,
     });
 
     const newEditorState = addAtomicBlock({

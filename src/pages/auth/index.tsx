@@ -13,8 +13,6 @@ import { GoogleLoginButton } from 'react-social-login-buttons';
 
 import { DefaultLayout } from '@/components/layout';
 import { AuthContext } from '@/pages/_app';
-import { useSocialSignin } from '@/hooks/useSocislSignin';
-import GoogleLogin from '@/components/googleLogin';
 
 import styles from './style.module.scss';
 
