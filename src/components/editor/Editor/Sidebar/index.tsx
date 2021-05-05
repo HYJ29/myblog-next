@@ -56,7 +56,7 @@ export default function SideBar({
     const files = e.target.files ?? [];
     const selectedFile = files[0];
 
-    const { imageDbId, imageS3Key, signedUrl } = await uploadIamgeS3AndDB({
+    const { imageDbId, imageS3Key, accessUrl } = await uploadIamgeS3AndDB({
       file: selectedFile,
       userId,
     });
@@ -64,7 +64,7 @@ export default function SideBar({
     const newEditorState = addAtomicBlock({
       editorState,
       entityType: 'GENERAL_IMAGE',
-      data: { imageUrl: signedUrl, imageDbId, imageKey: imageS3Key },
+      data: { imageUrl: accessUrl, imageDbId, imageKey: imageS3Key },
     });
     setEditorState(newEditorState);
     setIsOpen(false);

@@ -3,7 +3,7 @@ import { useRouter } from 'next/router';
 import Link from 'next/link';
 import { API } from 'aws-amplify';
 
-import { useModal } from '@/hooks/useModal';
+import { useModal, useLoadingModal } from '@/hooks';
 import { XCircle } from '@/components/icons';
 import { Button } from '@/components/button';
 import { getRawJsonContentStateFrom } from '@/utils/draft/convert';
@@ -23,6 +23,7 @@ import ControllerItem from '../Items/ControllerItem';
 export default function EditHeader({ editorState, postId, userId }) {
   const router = useRouter();
   const { Modal, setShowModal } = useModal();
+  const { LoadingModal, setShowLoadingModal } = useLoadingModal();
 
   const rawJsonContentState = getRawJsonContentStateFrom({ editorState });
   const titlePhoto = getTitlePhtoFromEditorState({ editorState });
@@ -37,6 +38,7 @@ export default function EditHeader({ editorState, postId, userId }) {
   const images = getImagesFromEditorState({ editorState });
 
   const onEditHandler = async () => {
+    setShowLoadingModal({ text: 'UPDATING YOUR POST' });
     const res = await API.graphql({
       query: updatePost,
       variables: {
@@ -65,6 +67,8 @@ export default function EditHeader({ editorState, postId, userId }) {
     await image.trimImageS3AndDB({ postId, images, userId });
 
     await image.mapPostAndIamges({ postId, userId, images });
+
+    setShowLoadingModal(false);
 
     return editedPostId;
   };
@@ -135,6 +139,7 @@ export default function EditHeader({ editorState, postId, userId }) {
       <Modal>
         <ModalContent />
       </Modal>
+      <LoadingModal />
     </header>
   );
 }

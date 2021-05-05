@@ -5,21 +5,21 @@ import { XCircle } from '@/components/icons';
 
 import styles from './style.module.scss';
 
-export const useModal = () => {
-  const [showModal, setShowModal] = useState(false);
+export const useLoadingModal = () => {
+  const [showLoadingModal, setShowLoadingModal] = useState(false);
   const [isBrowser, setIsBrowser] = useState(false);
 
-  const transitions = useTransition(showModal, {
-    from: { transform: 'translateY(100%)' },
-    enter: { transform: 'translateY(0%)' },
-    leave: { transform: 'translate(100%)' },
+  const transitions = useTransition(showLoadingModal, {
+    from: { opacity: 0 },
+    enter: { opacity: 1 },
+    leave: { opacity: 0 },
   });
 
   useEffect(() => {
     setIsBrowser(true);
   }, []);
 
-  const Modal = ({ children }: { children: React.ReactNode }) => {
+  const LoadingModal = () => {
     if (isBrowser) {
       return ReactDOM.createPortal(
         transitions((transitionStyles, item) =>
@@ -28,7 +28,9 @@ export const useModal = () => {
               className={styles.modalOverlay}
               style={transitionStyles}
             >
-              {children}
+              <div className={styles.modalContainer}>
+                {showLoadingModal.text}
+              </div>
             </animated.div>
           ) : (
             ''
@@ -41,5 +43,5 @@ export const useModal = () => {
     }
   };
 
-  return { Modal, setShowModal };
+  return { LoadingModal, setShowLoadingModal };
 };

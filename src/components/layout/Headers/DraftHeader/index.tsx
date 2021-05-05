@@ -5,6 +5,7 @@ import { API, Storage } from 'aws-amplify';
 import { difference } from 'lodash';
 
 import { useModal } from '@/hooks/useModal';
+import { useLoadingModal } from '@/hooks/useLoadingModal';
 import { XCircle } from '@/components/icons';
 import { Button } from '@/components/button';
 import { getRawJsonContentStateFrom } from '@/utils/draft/convert';
@@ -25,6 +26,7 @@ import {
   deletePostImage,
   createDraft,
   updateDraft,
+  deleteDraft,
 } from '@/graphql/mutations';
 
 import { AuthContext } from '@/pages/_app';
@@ -37,6 +39,7 @@ import ControllerItem from '../Items/ControllerItem';
 export default function DraftHeader({ editorState, draftId, userId }) {
   const router = useRouter();
   const { Modal, setShowModal } = useModal();
+  const { LoadingModal, setShowLoadingModal } = useLoadingModal();
 
   const rawJsonContentState = getRawJsonContentStateFrom({ editorState });
   const titlePhoto = getTitlePhtoFromEditorState({ editorState });
@@ -48,9 +51,9 @@ export default function DraftHeader({ editorState, draftId, userId }) {
   });
   const tags = getTagsFromEditorState({ editorState });
   const images = getImagesFromEditorState({ editorState });
-  console.log(`images`, images);
 
   const onPublishHandler = async () => {
+    setShowLoadingModal({ text: 'PUBLISHING YOUR DRAFT' });
     const res = await API.graphql({
       query: createPost,
       variables: {
@@ -64,6 +67,22 @@ export default function DraftHeader({ editorState, draftId, userId }) {
         },
       },
     });
+
+    const deleteDraftRes = await API.graphql({
+      query: deleteDraft,
+      variables: {
+        input: {
+          id: draftId,
+        },
+      },
+    });
+
+    console.log(`deleteDraftRes`, deleteDraftRes);
+
+    const draftImagesToDelete =
+      deleteDraftRes.data.deleteDraft.draftImages?.items ?? [];
+
+    await image.deleteDraftImageLink({draftImagesToDelete})
 
     const post = res.data.createPost;
 
@@ -79,10 +98,13 @@ export default function DraftHeader({ editorState, draftId, userId }) {
 
     await image.mapPostAndIamges({ postId, userId, images });
 
+    setShowLoadingModal(false);
+
     return postId;
   };
 
   const onSaveHandler = async () => {
+    setShowLoadingModal({ text: 'SAVING YOUR DRAFT' });
     const updateDraftRes = await API.graphql({
       query: updateDraft,
       variables: {
@@ -100,6 +122,8 @@ export default function DraftHeader({ editorState, draftId, userId }) {
 
     await image.trimImageS3AndDBDraft({ draftId, images, userId });
     await image.mapDraftAndIamges({ draftId, userId, images });
+
+    setShowLoadingModal(false);
 
     return draftId;
   };
@@ -177,6 +201,7 @@ export default function DraftHeader({ editorState, draftId, userId }) {
       <Modal>
         <ModalContent />
       </Modal>
+      <LoadingModal />
     </header>
   );
 }

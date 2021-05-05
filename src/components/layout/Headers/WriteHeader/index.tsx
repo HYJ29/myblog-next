@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { API, Storage } from 'aws-amplify';
 import { difference } from 'lodash';
 
-import { useModal } from '@/hooks/useModal';
+import { useModal, useLoadingModal } from '@/hooks';
 import { XCircle } from '@/components/icons';
 import { Button } from '@/components/button';
 import { getRawJsonContentStateFrom } from '@/utils/draft/convert';
@@ -36,7 +36,7 @@ import ControllerItem from '../Items/ControllerItem';
 export default function WriteHeader({ editorState, userId }) {
   const router = useRouter();
   const { Modal, setShowModal } = useModal();
-  console.log(`userId`, userId);
+  const { LoadingModal, setShowLoadingModal } = useLoadingModal();
 
   const rawJsonContentState = getRawJsonContentStateFrom({ editorState });
   const titlePhoto = getTitlePhtoFromEditorState({ editorState });
@@ -51,6 +51,7 @@ export default function WriteHeader({ editorState, userId }) {
   console.log(`images`, images);
 
   const onPublishHandler = async () => {
+    setShowLoadingModal({ text: 'PUBLISHING YOUR POST' });
     const res = await API.graphql({
       query: createPost,
       variables: {
@@ -78,11 +79,13 @@ export default function WriteHeader({ editorState, userId }) {
     await image.trimImageS3AndDB({ postId, images, userId });
 
     await image.mapPostAndIamges({ postId, userId, images });
+    setShowLoadingModal(false);
 
     return postId;
   };
 
   const onSaveHandler = async () => {
+    setShowLoadingModal({ text: 'SAVING YOUR DRAFT' });
     const createDraftRes = await API.graphql({
       query: createDraft,
       variables: {
@@ -101,6 +104,7 @@ export default function WriteHeader({ editorState, userId }) {
 
     await image.trimImageS3AndDBDraft({ draftId, images, userId });
     await image.mapDraftAndIamges({ draftId, userId, images });
+    setShowLoadingModal(false);
 
     return draftId;
   };
@@ -178,6 +182,7 @@ export default function WriteHeader({ editorState, userId }) {
       <Modal>
         <ModalContent />
       </Modal>
+      <LoadingModal />
     </header>
   );
 }

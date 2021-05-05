@@ -8,6 +8,7 @@ import {
   createPostImage,
   updateImage,
   createDraftImage,
+  deleteDraftImage,
 } from '@/graphql/mutations';
 import {
   listImages,
@@ -29,7 +30,7 @@ export const uploadIamgeS3AndDB = async ({ file, userId }) => {
   });
   const imageS3Key = s3Object.key;
   const signedUrl = await Storage.get(imageS3Key);
-  const accessUrl = `https://${aws_user_files_s3_bucket}.${aws_user_files_s3_bucket_region}.amazonaws.com/public/${imageS3Key}`;
+  const accessUrl = `https://${aws_user_files_s3_bucket}.s3.${aws_user_files_s3_bucket_region}.amazonaws.com/public/${imageS3Key}`;
 
   // Create Image
   const createImageRes = await API.graphql({
@@ -48,7 +49,7 @@ export const uploadIamgeS3AndDB = async ({ file, userId }) => {
 
   const imageDbId = createImageRes.data.createImage.id;
 
-  return { imageDbId, imageS3Key, signedUrl };
+  return { imageDbId, imageS3Key, accessUrl };
 };
 
 export const trimImageS3AndDB = async ({ postId, images, userId }) => {
@@ -175,12 +176,12 @@ export const mapPostAndIamges = async ({ postId, userId, images }) => {
     query: listPostImages,
     variables: { filter: { postId: { eq: postId } } },
   });
-  const postImageDB = postImagesDBRes?.data?.listPostImages?.items ?? [];
+  const postImagesDB = postImagesDBRes?.data?.listPostImages?.items ?? [];
 
   // Create Image Mapping if not mapped already
   for (const image of images) {
-    const isMapedDBAlready = !!postImageDB.find(
-      (imageDB) => imageDB.id === image.data.imageDbId
+    const isMapedDBAlready = !!postImagesDB.find(
+      (postImage) => postImage.imageId === image.data.imageDbId
     );
     if (!isMapedDBAlready) {
       const createPostImageRes = await API.graphql({
@@ -214,16 +215,21 @@ export const mapPostAndIamges = async ({ postId, userId, images }) => {
 
 export const mapDraftAndIamges = async ({ draftId, userId, images }) => {
   // Get PostImages on this Post
+
   const draftImagesDBRes = await API.graphql({
     query: listDraftImages,
     variables: { filter: { draftId: { eq: draftId } } },
   });
-  const draftImageDB = draftImagesDBRes?.data?.listPostImages?.items ?? [];
+
+  const draftImagesDB = draftImagesDBRes?.data?.listDraftImages?.items ?? [];
+
+  console.log(`draftImageDB`, draftImagesDB);
 
   // Create Image Mapping if not mapped already
   for (const image of images) {
-    const isMapedDBAlready = !!draftImageDB.find(
-      (imageDB) => imageDB.id === image.data.imageDbId
+    console.log(`image`, image);
+    const isMapedDBAlready = !!draftImagesDB.find(
+      (draftImage) => draftImage.imageId === image.data.imageDbId
     );
     if (!isMapedDBAlready) {
       const createDraftImageRes = await API.graphql({
@@ -285,5 +291,15 @@ export const deleteImageS3AndDB = async ({ post }) => {
       // Delete Image on S3
       const storageDeleteRes = await Storage.remove(deletedLinkImage.imageKey);
     }
+  }
+};
+
+export const deleteDraftImageLink = async ({ draftImagesToDelete }) => {
+  for (const draftImage of draftImagesToDelete) {
+    const deleteDraftImageRes = await API.graphql({
+      query: deleteDraftImage,
+      variables: { input: { id: draftImage.id } },
+    });
+    console.log(`deleteDraftImageRes`, deleteDraftImageRes);
   }
 };

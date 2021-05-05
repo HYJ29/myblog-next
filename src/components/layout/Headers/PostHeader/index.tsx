@@ -3,22 +3,12 @@ import { useRouter } from 'next/router';
 import Link from 'next/link';
 import { API, Storage } from 'aws-amplify';
 
-import { useModal } from '@/hooks/useModal';
+import { useModal, useLoadingModal } from '@/hooks';
 import { XCircle } from '@/components/icons';
 import { Button } from '@/components/button';
 import { getRawJsonContentStateFrom } from '@/utils/draft/convert';
-import {
-  getTitlePhtoFromEditorState,
-  getPostInfoFromEditorState,
-  getTagsFromEditorState,
-} from '@/utils/draft/filter';
-import {
-  deletePost,
-  deletePostTag,
-  deletePostImage,
-  deleteTag,
-  deleteImage,
-} from '@/graphql/mutations';
+
+import { deletePost } from '@/graphql/mutations';
 import { AuthContext } from '@/pages/_app';
 import { tag, image } from '@/apiHelper';
 
@@ -29,6 +19,7 @@ import ControllerItem from '../Items/ControllerItem';
 export default function PostHeader({ editorState, owner, post, username }) {
   const router = useRouter();
   const { Modal, setShowModal } = useModal();
+  const { LoadingModal, setShowLoadingModal } = useLoadingModal();
 
   const postId = post.id;
 
@@ -64,6 +55,7 @@ export default function PostHeader({ editorState, owner, post, username }) {
           style={{ width: 100, alignSelf: 'center', marginTop: '1rem' }}
           onClick={async () => {
             setShowModal(false);
+            setShowLoadingModal({ text: 'DELETING POST' });
             const postTagsInDB = await tag.getTagsByPostId({ postId });
 
             await tag.deleteAndUnLinkLegacyTag({
@@ -79,6 +71,7 @@ export default function PostHeader({ editorState, owner, post, username }) {
               query: deletePost,
               variables: { input: { id: postId } },
             });
+            setShowLoadingModal(false);
             router.push('/');
           }}
         >
@@ -113,6 +106,7 @@ export default function PostHeader({ editorState, owner, post, username }) {
       <Modal>
         <ModalContent />
       </Modal>
+      <LoadingModal />
     </header>
   );
 }
