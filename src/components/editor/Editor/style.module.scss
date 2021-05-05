@@ -1,8 +1,15 @@
+@import 'layout';
+
 .container {
   min-height: 100vh;
 }
 
 .editorContainer {
   // background-color: gray;
-  min-height: 100vh;
+  min-width: 350px;
+  min-height: 200vh;
+
+  @include breakpoint('desktop') {
+    min-width: 800px;
+  }
 }

@@ -6,7 +6,7 @@
   height: 5rem;
   justify-content: space-between;
   align-items: center;
-  background-color: transparent;
+  background-color: white;
 }
 
 .logoContainer {
@@ -21,4 +21,11 @@
 
 .navigationContainer {
   @include row();
+}
+
+.navigationItem {
+  margin-right: 0.5rem;
+  @include breakpoint('desktop') {
+    margin-right: 3rem;
+  }
 }

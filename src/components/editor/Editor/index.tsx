@@ -82,7 +82,7 @@ export default function EditorComponent({
             width: 680,
           }}
         > */}
-        <div style={{ width: 500 }}>
+        <div>
           <Editor
             editorState={editorState}
             onChange={(editorState) => setEditorState(editorState)}

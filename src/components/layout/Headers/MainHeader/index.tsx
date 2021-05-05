@@ -30,24 +30,39 @@ export default function MainHeader() {
         </div>
       </Link>
       <ul className={styles.navigationContainer}>
-        <NavigationItem text="HOME" route="/" pathname={pathname} />
-        <NavigationItem text="ABOUT" route="/about" pathname={pathname} />
+        <li className={styles.navigationItem}>
+          <NavigationItem text="HOME" route="/" pathname={pathname} />
+        </li>
+        <li className={styles.navigationItem}>
+          <NavigationItem text="ABOUT" route="/about" pathname={pathname} />
+        </li>
+
         {!user && (
-          <NavigationItem
-            text="WHO ARE YOU"
-            route="/auth"
-            pathname={pathname}
-          />
+          <li className={styles.navigationItem}>
+            <NavigationItem
+              text="WHO ARE YOU"
+              route="/auth"
+              pathname={pathname}
+            />
+          </li>
         )}
         {user && (
-          <NavigationItem text="PROFILE" route="/profile" pathname={pathname} />
+          <li className={styles.navigationItem}>
+            <NavigationItem
+              text="PROFILE"
+              route="/profile"
+              pathname={pathname}
+            />
+          </li>
         )}
         {user && (
-          <NavigationItem
-            text="WRITE"
-            route="/post/write"
-            pathname={pathname}
-          />
+          <li className={styles.navigationItem}>
+            <NavigationItem
+              text="WRITE"
+              route="/post/write"
+              pathname={pathname}
+            />
+          </li>
         )}
       </ul>
     </header>

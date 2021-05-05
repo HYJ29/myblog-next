@@ -7,5 +7,10 @@ export default function SubjectTitle({
 }: {
   children: React.ReactNode;
 }) {
-  return <h5 className={styles.subjectTitle}>{children}</h5>;
+  const key = children.key;
+  return (
+    <section id={key}>
+      <h5 className={styles.subjectTitle}>{children}</h5>
+    </section>
+  );
 }

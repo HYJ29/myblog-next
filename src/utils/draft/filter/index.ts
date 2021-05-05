@@ -85,3 +85,11 @@ export const getTagsFromEditorState = ({
     return tags;
   }, []);
 };
+
+export const getSubjectsFromEditorState = ({ editorState }) => {
+  const contentState = editorState.getCurrentContent();
+  const blocks = contentState.getBlocksAsArray();
+  console.log(`blocks`, blocks);
+  const subjectBlocks = blocks.filter((block) => block.type === 'header-five');
+  return subjectBlocks;
+};

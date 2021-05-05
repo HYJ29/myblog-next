@@ -30,3 +30,11 @@
   @extend .tag;
   border: 3px $color-basic-300 solid;
 }
+
+.postListContainer {
+  min-width: 300px;
+
+  @include breakpoint('desktop') {
+    min-width: 800px;
+  }
+}

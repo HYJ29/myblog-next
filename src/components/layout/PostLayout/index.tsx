@@ -3,7 +3,9 @@ import { EditorState } from 'draft-js';
 
 import compositeDecorator from '@/components/editor/Editor/plugins/customPlugin/decorators';
 import { parseEditorState } from '@/data/utils';
+import { getSubjectsFromEditorState } from '@/utils/draft/filter';
 import { AuthContext } from '@/pages/_app';
+import { SubjectList } from '@/components/draft';
 
 import styles from './style.module.scss';
 import PostHeader from '../Headers/PostHeader';
@@ -31,6 +33,10 @@ export default function PostLayout({
   const [editorState, setEditorState] = useState(parsedEditorState);
   const { authState } = useContext(AuthContext);
   const { username } = authState.auth;
+
+  const isDesktop = window.innerWidth > 800;
+
+  const subjectBlocks = getSubjectsFromEditorState({ editorState });
   return (
     <div className={styles.container}>
       <div className={styles.headerContainer}>
@@ -49,6 +55,11 @@ export default function PostLayout({
           isPostMode={true}
         />
       </div>
+      {isDesktop && (
+        <div className={styles.subjectListContainer}>
+          <SubjectList subjectBlocks={subjectBlocks} />
+        </div>
+      )}
     </div>
   );
 }

@@ -7,3 +7,17 @@
   display: flex;
   flex-direction: row;
 }
+
+@mixin breakpoint($class) {
+  @if $class == 'tablet' {
+    @media (min-width: 688px) {
+      @content;
+    }
+  } @else if $class == 'desktop' {
+    @media (min-width: 992px) {
+      @content;
+    }
+  } @else {
+    @warn "Break point support 'tablet' and 'desktop'";
+  }
+}

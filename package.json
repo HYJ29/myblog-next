@@ -26,6 +26,7 @@
     "next-auth": "^3.15.9",
     "prism-react-renderer": "^1.2.0",
     "react": "17.0.2",
+    "react-anchor-link-smooth-scroll": "^1.0.12",
     "react-dom": "17.0.2",
     "react-social-login-buttons": "^3.4.0",
     "react-spring": "^9.0.0",
