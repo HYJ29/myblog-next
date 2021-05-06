@@ -1,9 +1,9 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
 import { API, Storage } from 'aws-amplify';
 
-import { useModal, useLoadingModal } from '@/hooks';
+import { useModal, useLoadingModal, useScrollPosition } from '@/hooks';
 import { XCircle } from '@/components/icons';
 import { Button } from '@/components/button';
 import { getRawJsonContentStateFrom } from '@/utils/draft/convert';
@@ -18,8 +18,19 @@ import ControllerItem from '../Items/ControllerItem';
 
 export default function PostHeader({ editorState, owner, post, username }) {
   const router = useRouter();
+  const [sticky, setSticky] = useState(true);
   const { Modal, setShowModal } = useModal();
   const { LoadingModal, setShowLoadingModal } = useLoadingModal();
+
+  useScrollPosition(
+    ({ prevPosition, currentPosition }) => {
+      const isShow = currentPosition.y > prevPosition.y;
+      if (isShow !== sticky) {
+        setSticky(isShow);
+      }
+    },
+    [sticky]
+  );
 
   const postId = post.id;
 
@@ -82,7 +93,13 @@ export default function PostHeader({ editorState, owner, post, username }) {
   };
 
   return (
-    <header className={styles.container}>
+    <header
+      className={styles.container}
+      style={{
+        transform: sticky ? 'translateY(0)' : 'translateY(-100%)',
+        transition: 'transform 400ms ease-in',
+      }}
+    >
       <Link href="/">
         <div className={styles.logoContainer}>
           <img

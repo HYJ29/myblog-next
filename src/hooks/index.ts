@@ -4,3 +4,4 @@ export * from './useUpperbarPosition';
 export * from './useWhoAmI';
 export * from './useModal';
 export * from './useLoadingModal';
+export * from './useScrollPosition';
