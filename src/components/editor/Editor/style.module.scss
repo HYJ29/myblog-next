@@ -6,10 +6,10 @@
 
 .editorContainer {
   // background-color: gray;
-  min-width: 350px;
+  width: 350px;
   min-height: 200vh;
 
   @include breakpoint('desktop') {
-    min-width: 800px;
+    width: 800px;
   }
 }

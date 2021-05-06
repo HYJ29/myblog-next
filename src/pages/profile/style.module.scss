@@ -1,4 +1,5 @@
 @import 'layout';
+@import 'colors';
 
 .container {
   @include col();
@@ -10,4 +11,15 @@
 
 .postsContainer {
   width: 700px;
+}
+
+.draftItem {
+  @include row();
+}
+
+.modalXIcon {
+  width: 24px;
+  height: 24px;
+  color: $color-primary-500;
+  cursor: pointer;
 }

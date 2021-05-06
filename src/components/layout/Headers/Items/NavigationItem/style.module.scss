@@ -4,6 +4,14 @@
   color: $color-primary-500;
   cursor: pointer;
   position: relative;
+  width: 100%;
+}
+
+.navigationItemText {
+  z-index: 100;
+  width: 100%;
+  position: relative;
+  bottom: 0;
 }
 
 .navigationItemDecorator {
@@ -12,5 +20,4 @@
   height: 0.5rem;
   width: 100%;
   bottom: 0;
-  z-index: -1;
 }
