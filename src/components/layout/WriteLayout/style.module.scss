@@ -1,0 +1,30 @@
+@import 'colors';
+@import 'layout';
+
+.container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+.headerContainer {
+  position: fixed;
+  z-index: 3;
+  width: 100%;
+  background-color: transparent;
+}
+
+.headerPlaceholder {
+  height: 5rem;
+}
+
+.editorContainer {
+  @include col();
+  align-items: center;
+  width: 100%;
+}
+
+.editor {
+  width: 680px;
+  min-height: 100vh;
+  margin: 0 24px;
+}

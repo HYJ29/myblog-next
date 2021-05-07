@@ -1,0 +1,31 @@
+@import 'colors';
+@import 'layout';
+
+.container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  padding: 0 0.5rem;
+}
+.headerContainer {
+  position: fixed;
+  z-index: 3;
+  width: 100%;
+  background-color: transparent;
+}
+
+.headerPlaceholder {
+  height: 5rem;
+}
+
+.editorContainer {
+  @include col();
+  align-items: center;
+  width: 100%;
+}
+
+.subjectListContainer {
+  position: fixed;
+  right: 30px;
+  top: 150px;
+}

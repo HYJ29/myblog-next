@@ -1,0 +1,33 @@
+@import 'layout';
+
+.container {
+  width: 100%;
+}
+
+.header {
+  width: 100%;
+  position: fixed;
+  padding: 3rem;
+}
+
+.imageContainer {
+  @include row();
+  align-self: center;
+  justify-content: center;
+  width: 100%;
+}
+
+.coverImage {
+  min-height: 500px;
+  width: 100%;
+  object-fit: cover;
+  border-radius: 0.5rem;
+}
+
+.editorContainer {
+  transform: translateY(90vw);
+  background-color: white;
+  z-index: 1;
+  min-height: 100vh;
+  padding-top: 3rem;
+}

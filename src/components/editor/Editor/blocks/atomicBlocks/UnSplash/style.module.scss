@@ -1,0 +1,47 @@
+@import 'layout';
+@import 'colors';
+
+.container {
+  width: 100%;
+}
+
+.searchForm {
+  @include row();
+  width: 100%;
+}
+
+.searchInput {
+  border: none;
+  border-bottom: solid 1px $color-basic-500;
+  width: 100%;
+  outline: none;
+  font-size: 20px;
+}
+
+.resultNavContainer {
+  @include row();
+  justify-content: center;
+  width: 100%;
+  position: relative;
+  color: $color-basic-500;
+  margin-top: 0.5rem;
+}
+
+.resultPrevButton {
+  position: absolute;
+  left: 0;
+  z-index: 1;
+  cursor: pointer;
+}
+
+.resultNextButton {
+  position: absolute;
+  right: 0;
+  z-index: 1;
+  cursor: pointer;
+}
+
+.resultTotalText {
+  flex: 1;
+  text-align: center;
+}

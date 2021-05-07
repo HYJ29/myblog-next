@@ -1,0 +1,40 @@
+@import 'colors';
+@import 'layout';
+
+.container {
+  @include col();
+  width: 100%;
+  align-items: center;
+}
+
+.tagsContainer {
+  @include row();
+  flex-wrap: wrap;
+  margin-bottom: 1rem;
+}
+
+.tag {
+  background-color: $color-basic-200;
+  padding: 0.4rem;
+  border-radius: 0.4rem;
+  margin-right: 1rem;
+  cursor: pointer;
+}
+
+.tag_selected {
+  @extend .tag;
+  background-color: $color-primary-400;
+}
+
+.tag_all {
+  @extend .tag;
+  border: 3px $color-basic-300 solid;
+}
+
+.postListContainer {
+  min-width: 300px;
+
+  @include breakpoint('desktop') {
+    min-width: 800px;
+  }
+}

@@ -1,0 +1,15 @@
+@import 'layout';
+
+.container {
+  @include col();
+  align-items: center;
+  width: 100%;
+  flex: 1;
+}
+.formContainer {
+  @include col();
+  align-items: center;
+  justify-content: center;
+  width: 500px;
+  flex: 1;
+}

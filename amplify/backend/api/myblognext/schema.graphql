@@ -6,14 +6,21 @@ type User
       { allow: public, operations: [read] }
       { allow: private, operations: [read] }
     ]
+  )
+  @key(
+    name: "userByProviderKey"
+    fields: ["providerKey"]
+    queryField: "userByProviderKey"
   ) {
   id: ID!
-  providerType: String!
   providerKey: String!
-  name: String!
+  userNickname: String!
+  baseType: String!
   photoUrl: AWSURL
   email: AWSEmail
-  Posts: [Post] @connection(fields: ["id"], keyName: "byUser")
+  Posts: [Post] @connection(keyName: "byUserAndCreatedAt", fields: ["id"])
+  Drafts: [Draft] @connection(keyName: "byUserAndCreatedAt", fields: ["id"])
+  Images: [Image] @connection(keyName: "byUserAndCreatedAt", fields: ["id"])
 }
 
 type Post
@@ -25,15 +32,38 @@ type Post
       { allow: private, operations: [read] }
     ]
   )
-  @key(name: "byUser", fields: ["userId"]) {
+  @key(name: "byUserAndCreatedAt", fields: ["userId", "createdAt"])
+  @key(
+    name: "postByCreatedAt"
+    fields: ["baseType", "createdAt"]
+    queryField: "postByCreatedAt"
+  ) {
   id: ID!
-  editorState: String!
-  titlePhoto: String!
+  rawContentState: String!
+  titlePhoto: String
   title: String!
-  subTitle: String!
-
+  subTitle: String
   userId: ID!
-  tags: [PostTag] @connection(keyName: "byPostByUser", fields: ["id"])
+  baseType: String!
+  createdAt: AWSDateTime!
+  postTags: [PostTag] @connection(keyName: "byPostByUser", fields: ["id"])
+  postImages: [PostImage] @connection(keyName: "byPostByUser", fields: ["id"])
+}
+
+type Draft
+  @model
+  @auth(rules: [{ allow: owner }])
+  @key(name: "byUserAndCreatedAt", fields: ["userId", "createdAt"]) {
+  id: ID!
+  rawContentState: String!
+  titlePhoto: String
+  title: String!
+  subTitle: String
+  userId: ID!
+  baseType: String!
+  createdAt: AWSDateTime!
+  draftImages: [DraftImage]
+    @connection(keyName: "byDraftByUser", fields: ["id"])
 }
 
 type PostTag
@@ -46,14 +76,19 @@ type PostTag
     ]
   )
   @key(name: "byPostByUser", fields: ["postId", "userId"])
-  @key(name: "byTagByUser", fields: ["tagId", "userId"]) {
+  @key(name: "byTagByUser", fields: ["tagId", "userId"])
+  @key(
+    name: "postTagsByPostIdAndTagId"
+    fields: ["baseType", "postId", "tagId"]
+    queryField: "postTagsByPostIdAndTagId"
+  ) {
   id: ID!
-
   userId: ID!
   postId: ID!
   tagId: ID!
-  post: Post! @connection(fields: ["postId"])
-  tag: Tag! @connection(fields: ["tagId"])
+  baseType: String!
+  post: Post @connection(fields: ["postId"])
+  tag: Tag @connection(fields: ["tagId"])
 }
 
 type Tag
@@ -64,9 +99,86 @@ type Tag
       { allow: public, operations: [read] }
       { allow: private, operations: [read] }
     ]
+  )
+  @key(
+    name: "tagByTagName"
+    fields: ["baseType", "tagName"]
+    queryField: "tagByTagName"
   ) {
   id: ID!
   tagName: String!
+  baseType: String!
+  postTags: [PostTag] @connection(keyName: "byTagByUser", fields: ["id"])
+}
 
-  posts: [PostTag] @connection(keyName: "byTagByUser", fields: ["id"])
+type PostImage
+  @model
+  @auth(
+    rules: [
+      { allow: owner }
+      { allow: public, operations: [read] }
+      { allow: private, operations: [read] }
+    ]
+  )
+  @key(name: "byPostByUser", fields: ["postId", "userId"])
+  @key(name: "byImageByUser", fields: ["imageId", "userId"])
+  @key(
+    name: "postImageByPostIdAndImageId"
+    fields: ["postId", "imageId"]
+    queryField: "postImageByPostIdAndImageId"
+  ) {
+  id: ID!
+  userId: ID!
+  postId: ID!
+  imageId: ID!
+  baseType: String!
+  post: Post @connection(fields: ["postId"])
+  image: Image @connection(fields: ["imageId"])
+}
+
+type DraftImage
+  @model
+  @auth(rules: [{ allow: owner }])
+  @key(name: "byDraftByUser", fields: ["draftId", "userId"])
+  @key(name: "byImageByUser", fields: ["imageId", "userId"])
+  @key(
+    name: "draftImageByDraftIdAndImageId"
+    fields: ["draftId", "imageId"]
+    queryField: "draftImageByDraftIdAndImageId"
+  ) {
+  id: ID!
+  userId: ID!
+  draftId: ID!
+  imageId: ID!
+  baseType: String!
+  draft: Draft @connection(fields: ["draftId"])
+  image: Image @connection(fields: ["imageId"])
+}
+
+type Image
+  @model
+  @auth(
+    rules: [
+      { allow: owner }
+      { allow: public, operations: [read] }
+      { allow: private, operations: [read] }
+    ]
+  )
+  @key(
+    name: "imageByCreatedAt"
+    fields: ["baseType", "createdAt"]
+    queryField: "imageByCreatedAt"
+  )
+  @key(name: "byUserAndCreatedAt", fields: ["userId", "createdAt"]) {
+  id: ID!
+  userId: ID!
+  url: String!
+  imageKey: String!
+  baseType: String!
+  isPublished: Boolean!
+  isSaved: Boolean!
+  createdAt: AWSDateTime!
+  postImages: [PostImage] @connection(keyName: "byImageByUser", fields: ["id"])
+  draftImages: [DraftImage]
+    @connection(keyName: "byImageByUser", fields: ["id"])
 }

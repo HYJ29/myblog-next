@@ -1,21 +1,26 @@
 const { PHASE_DEVELOPMENT_SERVER } = require('next/constants');
+const path = require('path');
 
 module.exports = (phase, { defaultConfig }) => {
+  // Env setting
   let env = {};
-
-  console.log(
-    `process.env.NEXT_PUBLIC_BROWSER_VARIABLE`,
-    process.env.NEXT_PUBLIC_BROWSER_VARIABLE
-  );
-  console.log(`process.env.SERVER_VARIABLE`, process.env.SERVER_VARIABLE);
 
   switch (phase) {
     case PHASE_DEVELOPMENT_SERVER:
       env = {};
       break;
     default:
-      return;
   }
 
-  return { ...defaultConfig, env };
+  // sass setting
+  const sassOptions = {
+    includePaths: [path.join(__dirname, '/src/styles')],
+  };
+
+  // Ignore typescript build error
+  const typescript = {
+    ignoreBuildErrors: true,
+  };
+
+  return { ...defaultConfig, sassOptions, typescript };
 };

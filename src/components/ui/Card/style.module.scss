@@ -1,0 +1,18 @@
+@import 'colors';
+@import 'layout';
+.container {
+  @include row();
+
+  width: 100%;
+  min-width: 300px;
+  margin: 0 0 3rem;
+  cursor: pointer;
+}
+
+.image {
+  width: 10rem;
+  height: 10rem;
+  object-fit: cover;
+  margin-right: 2rem;
+  border-radius: 0.5rem;
+}

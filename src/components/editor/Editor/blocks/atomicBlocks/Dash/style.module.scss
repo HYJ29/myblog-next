@@ -1,0 +1,20 @@
+@import 'layout';
+@import 'colors';
+
+.container {
+  @include row();
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+
+.dashText {
+  margin: 0 20px;
+  color: $color-basic-300;
+  font-family: 'Pacifico', cursive;
+}
+
+.breakLine {
+  width: 30%;
+  border-bottom: 1px solid $color-basic-300;
+}
