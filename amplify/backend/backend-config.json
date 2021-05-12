@@ -1,6 +1,6 @@
 {
   "auth": {
-    "myblognexta5c09760": {
+    "myblognext498e72e7": {
       "service": "Cognito",
       "providerPlugin": "awscloudformation",
       "dependsOn": [],
@@ -16,7 +16,7 @@
           "defaultAuthentication": {
             "authenticationType": "AMAZON_COGNITO_USER_POOLS",
             "userPoolConfig": {
-              "userPoolId": "authmyblognexta5c09760"
+              "userPoolId": "authmyblognext498e72e7"
             }
           },
           "additionalAuthenticationProviders": [
@@ -24,7 +24,7 @@
               "authenticationType": "API_KEY",
               "apiKeyConfig": {
                 "apiKeyExpirationDays": 7,
-                "description": "api key for my blog next.js app"
+                "description": "blog next api key"
               }
             }
           ]
@@ -33,7 +33,7 @@
     }
   },
   "storage": {
-    "myblognextstorage": {
+    "blognextstorage": {
       "service": "S3",
       "providerPlugin": "awscloudformation"
     }

@@ -1,8 +1,8 @@
 {
-    "identityPoolName": "myblognexta5c09760_identitypool_a5c09760",
+    "identityPoolName": "myblognext498e72e7_identitypool_498e72e7",
     "allowUnauthenticatedIdentities": true,
-    "resourceNameTruncated": "mybloga5c09760",
-    "userPoolName": "myblognexta5c09760_userpool_a5c09760",
+    "resourceNameTruncated": "myblog498e72e7",
+    "userPoolName": "myblognext498e72e7_userpool_498e72e7",
     "autoVerifiedAttributes": [
         "email"
     ],
@@ -28,10 +28,10 @@
     "userpoolClientReadAttributes": [
         "email"
     ],
-    "userpoolClientLambdaRole": "mybloga5c09760_userpoolclient_lambda_role",
+    "userpoolClientLambdaRole": "myblog498e72e7_userpoolclient_lambda_role",
     "userpoolClientSetAttributes": false,
-    "sharedId": "a5c09760",
-    "resourceName": "myblognexta5c09760",
+    "sharedId": "498e72e7",
+    "resourceName": "myblognext498e72e7",
     "authSelections": "identityPoolAndUserPool",
     "authRoleArn": {
         "Fn::GetAtt": [
@@ -46,16 +46,15 @@
         ]
     },
     "useDefault": "defaultSocial",
-    "userPoolGroupList": [],
-    "serviceName": "Cognito",
-    "usernameCaseSensitive": false,
-    "dependsOn": [],
     "hostedUI": true,
-    "hostedUIDomainName": "myblog-next",
+    "hostedUIDomainName": "myblognextauth",
     "authProvidersUserPool": [
         "Google"
     ],
     "hostedUIProviderMeta": "[{\"ProviderName\":\"Google\",\"authorize_scopes\":\"openid email profile\",\"AttributeMapping\":{\"email\":\"email\",\"username\":\"sub\"}}]",
     "oAuthMetadata": "{\"AllowedOAuthFlows\":[\"code\"],\"AllowedOAuthScopes\":[\"phone\",\"email\",\"openid\",\"profile\",\"aws.cognito.signin.user.admin\"],\"CallbackURLs\":[\"http://localhost:3000/\"],\"LogoutURLs\":[\"http://localhost:3000/\"]}",
-    "authProviders": []
+    "userPoolGroupList": [],
+    "serviceName": "Cognito",
+    "usernameCaseSensitive": false,
+    "dependsOn": []
 }
