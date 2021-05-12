@@ -1,5 +1,6 @@
 import React, { useRef } from 'react';
 import { withSSRContext, API } from 'aws-amplify';
+import { useRouter } from 'next/router';
 
 import { DefaultLayout } from '@/components/layout';
 import { Input } from '@/components/input';
@@ -12,7 +13,7 @@ import { GetServerSideProps } from 'next';
 import { userByProviderKey } from '@/graphql/queries';
 
 export default function RegisterPage({ username }) {
-  // const {providerType, providerKey} =
+  const router = useRouter();
   const nameInputRef = useRef();
 
   const onSubmitHandler = async () => {
@@ -26,6 +27,7 @@ export default function RegisterPage({ username }) {
       query: createUser,
       variables: { input: registerInfo },
     });
+    router.push('/');
   };
 
   return (
@@ -55,10 +57,10 @@ export const getServerSideProps = async ({ req, res }) => {
     });
     const dbUser = userOfProviderKey.data.userByProviderKey.items[0] ?? null;
     if (dbUser) {
-      res.writeHead(302, { Location: '/auth' });
+      res.writeHead(302, { Location: '/' });
       res.end();
     } else {
-      return;
+      return { props: { username: providerKey } };
     }
   } catch {
     res.writeHead(302, { Location: '/auth' });
