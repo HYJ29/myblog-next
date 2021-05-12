@@ -34,5 +34,23 @@
         "myblognext498e72e7": {}
       }
     }
+  },
+  "main": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-myblognext-main-110022-authRole",
+      "UnauthRoleArn": "arn:aws:iam::220337603506:role/amplify-myblognext-main-110022-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::220337603506:role/amplify-myblognext-main-110022-authRole",
+      "Region": "ap-northeast-2",
+      "DeploymentBucketName": "amplify-myblognext-main-110022-deployment",
+      "UnauthRoleName": "amplify-myblognext-main-110022-unauthRole",
+      "StackName": "amplify-myblognext-main-110022",
+      "StackId": "arn:aws:cloudformation:ap-northeast-2:220337603506:stack/amplify-myblognext-main-110022/d00a75e0-b2c5-11eb-8d80-0aa73c97694a",
+      "AmplifyAppId": "d3vdet5hrbtfxv"
+    },
+    "categories": {
+      "auth": {
+        "myblognext498e72e7": {}
+      }
+    }
   }
 }
