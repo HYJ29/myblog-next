@@ -31,7 +31,6 @@ if (process.env.NODE_ENV === 'production') {
   config = envConfig;
 } else {
   import('../../aws-exports').then((awsExports) => {
-    console.log(`awsExports`, awsExports);
     config = awsExports;
   });
 }
