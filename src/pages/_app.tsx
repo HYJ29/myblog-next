@@ -7,12 +7,12 @@ import Head from 'next/head';
 import Amplify, { API, Storage, Auth, Hub, withSSRContext } from 'aws-amplify';
 
 import { userByProviderKey } from '@/graphql/queries';
+import { awsExports } from '@/config';
 
-import config from '../aws-exports';
 import './globals.scss';
 
 Amplify.configure({
-  ...config,
+  ...awsExports,
   ssr: true,
 });
 
