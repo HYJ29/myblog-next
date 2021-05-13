@@ -27,11 +27,13 @@ const envConfig = {
     process.env.NEXT_PUBLIC_AWS_USER_FILES_S3_BUCKET_REGION,
 };
 
-import('../../aws-exports')
-  .then((awsExports) => {
+if (process.env.NODE_ENV === 'production') {
+  config = envConfig;
+} else {
+  import('../../aws-exports').then((awsExports) => {
     console.log(`awsExports`, awsExports);
     config = awsExports;
-  })
-  .catch(() => (config = envConfig));
+  });
+}
 
 export default config;
