@@ -18,8 +18,11 @@ import {
   draftImageByDraftIdAndImageId,
 } from '@/graphql/queries';
 
-import awsConfig from '@/aws-exports';
-const { aws_user_files_s3_bucket, aws_user_files_s3_bucket_region } = awsConfig;
+import { awsExports } from '@/config';
+const {
+  aws_user_files_s3_bucket,
+  aws_user_files_s3_bucket_region,
+} = awsExports;
 
 export const uploadIamgeS3AndDB = async ({ file, userId }) => {
   const imageUniqueKey = uuidV4();
