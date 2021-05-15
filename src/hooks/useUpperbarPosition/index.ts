@@ -38,7 +38,7 @@ export const useUpperbarPosition = ({
       //   : selectionRect.right;
       setScale(1);
       setLeft((selectionRect.left + selectionRect.right) / 2 + 50 - 150);
-      setTop(selectionRect.top - 60);
+      setTop(selectionRect.top - 60 + window.scrollY);
     } else {
       setScale(0);
     }
