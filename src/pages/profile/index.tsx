@@ -20,12 +20,10 @@ export default function Profile({ authenticated, user: dbUser }) {
   const { Modal, setShowModal } = useModal();
   const { LoadingModal, setShowLoadingModal } = useLoadingModal();
 
-  console.log(`user`, user);
   const drafts = user.Drafts.items;
 
   const deleteDraftHandler = async (draft) => {
     setShowLoadingModal({ text: 'DELETING DRAFT' });
-    console.log(`draft`, draft);
     const draftId = draft.id;
 
     // deleteDraft

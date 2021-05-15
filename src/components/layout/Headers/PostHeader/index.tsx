@@ -35,7 +35,6 @@ export default function PostHeader({ editorState, owner, post }) {
 
   const postId = post.id;
 
-  console.log(`post`, post);
 
   const isUserOwnerOfPost = authState.auth && authState.auth.username === owner;
 

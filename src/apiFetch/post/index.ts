@@ -27,7 +27,6 @@ export const getPostByTags = async ({ tagId }) => {
   const posts = postTagRes.data.listPostTags.items
     .map((item) => item.post)
     .sort((a, b) => {
-      console.log(`a`, a);
       return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
     });
   return posts;

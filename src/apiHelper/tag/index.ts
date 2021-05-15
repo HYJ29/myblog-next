@@ -83,8 +83,6 @@ export const deleteAndUnLinkLegacyTag = async ({
           postIdTagId: { eq: { postId, tagId: tagDB.id } },
         },
       });
-      console.log(`tagDB`, tagDB);
-      console.log(`postTagOnPostRes`, postTagOnPostRes);
 
       const postTagId =
         postTagOnPostRes.data.postTagsByPostIdAndTagId.items[0].id ?? null;
@@ -103,8 +101,6 @@ export const deleteAndUnLinkLegacyTag = async ({
           id: tagDB.id,
         },
       });
-
-      console.log(`tagRes`, tagRes);
 
       const noMoreLinkdPost =
         tagRes?.data?.getTag?.postTags?.items?.length === 0;

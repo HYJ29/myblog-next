@@ -39,6 +39,5 @@ export const getServerSideProps: GetServerSideProps = async ({
     authMode: GRAPHQL_AUTH_MODE.API_KEY,
   });
   const post = res.data.getPost;
-  console.log(`res`, res);
   return { props: { post } };
 };

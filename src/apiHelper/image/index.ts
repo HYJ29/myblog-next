@@ -210,8 +210,6 @@ export const mapPostAndIamges = async ({ postId, userId, images }) => {
           },
         },
       });
-      console.log(`updateImageRes`, updateImageRes);
-      console.log(`createPostImageRes`, createPostImageRes);
     }
   }
 };
@@ -226,11 +224,8 @@ export const mapDraftAndIamges = async ({ draftId, userId, images }) => {
 
   const draftImagesDB = draftImagesDBRes?.data?.listDraftImages?.items ?? [];
 
-  console.log(`draftImageDB`, draftImagesDB);
-
   // Create Image Mapping if not mapped already
   for (const image of images) {
-    console.log(`image`, image);
     const isMapedDBAlready = !!draftImagesDB.find(
       (draftImage) => draftImage.imageId === image.data.imageDbId
     );
@@ -258,8 +253,6 @@ export const mapDraftAndIamges = async ({ draftId, userId, images }) => {
           },
         },
       });
-      console.log(`updateImageRes`, updateImageRes);
-      console.log(`createDraftImageRes`, createDraftImageRes);
     }
   }
 };
@@ -303,6 +296,5 @@ export const deleteDraftImageLink = async ({ draftImagesToDelete }) => {
       query: deleteDraftImage,
       variables: { input: { id: draftImage.id } },
     });
-    console.log(`deleteDraftImageRes`, deleteDraftImageRes);
   }
 };

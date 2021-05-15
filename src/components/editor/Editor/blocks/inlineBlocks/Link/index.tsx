@@ -4,7 +4,6 @@ import styles from './style.module.scss';
 
 export default function Link({ contentState, entityKey, children }) {
   const { url } = contentState.getEntity(entityKey).getData();
-  console.log(`url`, url);
   return (
     <a
       href={url}
