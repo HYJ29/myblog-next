@@ -16,7 +16,6 @@ const SignInWithGoogle = () => {
 
     ga.signIn().then(
       (googleUser) => {
-        console.log(`googleUser`, googleUser);
         getAWSCredentials(googleUser);
       },
       (error) => {
@@ -26,10 +25,7 @@ const SignInWithGoogle = () => {
   };
 
   const getAWSCredentials = async (googleUser) => {
-    console.log('gothere');
     const { id_token, expires_at } = googleUser.getAuthResponse();
-    console.log(`id_token`, id_token);
-    console.log('after auth');
     const profile = googleUser.getBasicProfile();
     let user = {
       email: profile.getEmail(),
@@ -41,7 +37,6 @@ const SignInWithGoogle = () => {
       { token: id_token, expires_at },
       user
     );
-    console.log('credentials', credentials);
   };
 
   const createScript = () => {

@@ -5,7 +5,6 @@ import AnchorLink from 'react-anchor-link-smooth-scroll';
 import styles from './style.module.scss';
 
 export default function SubjectList({ subjectBlocks }) {
-  console.log(`subjectBlocks`, subjectBlocks);
   return (
     <ul className={styles.container}>
       {subjectBlocks.map((block) => (
