@@ -14,6 +14,7 @@ import {
   tagByTagName,
   listPostTags,
 } from '@/graphql/queries';
+import api from '@/apiFetch';
 
 import styles from './style.module.scss';
 import { ModelSortDirection } from '@/API';
@@ -30,25 +31,8 @@ export default function HomePage({}: Props): JSX.Element {
 
   const getAllPostsAndTags = async () => {
     try {
-      const postRes = await API.graphql({
-        query: postByCreatedAt,
-        variables: {
-          baseType: 'Post',
-          sortDirection: ModelSortDirection.DESC,
-        },
-        authMode: GRAPHQL_AUTH_MODE.API_KEY,
-      });
-
-      const posts = postRes.data.postByCreatedAt.items;
-      // Get Tags
-      const tagRes = await API.graphql({
-        query: tagByTagName,
-        variables: { baseType: 'Tag', sortDirection: 'ASC' },
-        authMode: GRAPHQL_AUTH_MODE.API_KEY,
-      });
-
-      const tags = tagRes.data.tagByTagName.items;
-
+      const posts = await api.post.getAllPosts();
+      const tags = await api.tag.getAllTags();
       setPosts(posts);
       setTags(tags);
     } catch (e) {
@@ -62,23 +46,12 @@ export default function HomePage({}: Props): JSX.Element {
   const onSelectTag = async (tag) => {
     setSelectedTag(tag.tagName);
     if (tag.tagName === 'all') {
+      const allPosts = await api.post.getAllPosts();
       setPosts(allPosts);
     } else {
-      const postTagRes = await API.graphql({
-        query: listPostTags,
-        variables: { filter: { tagId: { eq: tag.id } } },
-      });
-      // TODO : sort post with grapqhql index key
-      const posts = postTagRes.data.listPostTags.items
-        .map((item) => item.post)
-        .sort((a, b) => {
-          console.log(`a`, a);
-          return (
-            new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
-          );
-        });
+      const postsOfTag = await api.post.getPostByTags({ tagId: tag.id });
 
-      setPosts(posts);
+      setPosts(postsOfTag);
     }
   };
   return (

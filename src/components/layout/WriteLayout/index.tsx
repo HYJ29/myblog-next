@@ -11,17 +11,17 @@ type Props = {
   Editor: typeof React.Component;
 };
 
-export default function WriteLayout({ Editor }: Props): JSX.Element {
+export default function WriteLayout({ Editor }: Props): JSX.Element | null {
   const [editorState, setEditorState] = useState(
     EditorState.createEmpty(compositeDecorator)
   );
 
   const { authState } = useContext(AuthContext);
-  const { id: userId } = authState.user;
-  return (
+
+  return authState.user ? (
     <div className={styles.container}>
       <div className={styles.headerContainer}>
-        <WriteHeader editorState={editorState} userId={userId} />
+        <WriteHeader editorState={editorState} userId={authState.user.id} />
       </div>
 
       <div className={styles.headerPlaceholder} />
@@ -30,10 +30,10 @@ export default function WriteLayout({ Editor }: Props): JSX.Element {
           <Editor
             editorState={editorState}
             setEditorState={setEditorState}
-            userId={userId}
+            userId={authState.user.id}
           />
         </div>
       </div>
     </div>
-  );
+  ) : null;
 }
