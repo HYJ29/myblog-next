@@ -2,6 +2,7 @@ import React from 'react';
 import { useRouter } from 'next/router';
 import { GetServerSideProps } from 'next';
 import { withSSRContext } from 'aws-amplify';
+import { GRAPHQL_AUTH_MODE } from '@aws-amplify/api';
 
 import { getPostById } from '@/data';
 import { Editor } from '@/components/editor';
@@ -32,7 +33,11 @@ export const getServerSideProps: GetServerSideProps = async ({
 }) => {
   const { API } = withSSRContext({ req });
   const { postId } = query;
-  const res = await API.graphql({ query: getPost, variables: { id: postId } });
+  const res = await API.graphql({
+    query: getPost,
+    variables: { id: postId },
+    authMode: GRAPHQL_AUTH_MODE.API_KEY,
+  });
   const post = res.data.getPost;
   console.log(`res`, res);
   return { props: { post } };
