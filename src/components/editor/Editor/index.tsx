@@ -60,6 +60,7 @@ export default function EditorComponent({
     editorState,
     setEditorState,
     setIsEditorReadOnly,
+    isPostMode,
   });
 
   return (

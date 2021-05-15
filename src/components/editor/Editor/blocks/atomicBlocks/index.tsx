@@ -15,6 +15,7 @@ type Props = {
     setIsEditorReadOnly: (arg0: boolean) => void;
     editorState: EditorState;
     setEditorState: (arg: EditorState) => void;
+    isPostMode?: boolean;
   };
 };
 
@@ -23,7 +24,12 @@ export default function AtomicBlockComponent({
   block,
   blockProps,
 }: Props) {
-  const { setIsEditorReadOnly, editorState, setEditorState } = blockProps;
+  const {
+    setIsEditorReadOnly,
+    editorState,
+    setEditorState,
+    isPostMode,
+  } = blockProps;
   const entity = contentState.getEntity(block.getEntityAt(0));
   const type = entity.getType();
 
@@ -78,6 +84,7 @@ export default function AtomicBlockComponent({
         setEditorState={setEditorState}
         block={block}
         codeBlockText={codeBlockText}
+        isPostMode={isPostMode}
       />
     );
   }

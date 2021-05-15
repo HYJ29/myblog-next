@@ -6,12 +6,14 @@ type Props = {
   setIsEditorReadOnly: (arg0: boolean) => void;
   editorState: EditorState;
   setEditorState: (ar0: EditorState) => void;
+  isPostMode?: boolean;
 };
 
 export const createBlockRendereFn = ({
   setIsEditorReadOnly,
   editorState,
   setEditorState,
+  isPostMode,
 }: Props) => (block: ContentBlock) => {
   const blockType = block.getType();
 
@@ -24,6 +26,7 @@ export const createBlockRendereFn = ({
           setIsEditorReadOnly,
           editorState,
           setEditorState,
+          isPostMode,
         },
       };
   }

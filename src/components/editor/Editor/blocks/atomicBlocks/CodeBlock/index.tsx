@@ -12,6 +12,7 @@ type Props = {
   setEditorState: (ar0: EditorState) => void;
   block: ContentBlock;
   codeBlockText: string;
+  isPostMode: boolean;
 };
 
 export default function CodeBlock({
@@ -20,10 +21,11 @@ export default function CodeBlock({
   setEditorState,
   block,
   codeBlockText: codeBlockTextProps,
+  isPostMode,
 }: Props) {
   const [codeBlockText, setCodeBlockText] = useState(codeBlockTextProps ?? '');
   const [textAreaValue, setTextAreaValue] = useState(codeBlockText ?? '');
-  const [showTextArea, setShowTextArea] = useState(true);
+  const [showTextArea, setShowTextArea] = useState(false);
 
   const textAreaInputRef = useRef<HTMLTextAreaElement | null>(null);
 
@@ -34,15 +36,12 @@ export default function CodeBlock({
         textAreaInputRef.current.value.length;
     }
   };
-  useEffect(() => {
-    if (codeBlockText) {
-      setShowTextArea(false);
-    }
-  }, []);
 
   useEffect(() => {
-    focusOnTextArea();
-  }, []);
+    if (showTextArea) {
+      focusOnTextArea();
+    }
+  }, [showTextArea]);
 
   const onFocusTextAreaHandler = async (e) => {
     setIsEditorReadOnly(true);
@@ -102,10 +101,10 @@ export default function CodeBlock({
               ...style,
               padding: '1rem',
               borderRadius: '.5rem',
-              cursor: 'pointer',
+              cursor: isPostMode ? 'default' : 'pointer',
               overflow: 'scroll',
             }}
-            onClick={onClickCodBlockHandler}
+            onClick={isPostMode ? () => {} : onClickCodBlockHandler}
           >
             {tokens.map((line, i) => (
               <div {...getLineProps({ line, key: i })}>
