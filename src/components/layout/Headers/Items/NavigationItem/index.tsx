@@ -26,8 +26,6 @@ export default function NavigationItem({
 
   const props = useSpring({ width: isSelected ? width : 0 });
 
-  console.log(`pathname, isSelected`, pathname, route, isSelected);
-
   useEffect(() => {
     setIsSelected(pathname === route);
   }, [pathname]);

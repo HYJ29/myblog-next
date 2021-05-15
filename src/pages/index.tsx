@@ -1,6 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { GetServerSideProps } from 'next';
-import { withSSRContext, API } from 'aws-amplify';
+
+import API, { GRAPHQL_AUTH_MODE } from '@aws-amplify/api';
+
 import classnames from 'classnames';
 
 import { Card } from '@/components/ui';
@@ -21,12 +23,41 @@ type Props = {
   tags: string[];
 };
 
-export default function HomePage({
-  posts: allPosts,
-  tags,
-}: Props): JSX.Element {
+export default function HomePage({}: Props): JSX.Element {
   const [selectedTag, setSelectedTag] = useState('all');
-  const [posts, setPosts] = useState(allPosts);
+  const [posts, setPosts] = useState([]);
+  const [tags, setTags] = useState([]);
+
+  const getAllPostsAndTags = async () => {
+    try {
+      const postRes = await API.graphql({
+        query: postByCreatedAt,
+        variables: {
+          baseType: 'Post',
+          sortDirection: ModelSortDirection.DESC,
+        },
+        authMode: GRAPHQL_AUTH_MODE.API_KEY,
+      });
+
+      const posts = postRes.data.postByCreatedAt.items;
+      // Get Tags
+      const tagRes = await API.graphql({
+        query: tagByTagName,
+        variables: { baseType: 'Tag', sortDirection: 'ASC' },
+        authMode: GRAPHQL_AUTH_MODE.API_KEY,
+      });
+
+      const tags = tagRes.data.tagByTagName.items;
+
+      setPosts(posts);
+      setTags(tags);
+    } catch (e) {
+      console.log(`getPosttasError`, e);
+    }
+  };
+  useEffect(() => {
+    getAllPostsAndTags();
+  }, []);
 
   const onSelectTag = async (tag) => {
     setSelectedTag(tag.tagName);
@@ -96,50 +127,3 @@ export default function HomePage({
     </DefaultLayout>
   );
 }
-
-export const getServerSideProps = async ({ req, res }) => {
-  const { Auth, API } = withSSRContext({ req });
-  try {
-    const cognitoUser = await Auth.currentAuthenticatedUser();
-
-    if (cognitoUser) {
-      //TODO : CHECK is user registered on DB
-      const providerKey = cognitoUser.username;
-      const userOfProviderKey = await API.graphql({
-        query: userByProviderKey,
-        variables: { providerKey },
-      });
-      const dbUser = userOfProviderKey.data.userByProviderKey.items[0] ?? null;
-
-      if (dbUser) {
-        // Get Posts
-        const postRes = await API.graphql({
-          query: postByCreatedAt,
-          variables: {
-            baseType: 'Post',
-            sortDirection: ModelSortDirection.DESC,
-          },
-          items: {},
-        });
-        const posts = postRes.data.postByCreatedAt.items;
-        // Get Tags
-        const tagRes = await API.graphql({
-          query: tagByTagName,
-          variables: { baseType: 'Tag', sortDirection: 'ASC' },
-        });
-
-        const tags = tagRes.data.tagByTagName.items;
-
-        return { props: { posts, tags } };
-      } else {
-        // IF not registered, do below
-        res.writeHead(302, { Location: '/user/register' });
-        res.end();
-      }
-    }
-  } catch (e) {
-    console.log(`hompage serverside error`, e);
-    // const posts = await API.graphql({ query: listPosts });
-    return { props: { posts: [], tags: [] } };
-  }
-};
