@@ -16,15 +16,19 @@ export default function EditLayout({
   Editor,
   rawContentState,
   postId,
-}: Props): JSX.Element {
+}: Props): JSX.Element | null {
   const parsedEditorState = parseEditorState(rawContentState);
   const [editorState, setEditorState] = useState(parsedEditorState);
   const { authState } = useContext(AuthContext);
-  const { id: userId } = authState.user;
-  return (
+
+  return authState.user ? (
     <div className={styles.container}>
       <div className={styles.headerContainer}>
-        <EditHeader editorState={editorState} postId={postId} userId={userId} />
+        <EditHeader
+          editorState={editorState}
+          postId={postId}
+          userId={authState.user.id}
+        />
       </div>
 
       <div className={styles.headerPlaceholder} />
@@ -33,10 +37,10 @@ export default function EditLayout({
           <Editor
             editorState={editorState}
             setEditorState={setEditorState}
-            userId={userId}
+            userId={authState.user.id}
           />
         </div>
       </div>
     </div>
-  );
+  ) : null;
 }
