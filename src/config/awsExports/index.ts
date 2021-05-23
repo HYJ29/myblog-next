@@ -44,28 +44,33 @@ const isProduction = process.env.NODE_ENV === 'production';
 if (isProduction) {
   config = envConfig;
 } else {
-  const awsExports = require('../../aws-exports');
-  const awsConfig = awsExports.default;
-  const [
-    localRedirectSignIn,
-    productionRedirectSignIn,
-  ] = awsConfig.oauth.redirectSignIn.split(',');
+  try {
+    const awsExports = require('../../aws-exports');
+    const awsConfig = awsExports.default;
+    const [
+      localRedirectSignIn,
+      productionRedirectSignIn,
+    ] = awsConfig.oauth.redirectSignIn.split(',');
 
-  const [
-    localRedirectSignOut,
-    productionRedirectSignOut,
-  ] = awsConfig.oauth.redirectSignOut.split(',');
+    const [
+      localRedirectSignOut,
+      productionRedirectSignOut,
+    ] = awsConfig.oauth.redirectSignOut.split(',');
 
-  const updatedConfig = {
-    ...awsConfig,
-    oauth: {
-      ...awsConfig.oauth,
-      redirectSignIn: localRedirectSignIn,
-      redirectSignOut: localRedirectSignOut,
-    },
-  };
+    const updatedConfig = {
+      ...awsConfig,
+      oauth: {
+        ...awsConfig.oauth,
+        redirectSignIn: localRedirectSignIn,
+        redirectSignOut: localRedirectSignOut,
+      },
+    };
 
-  config = updatedConfig;
+    config = updatedConfig;
+  } catch (e) {
+    console.log(`error on requiring aws-exports`, e);
+    config = envConfig;
+  }
 }
 
 export default config;
