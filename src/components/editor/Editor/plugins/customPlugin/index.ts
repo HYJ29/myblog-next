@@ -11,18 +11,21 @@ type Props = {
   editorState: EditorState;
   setEditorState: (ar0: EditorState) => void;
   setIsEditorReadOnly: (arg0: boolean) => void;
+  isPostMode?: boolean;
 };
 
 export const createCustomPlugin = ({
   editorState,
   setEditorState,
   setIsEditorReadOnly,
+  isPostMode,
 }: Props) => {
   const handleKeyCommand = createHandleKeyCommand(setEditorState);
   const blockRendererFn = createBlockRendererFn({
     setIsEditorReadOnly,
     editorState,
     setEditorState,
+    isPostMode,
   });
   const handlePastedFiles = createHandlePastedFiles({
     editorState,

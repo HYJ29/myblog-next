@@ -3,16 +3,12 @@ import React, { useState, useRef, useEffect } from 'react';
 import { EditorState } from 'draft-js';
 import Editor from '@draft-js-plugins/editor';
 import 'draft-js/dist/Draft.css';
-import createLinkifyPlugin from '@draft-js-plugins/linkify';
 import '@draft-js-plugins/linkify/lib/plugin.css';
 
 import { useSidebarPosition, useUpperbarPosition } from '@/hooks';
-import { getConvertedToRawContentState } from '@/utils/draft/convert';
 
 import Sidebar from './Sidebar';
-import Uppperbar from './Upperbar';
 import { createCustomPlugin } from './plugins';
-import compositeDecorator from './plugins/customPlugin/decorators';
 import styles from './style.module.scss';
 import Upperbar from './Upperbar';
 
@@ -54,8 +50,6 @@ export default function EditorComponent({
     editorrRef.current?.focus();
   }, []);
 
-  // const rawContentState = getConvertedToRawContentState({ editorState });
-
   const onClickEditorContainerHandler = () => {
     if (editorrRef && editorrRef.current) {
       editorrRef.current.focus();
@@ -66,6 +60,7 @@ export default function EditorComponent({
     editorState,
     setEditorState,
     setIsEditorReadOnly,
+    isPostMode,
   });
 
   return (
@@ -74,14 +69,6 @@ export default function EditorComponent({
         className={styles.editorContainer}
         onClick={onClickEditorContainerHandler}
       >
-        {/* temp block for dev */}
-        {/* <div
-          style={{
-            display: 'flex',
-            justifyContent: 'space-between',
-            width: 680,
-          }}
-        > */}
         <div>
           <Editor
             editorState={editorState}
@@ -93,10 +80,6 @@ export default function EditorComponent({
             readOnly={isPostMode ? true : isEditorReadOnly}
           />
         </div>
-        {/* <pre style={{ minHeight: '100vh', width: 100 }}>
-            {JSON.stringify(rawContentState, null, 2)}
-          </pre>
-        </div> */}
       </div>
       {!isPostMode && (
         <>

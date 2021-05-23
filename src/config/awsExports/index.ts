@@ -1,5 +1,10 @@
 let config: object = {};
 
+// awsConfig from env variables.
+// It is set on vercel
+// only differences are signin & signout urls
+// it's array of urls on localhost
+// but it's production url on production
 const envConfig = {
   aws_project_region: process.env.NEXT_PUBLIC_AWS_PROJECT_REGION,
   aws_cognito_identity_pool_id:
@@ -26,13 +31,46 @@ const envConfig = {
   aws_user_files_s3_bucket_region:
     process.env.NEXT_PUBLIC_AWS_USER_FILES_S3_BUCKET_REGION,
 };
+const isProduction = process.env.NODE_ENV === 'production';
 
-if (process.env.NODE_ENV === 'production') {
+// const isLocalhost = Boolean(
+//   window.location.hostname === 'localhost' ||
+//     window.location.hostname === '[::1]' ||
+//     window.location.hostname.match(
+//       /^127(?:\.(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)){3}$/
+//     )
+// );
+
+if (isProduction) {
   config = envConfig;
 } else {
-  import('../../aws-exports').then((awsExports) => {
-    config = awsExports;
-  });
+  try {
+    const awsExports = require('../../aws-exports');
+    const awsConfig = awsExports.default;
+    const [
+      localRedirectSignIn,
+      productionRedirectSignIn,
+    ] = awsConfig.oauth.redirectSignIn.split(',');
+
+    const [
+      localRedirectSignOut,
+      productionRedirectSignOut,
+    ] = awsConfig.oauth.redirectSignOut.split(',');
+
+    const updatedConfig = {
+      ...awsConfig,
+      oauth: {
+        ...awsConfig.oauth,
+        redirectSignIn: localRedirectSignIn,
+        redirectSignOut: localRedirectSignOut,
+      },
+    };
+
+    config = updatedConfig;
+  } catch (e) {
+    console.log(`error on requiring aws-exports`, e);
+    config = envConfig;
+  }
 }
 
 export default config;

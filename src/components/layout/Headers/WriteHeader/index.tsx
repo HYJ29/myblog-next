@@ -48,7 +48,6 @@ export default function WriteHeader({ editorState, userId }) {
   });
   const tags = getTagsFromEditorState({ editorState });
   const images = getImagesFromEditorState({ editorState });
-  console.log(`images`, images);
 
   const onPublishHandler = async () => {
     setShowLoadingModal({ text: 'PUBLISHING YOUR POST' });

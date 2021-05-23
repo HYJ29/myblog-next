@@ -31,7 +31,6 @@ export default function AuthPage() {
               provider: CognitoHostedUIIdentityProvider.Google,
               customState: 'signinWithGoogle',
             }).then((cred) => {
-              console.log(`cred`, cred);
             });
           }}
         >

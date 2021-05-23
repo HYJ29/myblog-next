@@ -77,7 +77,6 @@ export default function DraftHeader({ editorState, draftId, userId }) {
       },
     });
 
-    console.log(`deleteDraftRes`, deleteDraftRes);
 
     const draftImagesToDelete =
       deleteDraftRes.data.deleteDraft.draftImages?.items ?? [];

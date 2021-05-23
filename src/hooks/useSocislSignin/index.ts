@@ -34,7 +34,6 @@ export const useSocialSignin = ({ provider }) => {
       // console.log(`user`, user);
       setSigninStatus(Status.databaseSignin);
       const resolved = await databaseSignin();
-      console.log(`resolved`, resolved);
       setSigninStatus(Status.finished);
     } catch (e) {
       console.log(`e`, e);

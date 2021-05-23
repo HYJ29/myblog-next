@@ -16,12 +16,13 @@ import styles from './style.module.scss';
 
 import ControllerItem from '../Items/ControllerItem';
 
-export default function PostHeader({ editorState, owner, post, username }) {
+export default function PostHeader({ editorState, owner, post }) {
   const router = useRouter();
   const [sticky, setSticky] = useState(true);
   const { Modal, setShowModal } = useModal();
   const { LoadingModal, setShowLoadingModal } = useLoadingModal();
 
+  const { authState } = useContext(AuthContext);
   useScrollPosition(
     ({ prevPosition, currentPosition }) => {
       const isShow = currentPosition.y > prevPosition.y;
@@ -34,9 +35,8 @@ export default function PostHeader({ editorState, owner, post, username }) {
 
   const postId = post.id;
 
-  console.log(`post`, post);
 
-  const isUserOwnerOfPost = username === owner;
+  const isUserOwnerOfPost = authState.auth && authState.auth.username === owner;
 
   const onEditHandler = async () => {
     router.push(`/post/edit/${postId}`);

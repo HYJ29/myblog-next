@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { EditorState, convertToRaw } from 'draft-js';
+import { EditorState } from 'draft-js';
 
 export const useSidebarPosition = ({
   editorState,
