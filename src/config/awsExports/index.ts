@@ -56,9 +56,9 @@ if (vercelDeployedUrl) {
   if (
     (process.env.VERCEL_ENV === 'production' ||
       process.env.NEXT_PUBLIC_VERCEL_ENV === 'production') &&
-    process.env.NEXT_PUBLIC_CUSTOM_URL
+    (process.env.NEXT_PUBLIC_CUSTOM_URL || process.env.CUSTOM_URL)
   ) {
-    url = process.env.NEXT_PUBLIC_CUSTOM_URL;
+    url = (process.env.NEXT_PUBLIC_CUSTOM_URL ?? process.env.CUSTOM_URL)!;
   }
   const vercelDeployedFullUrl = 'https://' + url;
   console.log(`url`, url);
