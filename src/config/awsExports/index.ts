@@ -63,28 +63,33 @@ if (vercelDeployedUrl) {
 
   config = updatedConfig;
 } else {
-  const awsExports = require('../../aws-exports');
-  const awsConfig = awsExports.default;
-  const [
-    localRedirectSignIn,
-    productionRedirectSignIn,
-  ] = awsConfig.oauth.redirectSignIn.split(',');
+  let updatedConfig = {};
+  try {
+    const awsExports = require('../../aws-exports');
+    const awsConfig = awsExports.default;
+    const [
+      localRedirectSignIn,
+      productionRedirectSignIn,
+    ] = awsConfig.oauth.redirectSignIn.split(',');
 
-  const [
-    localRedirectSignOut,
-    productionRedirectSignOut,
-  ] = awsConfig.oauth.redirectSignOut.split(',');
+    const [
+      localRedirectSignOut,
+      productionRedirectSignOut,
+    ] = awsConfig.oauth.redirectSignOut.split(',');
 
-  const updatedConfig = {
-    ...awsConfig,
-    oauth: {
-      ...awsConfig.oauth,
-      redirectSignIn: localRedirectSignIn,
-      redirectSignOut: localRedirectSignOut,
-    },
-  };
-
-  config = updatedConfig;
+    updatedConfig = {
+      ...awsConfig,
+      oauth: {
+        ...awsConfig.oauth,
+        redirectSignIn: localRedirectSignIn,
+        redirectSignOut: localRedirectSignOut,
+      },
+    };
+  } catch (e) {
+    console.log(`e`, e);
+  } finally {
+    config = updatedConfig;
+  }
 }
 
 export default config;
