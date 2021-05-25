@@ -49,18 +49,17 @@ const nextPublicVercelUrl = process.env.NEXT_PUBLIC_VERCEL_URL;
 console.log(`vercelUrl`, vercelUrl);
 console.log(`nextPublicVercelUrl`, nextPublicVercelUrl);
 
-const vercelDeployedUrl =
-  'https://' + (vercelUrl ? vercelUrl : nextPublicVercelUrl);
-console.log(`vercelDeployedUrl`, vercelDeployedUrl);
+const vercelDeployedUrl = vercelUrl ? vercelUrl : nextPublicVercelUrl;
 
 if (vercelDeployedUrl) {
+  const vercelDeployedFullUrl = 'https://' + vercelDeployedUrl;
   console.log(`vercelDeployedUrl`, vercelDeployedUrl);
   const updatedConfig = {
     ...envConfig,
     oauth: {
       ...envConfig.oauth,
-      redirectSignIn: vercelDeployedUrl,
-      redirectSignOut: vercelDeployedUrl,
+      redirectSignIn: vercelDeployedFullUrl,
+      redirectSignOut: vercelDeployedFullUrl,
     },
   };
 
