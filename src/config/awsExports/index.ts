@@ -51,6 +51,7 @@ console.log(`nextPublicVercelUrl`, nextPublicVercelUrl);
 
 const vercelDeployedUrl =
   'https://' + vercelUrl ? vercelUrl : nextPublicVercelUrl;
+console.log(`vercelDeployedUrl`, vercelDeployedUrl);
 
 if (vercelDeployedUrl) {
   console.log(`vercelDeployedUrl`, vercelDeployedUrl);
@@ -66,7 +67,7 @@ if (vercelDeployedUrl) {
   config = updatedConfig;
 } else {
   let updatedConfig = {};
-  console.log('came here?');
+
   try {
     const awsExports = require('../../aws-exports');
     const awsConfig = awsExports.default;
