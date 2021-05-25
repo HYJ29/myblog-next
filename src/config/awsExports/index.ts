@@ -49,7 +49,8 @@ const nextPublicVercelUrl = process.env.NEXT_PUBLIC_VERCEL_URL;
 console.log(`vercelUrl`, vercelUrl);
 console.log(`nextPublicVercelUrl`, nextPublicVercelUrl);
 
-const vercelDeployedUrl = vercelUrl ? vercelUrl : nextPublicVercelUrl;
+const vercelDeployedUrl =
+  'https://' + vercelUrl ? vercelUrl : nextPublicVercelUrl;
 
 if (vercelDeployedUrl) {
   const updatedConfig = {
