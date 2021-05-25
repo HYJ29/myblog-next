@@ -52,8 +52,16 @@ console.log(`nextPublicVercelUrl`, nextPublicVercelUrl);
 const vercelDeployedUrl = vercelUrl ? vercelUrl : nextPublicVercelUrl;
 
 if (vercelDeployedUrl) {
-  const vercelDeployedFullUrl = 'https://' + vercelDeployedUrl;
-  console.log(`vercelDeployedUrl`, vercelDeployedUrl);
+  let url = vercelDeployedUrl;
+  if (
+    (process.env.VERCEL_ENV === 'production' ||
+      process.env.NEXT_PUBLIC_VERCEL_ENV === 'production') &&
+    process.env.NEXT_PUBLIC_CUSTOM_URL
+  ) {
+    url = process.env.NEXT_PUBLIC_CUSTOM_URL;
+  }
+  const vercelDeployedFullUrl = 'https://' + url;
+  console.log(`url`, url);
   const updatedConfig = {
     ...envConfig,
     oauth: {
