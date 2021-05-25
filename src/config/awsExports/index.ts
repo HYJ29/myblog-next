@@ -43,7 +43,26 @@ console.log(`process.env.NODE_ENV`, process.env.NODE_ENV);
 //     )
 // );
 
-if (isDevelopment) {
+const vercelUrl = process.env.VERCEL_URL;
+const nextPublicVercelUrl = process.env.NEXT_PUBLIC_VERCEL_URL;
+
+console.log(`vercelUrl`, vercelUrl);
+console.log(`nextPublicVercelUrl`, nextPublicVercelUrl);
+
+const vercelDeployedUrl = vercelUrl ? vercelUrl : nextPublicVercelUrl;
+
+if (vercelDeployedUrl) {
+  const updatedConfig = {
+    ...envConfig,
+    oauth: {
+      ...envConfig.oauth,
+      redirectSignIn: vercelDeployedUrl,
+      redirectSignOut: vercelDeployedUrl,
+    },
+  };
+
+  config = updatedConfig;
+} else {
   const awsExports = require('../../aws-exports');
   const awsConfig = awsExports.default;
   const [
@@ -62,24 +81,6 @@ if (isDevelopment) {
       ...awsConfig.oauth,
       redirectSignIn: localRedirectSignIn,
       redirectSignOut: localRedirectSignOut,
-    },
-  };
-
-  config = updatedConfig;
-} else {
-  const vercelUrl = process.env.VERCEL_URL;
-  const nextPublicVercelUrl = process.env.NEXT_PUBLIC_VERCEL_URL;
-
-  console.log(`vercelUrl`, vercelUrl);
-  console.log(`nextPublicVercelUrl`, nextPublicVercelUrl);
-
-  const vercelDeployedUrl = vercelUrl ? vercelUrl : nextPublicVercelUrl;
-  const updatedConfig = {
-    ...envConfig,
-    oauth: {
-      ...envConfig.oauth,
-      redirectSignIn: vercelDeployedUrl,
-      redirectSignOut: vercelDeployedUrl,
     },
   };
 
