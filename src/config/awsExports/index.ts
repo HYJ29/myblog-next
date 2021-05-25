@@ -50,7 +50,7 @@ console.log(`vercelUrl`, vercelUrl);
 console.log(`nextPublicVercelUrl`, nextPublicVercelUrl);
 
 const vercelDeployedUrl =
-  'https://' + vercelUrl ? vercelUrl : nextPublicVercelUrl;
+  'https://' + (vercelUrl ? vercelUrl : nextPublicVercelUrl);
 console.log(`vercelDeployedUrl`, vercelDeployedUrl);
 
 if (vercelDeployedUrl) {
