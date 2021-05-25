@@ -60,7 +60,7 @@ if (vercelDeployedUrl) {
   ) {
     url = (process.env.NEXT_PUBLIC_CUSTOM_URL ?? process.env.CUSTOM_URL)!;
   }
-  const vercelDeployedFullUrl = 'https://' + url;
+  const vercelDeployedFullUrl = 'https://' + url + '/';
   console.log(`url`, url);
   const updatedConfig = {
     ...envConfig,
