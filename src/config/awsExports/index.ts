@@ -31,7 +31,9 @@ const envConfig = {
   aws_user_files_s3_bucket_region:
     process.env.NEXT_PUBLIC_AWS_USER_FILES_S3_BUCKET_REGION,
 };
-const isProduction = process.env.NODE_ENV === 'production';
+const isDevelopment = process.env.NODE_ENV === 'development';
+
+console.log(`process.env.NODE_ENV`, process.env.NODE_ENV);
 
 // const isLocalhost = Boolean(
 //   window.location.hostname === 'localhost' ||
@@ -41,36 +43,47 @@ const isProduction = process.env.NODE_ENV === 'production';
 //     )
 // );
 
-if (isProduction) {
-  config = envConfig;
+if (isDevelopment) {
+  const awsExports = require('../../aws-exports');
+  const awsConfig = awsExports.default;
+  const [
+    localRedirectSignIn,
+    productionRedirectSignIn,
+  ] = awsConfig.oauth.redirectSignIn.split(',');
+
+  const [
+    localRedirectSignOut,
+    productionRedirectSignOut,
+  ] = awsConfig.oauth.redirectSignOut.split(',');
+
+  const updatedConfig = {
+    ...awsConfig,
+    oauth: {
+      ...awsConfig.oauth,
+      redirectSignIn: localRedirectSignIn,
+      redirectSignOut: localRedirectSignOut,
+    },
+  };
+
+  config = updatedConfig;
 } else {
-  try {
-    const awsExports = require('../../aws-exports');
-    const awsConfig = awsExports.default;
-    const [
-      localRedirectSignIn,
-      productionRedirectSignIn,
-    ] = awsConfig.oauth.redirectSignIn.split(',');
+  const vercelUrl = process.env.VERCEL_URL;
+  const nextPublicVercelUrl = process.env.NEXT_PUBLIC_VERCEL_URL;
 
-    const [
-      localRedirectSignOut,
-      productionRedirectSignOut,
-    ] = awsConfig.oauth.redirectSignOut.split(',');
+  console.log(`vercelUrl`, vercelUrl);
+  console.log(`nextPublicVercelUrl`, nextPublicVercelUrl);
 
-    const updatedConfig = {
-      ...awsConfig,
-      oauth: {
-        ...awsConfig.oauth,
-        redirectSignIn: localRedirectSignIn,
-        redirectSignOut: localRedirectSignOut,
-      },
-    };
+  const vercelDeployedUrl = vercelUrl ? vercelUrl : nextPublicVercelUrl;
+  const updatedConfig = {
+    ...envConfig,
+    oauth: {
+      ...envConfig.oauth,
+      redirectSignIn: vercelDeployedUrl,
+      redirectSignOut: vercelDeployedUrl,
+    },
+  };
 
-    config = updatedConfig;
-  } catch (e) {
-    console.log(`error on requiring aws-exports`, e);
-    config = envConfig;
-  }
+  config = updatedConfig;
 }
 
 export default config;

@@ -6,7 +6,7 @@ export const getAllTags = async () => {
   const tagRes = await API.graphql({
     query: tagByTagName,
     variables: { baseType: 'Tag', sortDirection: 'ASC' },
-    authMode: GRAPHQL_AUTH_MODE.API_KEY,
+    authMode: GRAPHQL_AUTH_MODE.AWS_IAM,
   });
 
   const tags = tagRes.data.tagByTagName.items;

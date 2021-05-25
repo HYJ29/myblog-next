@@ -3,7 +3,7 @@ type User
   @auth(
     rules: [
       { allow: owner }
-      { allow: public, operations: [read] }
+      { allow: public, operations: [read], provider: iam }
       { allow: private, operations: [read] }
     ]
   )
@@ -28,7 +28,7 @@ type Post
   @auth(
     rules: [
       { allow: owner }
-      { allow: public, operations: [read] }
+      { allow: public, operations: [read], provider: iam }
       { allow: private, operations: [read] }
     ]
   )
@@ -71,7 +71,7 @@ type PostTag
   @auth(
     rules: [
       { allow: owner }
-      { allow: public, operations: [read] }
+      { allow: public, operations: [read], provider: iam }
       { allow: private, operations: [read] }
     ]
   )
@@ -96,7 +96,7 @@ type Tag
   @auth(
     rules: [
       { allow: owner }
-      { allow: public, operations: [read] }
+      { allow: public, operations: [read], provider: iam }
       { allow: private, operations: [read] }
     ]
   )
@@ -116,7 +116,7 @@ type PostImage
   @auth(
     rules: [
       { allow: owner }
-      { allow: public, operations: [read] }
+      { allow: public, operations: [read], provider: iam }
       { allow: private, operations: [read] }
     ]
   )
@@ -160,7 +160,7 @@ type Image
   @auth(
     rules: [
       { allow: owner }
-      { allow: public, operations: [read] }
+      { allow: public, operations: [read], provider: iam }
       { allow: private, operations: [read] }
     ]
   )
