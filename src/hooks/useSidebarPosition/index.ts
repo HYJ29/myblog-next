@@ -33,8 +33,14 @@ export const useSidebarPosition = ({
     const anchorNode = windowSelection?.anchorNode;
 
     // If  threre are no text and just 'span' ELEMENT_NODE exists -> set the span element top, left position and show sidebar
-    if (anchorNode && anchorNode.ELEMENT_NODE && anchorNode.attributes) {
-      const dataOffsetKey = anchorNode.attributes['data-offset-key']?.value;
+    if (
+      anchorNode &&
+      anchorNode instanceof HTMLElement &&
+      anchorNode.attributes
+    ) {
+      const dataOffsetKey = (anchorNode.attributes as { [key: string]: any })[
+        'data-offset-key'
+      ]?.value;
       // Find the most parent node with same data-offset-key
       const blockNode = document.querySelector(
         `[data-offset-key="${dataOffsetKey}"]`

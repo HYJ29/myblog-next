@@ -24,8 +24,11 @@
               "authenticationType": "API_KEY",
               "apiKeyConfig": {
                 "apiKeyExpirationDays": 7,
-                "description": "pnuu api key"
+                "description": "blognext api key"
               }
+            },
+            {
+              "authenticationType": "AWS_IAM"
             }
           ]
         }

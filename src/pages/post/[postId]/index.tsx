@@ -33,11 +33,15 @@ export const getServerSideProps: GetServerSideProps = async ({
 }) => {
   const { API } = withSSRContext({ req });
   const { postId } = query;
-  const res = await API.graphql({
-    query: getPost,
-    variables: { id: postId },
-    authMode: GRAPHQL_AUTH_MODE.API_KEY,
-  });
-  const post = res.data.getPost;
-  return { props: { post } };
+  try {
+    const res = await API.graphql({
+      query: getPost,
+      variables: { id: postId },
+      authMode: GRAPHQL_AUTH_MODE.AWS_IAM,
+    });
+    const post = res.data.getPost;
+    return { props: { post } };
+  } catch (e) {
+    console.log(`e`, e);
+  }
 };

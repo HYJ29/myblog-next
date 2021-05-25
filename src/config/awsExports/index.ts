@@ -31,7 +31,9 @@ const envConfig = {
   aws_user_files_s3_bucket_region:
     process.env.NEXT_PUBLIC_AWS_USER_FILES_S3_BUCKET_REGION,
 };
-const isProduction = process.env.NODE_ENV === 'production';
+const isDevelopment = process.env.NODE_ENV === 'development';
+
+console.log(`process.env.NODE_ENV`, process.env.NODE_ENV);
 
 // const isLocalhost = Boolean(
 //   window.location.hostname === 'localhost' ||
@@ -41,9 +43,31 @@ const isProduction = process.env.NODE_ENV === 'production';
 //     )
 // );
 
-if (isProduction) {
-  config = envConfig;
+const vercelUrl = process.env.VERCEL_URL;
+const nextPublicVercelUrl = process.env.NEXT_PUBLIC_VERCEL_URL;
+
+console.log(`vercelUrl`, vercelUrl);
+console.log(`nextPublicVercelUrl`, nextPublicVercelUrl);
+
+const vercelDeployedUrl =
+  'https://' + (vercelUrl ? vercelUrl : nextPublicVercelUrl);
+console.log(`vercelDeployedUrl`, vercelDeployedUrl);
+
+if (vercelDeployedUrl) {
+  console.log(`vercelDeployedUrl`, vercelDeployedUrl);
+  const updatedConfig = {
+    ...envConfig,
+    oauth: {
+      ...envConfig.oauth,
+      redirectSignIn: vercelDeployedUrl,
+      redirectSignOut: vercelDeployedUrl,
+    },
+  };
+
+  config = updatedConfig;
 } else {
+  let updatedConfig = {};
+
   try {
     const awsExports = require('../../aws-exports');
     const awsConfig = awsExports.default;
@@ -57,7 +81,7 @@ if (isProduction) {
       productionRedirectSignOut,
     ] = awsConfig.oauth.redirectSignOut.split(',');
 
-    const updatedConfig = {
+    updatedConfig = {
       ...awsConfig,
       oauth: {
         ...awsConfig.oauth,
@@ -65,11 +89,10 @@ if (isProduction) {
         redirectSignOut: localRedirectSignOut,
       },
     };
-
-    config = updatedConfig;
   } catch (e) {
-    console.log(`error on requiring aws-exports`, e);
-    config = envConfig;
+    console.log(`e`, e);
+  } finally {
+    config = updatedConfig;
   }
 }
 

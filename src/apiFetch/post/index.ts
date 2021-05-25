@@ -10,10 +10,12 @@ export const getAllPosts = async () => {
       baseType: 'Post',
       sortDirection: ModelSortDirection.DESC,
     },
-    authMode: GRAPHQL_AUTH_MODE.API_KEY,
+    authMode: GRAPHQL_AUTH_MODE.AWS_IAM,
   });
 
   const posts = postRes.data.postByCreatedAt.items;
+
+  console.log(`posts`, posts);
 
   return posts;
 };
