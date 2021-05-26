@@ -113,7 +113,7 @@ function MyApp({ Component, pageProps }: AppProps) {
           <meta property="og:title" content="LOG" key="title" />
           <meta property="og:type" content="site" />
           <meta
-            property="og:descriptoin"
+            property="og:description"
             content="블로그하기 위해서 만든 개발 블로그 입니다."
           />
           <meta

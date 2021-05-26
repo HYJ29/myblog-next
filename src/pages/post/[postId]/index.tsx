@@ -21,7 +21,7 @@ export default function PostDetailPage({ post }) {
         <title>{title}</title>
         <meta name="description" content={subTitle} />
         <meta property="og:title" content={title} key="title" />
-        <meta property="og:descriptoin" content={subTitle} />
+        <meta property="og:description" content={subTitle} />
         <meta property="og:type" content="article" />
         <meta property="og:image" content={titlePhoto} />
       </Head>
