@@ -122,6 +122,19 @@ function MyApp({ Component, pageProps }: AppProps) {
               'https://mynextblog.s3.ap-northeast-2.amazonaws.com/default_cover_image.png'
             }
           />
+          <meta
+            property="twitter:title"
+            content={'블로그하기 위해서 만든 개발 블로그 입니다.'}
+          />
+          <meta
+            property="twitter:description"
+            content={'블로그하기 위해서 만든 개발 블로그 입니다.'}
+          />
+          <meta property="twitter:card" content="summary_large_image" />
+          <meta
+            property="twitter:image"
+            content="https://mynextblog.s3.ap-northeast-2.amazonaws.com/default_cover_image.png"
+          />
           <link rel="icon" href="/favicon.ico" />
           <link
             rel="preload"

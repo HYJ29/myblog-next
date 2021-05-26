@@ -21,9 +21,13 @@ export default function PostDetailPage({ post }) {
         <title>{title}</title>
         <meta name="description" content={subTitle} />
         <meta property="og:title" content={title} key="title" />
-        <meta property="og:description" content={subTitle} />
+        <meta property="og:description" content={subTitle} data-rh="true" />
         <meta property="og:type" content="article" />
         <meta property="og:image" content={titlePhoto} />
+        <meta property="twitter:title" content={title} />
+        <meta property="twitter:description" content={subTitle} />
+        <meta property="twitter:card" content="summary_large_image" />
+        <meta property="twitter:image" content={titlePhoto} />
       </Head>
       <PostLayout
         Editor={Editor}
