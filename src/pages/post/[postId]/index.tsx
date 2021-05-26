@@ -1,6 +1,7 @@
 import React from 'react';
 import { useRouter } from 'next/router';
 import { GetServerSideProps } from 'next';
+import Head from 'next/head';
 import { withSSRContext } from 'aws-amplify';
 import { GRAPHQL_AUTH_MODE } from '@aws-amplify/api';
 
@@ -15,15 +16,29 @@ export default function PostDetailPage({ post }) {
   const { rawContentState, titlePhoto, title, subTitle, owner, id } = post;
 
   return (
-    <PostLayout
-      Editor={Editor}
-      rawContentState={rawContentState}
-      titlePhoto={titlePhoto}
-      title={title}
-      subTitle={subTitle}
-      owner={owner}
-      post={post}
-    />
+    <>
+      <Head>
+        <title>{title}</title>
+        <meta name="description" content={subTitle} />
+        <meta property="og:title" content={title} key="title" />
+        <meta property="og:description" content={subTitle} data-rh="true" />
+        <meta property="og:type" content="article" />
+        <meta property="og:image" content={titlePhoto} />
+        <meta property="twitter:title" content={title} />
+        <meta property="twitter:description" content={subTitle} />
+        <meta property="twitter:card" content="summary_large_image" />
+        <meta property="twitter:image" content={titlePhoto} />
+      </Head>
+      <PostLayout
+        Editor={Editor}
+        rawContentState={rawContentState}
+        titlePhoto={titlePhoto}
+        title={title}
+        subTitle={subTitle}
+        owner={owner}
+        post={post}
+      />
+    </>
   );
 }
 
