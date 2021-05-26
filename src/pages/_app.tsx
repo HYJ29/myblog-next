@@ -113,6 +113,10 @@ function MyApp({ Component, pageProps }: AppProps) {
           <meta property="og:title" content="LOG" key="title" />
           <meta property="og:type" content="site" />
           <meta
+            property="og:descriptoin"
+            content="블로그하기 위해서 만든 개발 블로그 입니다."
+          />
+          <meta
             property="og:image"
             content={
               'https://mynextblog.s3.ap-northeast-2.amazonaws.com/default_cover_image.png'
