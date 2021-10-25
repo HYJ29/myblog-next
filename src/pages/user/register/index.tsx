@@ -1,5 +1,5 @@
-import React, { useRef } from 'react';
-import { withSSRContext, API } from 'aws-amplify';
+import React, { useRef, useEffect, useState } from 'react';
+import { withSSRContext, API, Auth } from 'aws-amplify';
 import { useRouter } from 'next/router';
 
 import { DefaultLayout } from '@/components/layout';
@@ -12,9 +12,28 @@ import styles from './style.module.scss';
 import { GetServerSideProps } from 'next';
 import { userByProviderKey } from '@/graphql/queries';
 
-export default function RegisterPage({ username }) {
+export default function RegisterPage() {
   const router = useRouter();
   const nameInputRef = useRef();
+
+  const [username, setUsername] = useState(null);
+
+  useEffect(() => {
+    (async () => {
+      const cognitoUser = await Auth.currentAuthenticatedUser();
+      const providerKey = cognitoUser.username;
+      const userOfProviderKey = await API.graphql({
+        query: userByProviderKey,
+        variables: { providerKey },
+      });
+      const dbUser = userOfProviderKey.data.userByProviderKey.items[0] ?? null;
+      if (dbUser) {
+        router.push('/');
+      } else {
+        setUsername(providerKey);
+      }
+    })();
+  }, []);
 
   const onSubmitHandler = async () => {
     const registerInfo = {
@@ -46,24 +65,24 @@ export default function RegisterPage({ username }) {
   );
 }
 
-export const getServerSideProps = async ({ req, res }) => {
-  const { Auth, API } = withSSRContext({ req });
-  try {
-    const cognitoUser = await Auth.currentAuthenticatedUser();
-    const providerKey = cognitoUser.username;
-    const userOfProviderKey = await API.graphql({
-      query: userByProviderKey,
-      variables: { providerKey },
-    });
-    const dbUser = userOfProviderKey.data.userByProviderKey.items[0] ?? null;
-    if (dbUser) {
-      res.writeHead(302, { Location: '/' });
-      res.end();
-    } else {
-      return { props: { username: providerKey } };
-    }
-  } catch {
-    res.writeHead(302, { Location: '/auth' });
-    res.end();
-  }
-};
+// export const getServerSideProps = async ({ req, res }) => {
+//   const { Auth, API } = withSSRContext({ req });
+//   try {
+//     const cognitoUser = await Auth.currentAuthenticatedUser();
+//     const providerKey = cognitoUser.username;
+//     const userOfProviderKey = await API.graphql({
+//       query: userByProviderKey,
+//       variables: { providerKey },
+//     });
+//     const dbUser = userOfProviderKey.data.userByProviderKey.items[0] ?? null;
+//     if (dbUser) {
+//       res.writeHead(302, { Location: '/' });
+//       res.end();
+//     } else {
+//       return { props: { username: providerKey } };
+//     }
+//   } catch {
+//     res.writeHead(302, { Location: '/auth' });
+//     res.end();
+//   }
+// };

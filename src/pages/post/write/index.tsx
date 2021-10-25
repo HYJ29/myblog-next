@@ -9,18 +9,18 @@ export default function PostWritePage() {
   return <WriteLayout Editor={Editor} />;
 }
 
-export async function getServerSideProps({ req, res }) {
-  const { Auth, API } = withSSRContext({ req });
+// export async function getServerSideProps({ req, res }) {
+//   const { Auth, API } = withSSRContext({ req });
 
-  try {
-    const cognitoUser = await Auth.currentAuthenticatedUser();
+//   try {
+//     const cognitoUser = await Auth.currentAuthenticatedUser();
 
-    return {
-      props: {},
-    };
-  } catch (e) {
-    console.log(`Error on Profile serverSide `, e);
-    res.writeHead(302, { Location: '/auth' });
-    res.end();
-  }
-}
+//     return {
+//       props: {},
+//     };
+//   } catch (e) {
+//     console.log(`Error on Profile serverSide `, e);
+//     res.writeHead(302, { Location: '/auth' });
+//     res.end();
+//   }
+// }

@@ -34,12 +34,12 @@ export default function PostHeader({ editorState, owner, post }) {
   );
 
   const postId = post.id;
-
+  const userId = post.userId;
 
   const isUserOwnerOfPost = authState.auth && authState.auth.username === owner;
 
   const onEditHandler = async () => {
-    router.push(`/post/edit/${postId}`);
+    router.push(`/post/edit/${userId}/${postId}`);
   };
 
   const onDeleteHandler = async () => {

@@ -30,8 +30,7 @@ export default function AuthPage() {
             Auth.federatedSignIn({
               provider: CognitoHostedUIIdentityProvider.Google,
               customState: 'signinWithGoogle',
-            }).then((cred) => {
-            });
+            }).then((cred) => {});
           }}
         >
           login with google
@@ -42,17 +41,17 @@ export default function AuthPage() {
   );
 }
 
-export async function getServerSideProps({ req, res }) {
-  const { Auth } = withSSRContext({ req });
-  try {
-    const user = await Auth.currentAuthenticatedUser();
-    res.writeHead(302, { Location: '/profile' });
-    res.end();
-  } catch (e) {
-    return {
-      props: {
-        authenticated: false,
-      },
-    };
-  }
-}
+// export async function getServerSideProps({ req, res }) {
+//   const { Auth } = withSSRContext({ req });
+//   try {
+//     const user = await Auth.currentAuthenticatedUser();
+//     res.writeHead(302, { Location: '/profile' });
+//     res.end();
+//   } catch (e) {
+//     return {
+//       props: {
+//         authenticated: false,
+//       },
+//     };
+//   }
+// }

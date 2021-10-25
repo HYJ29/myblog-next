@@ -33,7 +33,7 @@ const envConfig = {
 };
 const isDevelopment = process.env.NODE_ENV === 'development';
 
-console.log(`process.env.NODE_ENV`, process.env.NODE_ENV);
+// console.log(`process.env.NODE_ENV`, process.env.NODE_ENV);
 
 // const isLocalhost = Boolean(
 //   window.location.hostname === 'localhost' ||
@@ -46,8 +46,8 @@ console.log(`process.env.NODE_ENV`, process.env.NODE_ENV);
 const vercelUrl = process.env.VERCEL_URL;
 const nextPublicVercelUrl = process.env.NEXT_PUBLIC_VERCEL_URL;
 
-console.log(`vercelUrl`, vercelUrl);
-console.log(`nextPublicVercelUrl`, nextPublicVercelUrl);
+// console.log(`vercelUrl`, vercelUrl);
+// console.log(`nextPublicVercelUrl`, nextPublicVercelUrl);
 
 const vercelDeployedUrl = vercelUrl ? vercelUrl : nextPublicVercelUrl;
 

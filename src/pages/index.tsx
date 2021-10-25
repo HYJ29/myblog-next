@@ -86,7 +86,7 @@ export default function HomePage({}: Props): JSX.Element {
             {posts.map((post) => (
               <Card
                 key={post.id}
-                linkTo={`/post/${post.id}`}
+                linkTo={`/post/${post.userId}/${post.id}`}
                 titlePhoto={post.titlePhoto}
                 title={post.title}
                 subTitle={post.subTitle}
