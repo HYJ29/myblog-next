@@ -101,7 +101,7 @@ export default function Upperbar({
     },
     {
       title: 'Title',
-      icon: '/icons/upperbar/Title.svg',
+      icon: '/icons/upperbar/title.svg',
       onClick: () => {
         const newEditorState = RichUtils.toggleBlockType(
           editorState,

@@ -98,7 +98,7 @@ export default function Profile() {
               <div className={styles.draftItem}>
                 <Card
                   key={draft.id}
-                  linkTo={`/draft/${draft.id}`}
+                  linkTo={`/draft/${draft.userId}/${draft.id}`}
                   titlePhoto={draft.titlePhoto}
                   title={draft.title}
                   subTitle={draft.subTitle}

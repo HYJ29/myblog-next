@@ -1,6 +1,7 @@
 import React from 'react';
 import { format, isThisYear } from 'date-fns';
 import Link from 'next/link';
+import Image from 'next/image';
 
 import styles from './style.module.scss';
 
