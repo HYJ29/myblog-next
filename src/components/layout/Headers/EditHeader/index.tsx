@@ -108,7 +108,7 @@ export default function EditHeader({ editorState, postId, userId }) {
           onClick={async () => {
             setShowModal(false);
             const postId = await onEditHandler();
-            router.push(`/post/${postId}`);
+            router.push(`/post/${userId}/${postId}`);
           }}
         >
           Publish Again

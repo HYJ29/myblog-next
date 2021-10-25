@@ -162,7 +162,7 @@ export default function DraftHeader({ editorState, draftId, userId }) {
           onClick={async () => {
             setShowModal(false);
             const postId = await onPublishHandler();
-            router.push(`/post/${postId}`);
+            router.push(`/post/${userId}/${postId}`);
           }}
         >
           Publish
@@ -187,7 +187,7 @@ export default function DraftHeader({ editorState, draftId, userId }) {
           text="Save"
           onClick={async () => {
             const draftId = await onSaveHandler();
-            router.push(`/draft/${draftId}`);
+            router.push(`/draft/${userId}/${draftId}`);
           }}
         />
         <ControllerItem
