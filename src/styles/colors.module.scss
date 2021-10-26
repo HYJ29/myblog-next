@@ -90,3 +90,7 @@ $color-basic-transparent-300: rgba(199, 196, 185, 0.24);
 $color-basic-transparent-400: rgba(199, 196, 185, 0.32);
 $color-basic-transparent-500: rgba(199, 196, 185, 0.4);
 $color-basic-transparent-600: rgba(199, 196, 185, 0.48);
+
+:export {
+  colorPrimary500: $color-primary-500;
+}
