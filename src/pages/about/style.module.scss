@@ -1,5 +1,37 @@
-.container {
+@import 'colors.module';
+@import 'layout';
+
+.sectionContainer {
+  @include col();
+  height: 100vh;
+  justify-content: center;
+  align-items: center;
+
+  h3 {
+    color: white;
+  }
 }
 
+.sectionContainer_1 {
+  @extend .sectionContainer;
+  background-color: $color-primary-200;
+}
+.sectionContainer_2 {
+  @extend .sectionContainer;
+  background-color: $color-primary-300;
+}
+.sectionContainer_3 {
+  @extend .sectionContainer;
+  background-color: $color-primary-400;
+}
+.profileImageContainer {
+  width: 300px;
+  height: 200px;
+  position: relative;
+}
+
+.profileImage {
+  border-radius: 1rem;
+}
 .postListContainer {
 }

@@ -1,4 +1,4 @@
-@import 'colors';
+@import 'colors.module';
 
 @font-face {
   font-family: 'Pacifico';
@@ -44,4 +44,12 @@ a {
 button {
   border: none;
   outline: none;
+}
+
+h3 {
+  font-size: 32px;
+}
+
+h4 {
+  font-size: 22px;
 }

@@ -1,4 +1,4 @@
-@import 'colors';
+@import 'colors.module';
 @import 'layout';
 .container {
   @include row();

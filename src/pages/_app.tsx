@@ -9,6 +9,7 @@ import Amplify, { API, Storage, Auth, Hub, withSSRContext } from 'aws-amplify';
 import { userByProviderKey } from '@/graphql/queries';
 import { awsExports } from '@/config';
 
+import './reset.scss';
 import './globals.scss';
 
 Amplify.configure({

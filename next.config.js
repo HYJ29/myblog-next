@@ -22,5 +22,27 @@ module.exports = (phase, { defaultConfig }) => {
     ignoreBuildErrors: true,
   };
 
-  return { ...defaultConfig, sassOptions, typescript };
+  // webpack
+  const webpack = (
+    config,
+    { buildId, dev, isServer, defaultLoaders, webpack }
+  ) => {
+    const modifiedConfig = {
+      ...config,
+      module: {
+        rules: [
+          ...config.module.rules,
+          {
+            test: /\.svg$/,
+            use: ['@svgr/webpack'],
+          },
+        ],
+      },
+    };
+
+    // Important: return the modified config
+    return modifiedConfig;
+  };
+
+  return { ...defaultConfig, sassOptions, typescript, webpack };
 };
