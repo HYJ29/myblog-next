@@ -29,10 +29,14 @@ export default function Card({
     <Link href={linkTo}>
       <div className={styles.container}>
         <div className={styles.imageContainer}>
-          <img
-            className={styles.image}
-            src={titlePhoto ?? '/images/default_cover_image.svg'}
-          />
+          <div className={styles.image}>
+            <Image
+              layout="fill"
+              objectFit="cover"
+              src={titlePhoto ?? '/images/default_cover_image.svg'}
+              className={styles.image}
+            />
+          </div>
         </div>
         <div className={styles.contentContainer}>
           <h2 className={styles.title}>{title}</h2>

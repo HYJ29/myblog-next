@@ -1,4 +1,19 @@
-.image {
+@import 'layout';
+
+.imageContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
   width: 100%;
-  height: auto;
+}
+
+.image {
+  position: relative;
+  width: 300px;
+  height: 300px;
+
+  @include breakpoint('desktop') {
+    width: 500px;
+    height: 500px;
+  }
 }

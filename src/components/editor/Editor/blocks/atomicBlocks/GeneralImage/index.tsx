@@ -1,22 +1,27 @@
 import React, { useEffect, useState } from 'react';
+import Image from 'next/image';
+
+import BeatLoader from 'react-spinners/BeatLoader';
+
+import colors from '@/styles/colors.module.scss';
 
 import styles from './style.module.scss';
 
 export default function GeneralImage({ imageUrl }) {
-  // const reader = new FileReader();
-  // reader.onload = (e) => {
-  //   if (e.target?.result) {
-  //     setImageUrl(e.target.result);
-  //   }
-  // };
-  // // console.log(`selectedFile`, selectedFile);
-  // // console.log(`imageUrl`, imageUrl);
-  // reader.readAsDataURL(selectedFile);
   return imageUrl ? (
-    <div>
-      <img className={styles.image} src={imageUrl} alt="local image" />
+    <div className={styles.imageContainer}>
+      <div className={styles.image}>
+        <Image
+          layout="fill"
+          objectFit="contain"
+          src={imageUrl}
+          alt="local image"
+        />
+      </div>
     </div>
   ) : (
-    <div>loading...</div>
+    <div className={styles.imageContainer}>
+      <BeatLoader color={colors.colorPrimary500} />
+    </div>
   );
 }

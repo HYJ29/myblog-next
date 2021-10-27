@@ -1,8 +1,20 @@
 @import 'colors.module';
+@import 'layout';
+
+.unsplashImageContainer {
+  @include col();
+  align-items: center;
+}
 
 .unsplashImage {
-  width: 100%;
-  height: auto;
+  position: relative;
+  width: 300px;
+  height: 300px;
+
+  @include breakpoint('desktop') {
+    width: 500px;
+    height: 500px;
+  }
 }
 
 .captionContainer {

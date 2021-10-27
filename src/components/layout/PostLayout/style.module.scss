@@ -28,4 +28,8 @@
   position: fixed;
   right: 30px;
   top: 150px;
+
+  @include breakpoint('desktop') {
+    display: none;
+  }
 }

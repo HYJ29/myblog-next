@@ -29,7 +29,7 @@ export default function AboutPage() {
           <h3>I love being service developer.</h3>
           <h3>Who can deploy awesome ideas to the world.</h3>
           <h3>I love to join project with mind of owner.</h3>
-          <h3>I love riding bycicles around 'Han' river.</h3>
+          <h3>I love riding bicycle around 'Han' river.</h3>
           <h3>I love running in the morning with music on my aftershock.</h3>
         </Fade>
       </section>
