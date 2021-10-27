@@ -8,12 +8,16 @@ import API, { GRAPHQL_AUTH_MODE } from '@aws-amplify/api';
 import { getPostById } from '@/data';
 import { Editor } from '@/components/editor';
 import { PostLayout } from '@/components/layout';
+import { Loader } from '@/components/loading';
 import * as queries from '@/graphql/queries';
-
-import styles from './style.module.scss';
 
 export default function PostDetailPage({ post }) {
   const { rawContentState, titlePhoto, title, subTitle, owner, id } = post;
+
+  const router = useRouter();
+  if (router.isFallback) {
+    return <Loader />;
+  }
 
   return (
     <>
@@ -53,11 +57,11 @@ export const getStaticPaths: GetStaticPaths = async () => {
       params: { postId: post.id, userId: post.userId },
     }));
 
-    return { paths, fallback: false };
+    return { paths, fallback: true };
   } catch (e) {
     console.log(`e`, e);
 
-    return { paths: [], fallback: false };
+    return { paths: [], fallback: true };
   }
 };
 

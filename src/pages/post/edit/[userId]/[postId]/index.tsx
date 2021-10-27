@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from 'react';
+import { useRouter } from 'next/router';
+
 import { Editor } from '@/components/editor';
 import { EditLayout } from '@/components/layout';
+import { Loader } from '@/components';
 import { GetServerSideProps, GetStaticProps, GetStaticPaths } from 'next';
 import { withSSRContext, API } from 'aws-amplify';
 import { GRAPHQL_AUTH_MODE } from '@aws-amplify/api';
@@ -10,6 +13,12 @@ import * as queries from '@/graphql/queries';
 export default function PostEditPage({ post }) {
   // TODO : local storage 에 editorState 있으면 hydrate 하기
   const { rawContentState, id } = post;
+
+  const router = useRouter();
+  if (router.isFallback) {
+    return <Loader />;
+  }
+
   return (
     <EditLayout Editor={Editor} rawContentState={rawContentState} postId={id} />
   );
@@ -26,11 +35,11 @@ export const getStaticPaths: GetStaticPaths = async () => {
       params: { postId: post.id, userId: post.userId },
     }));
 
-    return { paths, fallback: false };
+    return { paths, fallback: true };
   } catch (e) {
     console.log(`e`, e);
 
-    return { paths: [], fallback: false };
+    return { paths: [], fallback: true };
   }
 };
 

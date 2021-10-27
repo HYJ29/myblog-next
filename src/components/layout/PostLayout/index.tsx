@@ -23,19 +23,11 @@ type Props = {
 export default function PostLayout({
   Editor,
   rawContentState,
-
   owner,
   post,
 }: Props): JSX.Element {
   const parsedEditorState = parseEditorState(rawContentState);
   const [editorState, setEditorState] = useState(parsedEditorState);
-  const [isDesktop, setIsDeskTop] = useState(false);
-
-  useEffect(() => {
-    if (window.innerWidth > 800) {
-      setIsDeskTop(true);
-    }
-  }, []);
 
   const subjectBlocks = getSubjectsFromEditorState({ editorState });
   return (
@@ -51,11 +43,9 @@ export default function PostLayout({
           isPostMode={true}
         />
       </div>
-      {isDesktop && (
-        <div className={styles.subjectListContainer}>
-          <SubjectList subjectBlocks={subjectBlocks} />
-        </div>
-      )}
+      <div className={styles.subjectListContainer}>
+        <SubjectList subjectBlocks={subjectBlocks} />
+      </div>
     </div>
   );
 }
