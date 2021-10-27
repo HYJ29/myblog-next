@@ -1,4 +1,5 @@
 import React from 'react';
+import Image from 'next/image';
 
 import { UnsplashImageInfo } from '@/types';
 
@@ -11,11 +12,16 @@ export default function UnsplashImage({ unsplashImageInfo }: Props) {
   const { regularImageSrc, userName, userProfileLink } = unsplashImageInfo;
   return (
     <div>
-      <img
-        src={regularImageSrc}
-        alt="Unsplash Image"
-        className={styles.unsplashImage}
-      />
+      <div className={styles.unsplashImageContainer}>
+        <div className={styles.unsplashImage}>
+          <Image
+            src={regularImageSrc}
+            alt="Unsplash Image"
+            layout="fill"
+            objectFit="contain"
+          />
+        </div>
+      </div>
       <div className={styles.captionContainer}>
         <span className={styles.captionText}>Photo by </span>
         <a

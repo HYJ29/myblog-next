@@ -1,5 +1,6 @@
 import React from 'react';
 import { ContentState, ContentBlock, EditorState } from 'draft-js';
+import Image from 'next/image'
 
 import UnSplash from './UnSplash';
 import GeneralImage from './GeneralImage';

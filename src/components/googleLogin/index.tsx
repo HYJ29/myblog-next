@@ -1,5 +1,7 @@
 import React, { useEffect } from 'react';
 import { Auth } from 'aws-amplify';
+
+import styles from './styles.module.scss';
 // To federated sign in from Google
 const SignInWithGoogle = () => {
   useEffect(() => {
@@ -63,8 +65,8 @@ const SignInWithGoogle = () => {
   };
 
   return (
-    <div style={{ width: 400, height: 400 }}>
-      <button style={{ width: 400, height: 400 }} onClick={signIn}>
+    <div className={styles.googleLoginButton}>
+      <button className={styles.googleLoginButton} onClick={signIn}>
         Sign in with Google
       </button>
     </div>

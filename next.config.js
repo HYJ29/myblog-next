@@ -44,5 +44,15 @@ module.exports = (phase, { defaultConfig }) => {
     return modifiedConfig;
   };
 
-  return { ...defaultConfig, sassOptions, typescript, webpack };
+  //images
+  const images = {
+    domains: [
+      'myblognextstorage84942-develop.s3.ap-northeast-2.amazonaws.com',
+      'myblognextstorage84942-staged.s3.ap-northeast-2.amazonaws.com',
+      'myblognextstorage84942-main.s3.ap-northeast-2.amazonaws.com',
+      'images.unsplash.com',
+    ],
+  };
+
+  return { ...defaultConfig, sassOptions, typescript, webpack, images };
 };
