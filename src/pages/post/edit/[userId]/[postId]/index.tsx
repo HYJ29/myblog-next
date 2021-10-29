@@ -11,13 +11,12 @@ import { GRAPHQL_AUTH_MODE } from '@aws-amplify/api';
 import * as queries from '@/graphql/queries';
 
 export default function PostEditPage({ post }) {
-  // TODO : local storage 에 editorState 있으면 hydrate 하기
-  const { rawContentState, id } = post;
-
   const router = useRouter();
   if (router.isFallback) {
     return <Loader />;
   }
+  // TODO : local storage 에 editorState 있으면 hydrate 하기
+  const { rawContentState, id } = post;
 
   return (
     <EditLayout Editor={Editor} rawContentState={rawContentState} postId={id} />
