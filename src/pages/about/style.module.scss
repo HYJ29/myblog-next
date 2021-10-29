@@ -6,23 +6,44 @@
   height: 100vh;
   justify-content: center;
   align-items: center;
+  scroll-snap-align: start;
 
   h3 {
     color: white;
   }
 }
 
+.container {
+  scroll-snap-type: y mandatory;
+  overflow-y: scroll;
+  height: 100vh;
+}
+
+.lottieContainer {
+  width: '90%';
+  height: 300px;
+
+  @include breakpoint('desktop') {
+    height: 500px;
+  }
+}
+
+.sectionContainer_0 {
+  @extend .sectionContainer;
+
+  background-color: black;
+}
 .sectionContainer_1 {
   @extend .sectionContainer;
-  background-color: $color-primary-200;
+  background-color: $color-primary-transparent-300;
 }
 .sectionContainer_2 {
   @extend .sectionContainer;
-  background-color: $color-primary-300;
+  background-color: $color-primary-transparent-400;
 }
 .sectionContainer_3 {
   @extend .sectionContainer;
-  background-color: $color-primary-400;
+  background-color: $color-primary-transparent-500;
 }
 .profileImageContainer {
   width: 300px;
