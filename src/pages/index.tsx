@@ -14,6 +14,8 @@ import {
   tagByTagName,
   listPostTags,
 } from '@/graphql/queries';
+
+import * as queries from '@/graphql/queries';
 import api from '@/apiFetch';
 
 import styles from './style.module.scss';
@@ -24,24 +26,12 @@ type Props = {
   tags: string[];
 };
 
-export default function HomePage({}: Props): JSX.Element {
+export default function HomePage({
+  posts: allPosts,
+  tags,
+}: Props): JSX.Element {
   const [selectedTag, setSelectedTag] = useState('all');
-  const [posts, setPosts] = useState([]);
-  const [tags, setTags] = useState([]);
-
-  const getAllPostsAndTags = async () => {
-    try {
-      const posts = await api.post.getAllPosts();
-      const tags = await api.tag.getAllTags();
-      setPosts(posts);
-      setTags(tags);
-    } catch (e) {
-      console.log(`getPosttasError`, e);
-    }
-  };
-  useEffect(() => {
-    getAllPostsAndTags();
-  }, []);
+  const [posts, setPosts] = useState(allPosts);
 
   const onSelectTag = async (tag) => {
     setSelectedTag(tag.tagName);
@@ -100,3 +90,25 @@ export default function HomePage({}: Props): JSX.Element {
     </DefaultLayout>
   );
 }
+
+export const getStaticProps: GetStaticProps = async ({ params }) => {
+  try {
+    const postsRes = await API.graphql({
+      query: queries.listPosts,
+      authMode: GRAPHQL_AUTH_MODE.AWS_IAM,
+    });
+
+    const tagsRes = await API.graphql({
+      query: queries.listTags,
+      authMode: GRAPHQL_AUTH_MODE.AWS_IAM,
+    });
+
+    const posts = postsRes.data?.listPosts?.items ?? [];
+    const tags = tagsRes.data?.listTags?.items ?? [];
+
+    return { props: { posts, tags }, revalidate: 10 };
+  } catch (e) {
+    console.log(`e`, e);
+    return { notFound: true };
+  }
+};
