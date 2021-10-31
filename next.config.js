@@ -49,7 +49,7 @@ module.exports = (phase, { defaultConfig }) => {
     domains: [
       'myblognextstorage84942-develop.s3.ap-northeast-2.amazonaws.com',
       'myblognextstorage84942-staged.s3.ap-northeast-2.amazonaws.com',
-      'myblognextstorage84942-main.s3.ap-northeast-2.amazonaws.com',
+      'myblognextstorage110022-main.s3.ap-northeast-2.amazonaws.com',
       'images.unsplash.com',
     ],
   };
