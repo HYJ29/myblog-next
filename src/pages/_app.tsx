@@ -34,6 +34,7 @@ const authReduceer = produce((draft, action) => {
       draft.user = action.payload;
       draft.isSignIned = true;
       break;
+
     case 'SIGN_OUT':
       return INITIAL_AUTH_STATE;
 
@@ -106,31 +107,25 @@ function MyApp({ Component, pageProps }: AppProps) {
       <AuthContext.Provider value={{ authState, dispatch }}>
         <Head>
           <title>LOG</title>
+          <meta name="description" content={"Young's dev blog"} />
+          <meta name="author" content="youngjin" />
           <meta
-            name="description"
-            content={'블로그하기 위해서 만든 개발 블로그 입니다.'}
+            name="keywords"
+            content="log, byyoung, byyoungjin, logbyyoung, logbyyoungme"
           />
+          <meta name="application-name" content="logbyyoung" />
           <meta name="viewport" content="width=device-width, initial-scale=1" />
           <meta property="og:title" content="LOG" key="title" />
           <meta property="og:type" content="site" />
-          <meta
-            property="og:description"
-            content="블로그하기 위해서 만든 개발 블로그 입니다."
-          />
+          <meta property="og:description" content="Young's dev blog" />
           <meta
             property="og:image"
             content={
               'https://mynextblog.s3.ap-northeast-2.amazonaws.com/default_cover_image.png'
             }
           />
-          <meta
-            property="twitter:title"
-            content={'블로그하기 위해서 만든 개발 블로그 입니다.'}
-          />
-          <meta
-            property="twitter:description"
-            content={'블로그하기 위해서 만든 개발 블로그 입니다.'}
-          />
+          <meta property="twitter:title" content={"Young's dev blog"} />
+          <meta property="twitter:description" content={"Young's dev blog"} />
           <meta property="twitter:card" content="summary_large_image" />
           <meta
             property="twitter:image"

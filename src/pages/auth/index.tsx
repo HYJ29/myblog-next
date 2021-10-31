@@ -18,7 +18,6 @@ import styles from './style.module.scss';
 
 export default function AuthPage() {
   const router = useRouter();
-  const { authState } = useContext(AuthContext);
 
   return (
     <DefaultLayout>

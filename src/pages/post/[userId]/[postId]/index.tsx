@@ -12,15 +12,12 @@ import { Loader } from '@/components/loading';
 import * as queries from '@/graphql/queries';
 
 export default function PostDetailPage({ post }) {
-
   const router = useRouter();
   if (router.isFallback) {
     return <Loader />;
   }
 
-
   const { rawContentState, titlePhoto, title, subTitle, owner, id } = post;
-
 
   return (
     <>
